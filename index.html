@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v1.5</title>
+<title>Correa v1.6</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1017,11 +1017,47 @@ function showConf(p) {
   msg.textContent = p.mensaje || "Registramos esto?";
 
   if (p.categoria_nueva && p.cat_sugerida) {
-    msg.textContent = "No tengo una categoria que encaje bien. Te propongo abrir \"" + p.cat_sugerida + "\" — ¿la creamos?";
-    fields.innerHTML = '<div style="grid-column:1/-1;display:flex;flex-direction:column;gap:10px" id="newcat-opts">' +
-      '<div style="display:flex;gap:8px;align-items:center"><input id="inp-newcat-nom" type="text" value="' + p.cat_sugerida + '" style="flex:1;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#F7F6F2;color:#1A1916"><button id="btn-mknewcat" style="background:#1A1916;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">+ Crear</button></div>' +
-      '<button id="btn-uservarios" style="background:none;border:1px solid #E2DED6;color:#6B6760;padding:9px 14px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;cursor:pointer;text-align:left">Usar Varios sin crear categoria</button>' +
-      '</div>';
+    msg.textContent = "No tengo una categoria que encaje bien. Te propongo \"" + p.cat_sugerida + "\".";
+    fields.innerHTML = "";
+    var ncDiv = document.createElement("div");
+    ncDiv.style.cssText = "grid-column:1/-1;display:flex;flex-direction:column;gap:10px";
+
+    // Option 1: create new
+    var createBox = document.createElement("div");
+    createBox.style.cssText = "background:#F0EEE8;border-radius:10px;padding:12px";
+    var createLbl = document.createElement("div");
+    createLbl.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";
+    createLbl.textContent = "Crear categoria nueva";
+    var createRow = document.createElement("div");
+    createRow.style.cssText = "display:flex;gap:8px;align-items:center";
+    var ncInp = document.createElement("input");
+    ncInp.id = "inp-newcat-nom"; ncInp.type = "text"; ncInp.value = p.cat_sugerida;
+    ncInp.style.cssText = "flex:1;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#fff;color:#1A1916";
+    var ncBtn = document.createElement("button");
+    ncBtn.id = "btn-mknewcat"; ncBtn.textContent = "+ Crear";
+    ncBtn.style.cssText = "background:#1A1916;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap";
+    createRow.appendChild(ncInp); createRow.appendChild(ncBtn);
+    createBox.appendChild(createLbl); createBox.appendChild(createRow);
+
+    // Option 2: use existing
+    var existBox = document.createElement("div");
+    existBox.style.cssText = "background:#F0EEE8;border-radius:10px;padding:12px";
+    var existLbl = document.createElement("div");
+    existLbl.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";
+    existLbl.textContent = "O elegir una que ya tengo";
+    var existSel = document.createElement("select");
+    existSel.id = "sel-existing-cat";
+    existSel.style.cssText = "width:100%;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#fff;color:#1A1916";
+    var defOpt = document.createElement("option"); defOpt.value=""; defOpt.textContent="-- Elegir --";
+    existSel.appendChild(defOpt);
+    (gCats()||[]).forEach(function(cat){
+      var o = document.createElement("option"); o.value=cat.nom; o.textContent=cat.em+" "+cat.nom;
+      existSel.appendChild(o);
+    });
+    existBox.appendChild(existLbl); existBox.appendChild(existSel);
+
+    ncDiv.appendChild(createBox); ncDiv.appendChild(existBox);
+    fields.appendChild(ncDiv);
     document.getElementById("conf-card").classList.add("show");
     document.getElementById("conf-card").scrollIntoView({behavior:"smooth",block:"nearest"});
     document.getElementById("btn-mknewcat").addEventListener("click", function() {
@@ -1400,93 +1436,88 @@ function renderCfgCats() {
   el.innerHTML = "";
   cats.forEach(function(c, i) {
     var wrapper = document.createElement("div");
-    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;overflow:hidden;margin-bottom:4px;";
+    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;overflow:hidden;margin-bottom:6px";
 
-    // Main row
-    var d = document.createElement("div");
-    d.className = "cfg-row";
-    d.style.cssText = "border:none;border-radius:0;cursor:pointer;";
-    d.innerHTML = '<span class="cfg-em">' + c.em + '</span><span class="cfg-nom">' + c.nom + '</span><span class="cfg-subs" id="subs-preview-' + i + '">' + c.subs.slice(0,2).join(", ") + (c.subs.length > 2 ? "..." : "") + '</span>';
+    // Header row
+    var row = document.createElement("div");
+    row.className = "cfg-row";
+    row.style.cssText = "border:none;cursor:pointer;border-radius:0";
+    row.innerHTML = '<span class="cfg-em">'+c.em+'</span><span class="cfg-nom">'+c.nom+'</span><span class="cfg-subs" style="flex:1;font-size:11px;color:#A8A49E">'+c.subs.slice(0,2).join(", ")+(c.subs.length>2?"...":"")+'</span>';
+
     var chevron = document.createElement("span");
     chevron.textContent = "›";
-    chevron.style.cssText = "color:#A8A49E;font-size:16px;transition:transform .2s;margin-left:4px;";
-    d.appendChild(chevron);
+    chevron.style.cssText = "color:#A8A49E;font-size:18px;transition:transform .2s;margin-right:4px";
+    row.appendChild(chevron);
 
-    // Delete button
     var delBtn = document.createElement("button");
     delBtn.className = "del-btn";
     delBtn.textContent = "Quitar";
-    delBtn.style.marginLeft = "8px";
-    (function(idx){ delBtn.addEventListener("click", function(e){ e.stopPropagation(); delCat(idx); }); })(i);
-    d.appendChild(delBtn);
+    delBtn.addEventListener("click", (function(ii){ return function(e){ e.stopPropagation(); delCat(ii); }; })(i));
+    row.appendChild(delBtn);
 
-    // Subcategory panel (hidden by default)
+    // Subcategory panel
     var panel = document.createElement("div");
-    panel.id = "subpanel-" + i;
-    panel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:12px;";
+    panel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:12px";
+    var isOpen = false;
 
-    function renderSubPanel() {
+    function refreshPanel(ii) {
       panel.innerHTML = "";
-      var label = document.createElement("div");
-      label.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";
-      label.textContent = "Subcategorias";
-      panel.appendChild(label);
-      var subList = document.createElement("div");
-      subList.style.cssText = "display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px";
-      (gCats()||[])[i] && (gCats()||[])[i].subs.forEach(function(s, si) {
+      var lbl = document.createElement("div");
+      lbl.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";
+      lbl.textContent = "Subcategorias";
+      panel.appendChild(lbl);
+
+      var freshCats = gCats() || [];
+      var cat = freshCats[ii];
+      if (!cat) return;
+
+      var tagWrap = document.createElement("div");
+      tagWrap.style.cssText = "display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px";
+      cat.subs.forEach(function(s, si) {
         var tag = document.createElement("div");
-        tag.style.cssText = "display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #E2DED6;border-radius:16px;padding:3px 10px;font-size:12px";
-        tag.innerHTML = s;
+        tag.style.cssText = "display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #E2DED6;border-radius:14px;padding:4px 10px;font-size:12px;color:#1A1916";
+        tag.appendChild(document.createTextNode(s));
         var x = document.createElement("span");
         x.textContent = "×";
-        x.style.cssText = "color:#A8A49E;cursor:pointer;font-size:14px;line-height:1;";
-        (function(subIdx){ x.addEventListener("click", function(){
-          var cats2 = gCats()||[];
-          cats2[i].subs.splice(subIdx,1);
-          ss("cr_cats",cats2);
-          renderSubPanel();
-        }); })(si);
+        x.style.cssText = "color:#A8A49E;cursor:pointer;font-size:15px;line-height:1;margin-left:2px";
+        x.addEventListener("click", (function(iii, sii){ return function(){
+          var fc = gCats()||[]; fc[iii].subs.splice(sii,1); ss("cr_cats",fc); refreshPanel(iii);
+        }; })(ii, si));
         tag.appendChild(x);
-        subList.appendChild(tag);
+        tagWrap.appendChild(tag);
       });
-      panel.appendChild(subList);
-      var addRow = document.createElement("div");
-      addRow.style.cssText = "display:flex;gap:6px";
-      var inp = document.createElement("input");
-      inp.type = "text";
-      inp.placeholder = "Nueva subcategoria...";
-      inp.style.cssText = "flex:1;padding:6px 10px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;background:#fff";
-      var addBtn = document.createElement("button");
-      addBtn.textContent = "+ Agregar";
-      addBtn.style.cssText = "background:#1A1916;color:#fff;border:none;padding:6px 12px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap";
-      addBtn.addEventListener("click", function(){
-        var nom = inp.value.trim();
-        if(!nom) return;
-        var cats2 = gCats()||[];
-        if(!cats2[i].subs.includes(nom)) cats2[i].subs.push(nom);
-        ss("cr_cats",cats2);
-        inp.value="";
-        renderSubPanel();
-      });
-      addRow.appendChild(inp); addRow.appendChild(addBtn);
-      panel.appendChild(addRow);
+      panel.appendChild(tagWrap);
+
+      var addRow2 = document.createElement("div");
+      addRow2.style.cssText = "display:flex;gap:6px";
+      var subInp = document.createElement("input");
+      subInp.type = "text"; subInp.placeholder = "Nueva subcategoria...";
+      subInp.style.cssText = "flex:1;padding:6px 10px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;background:#fff;color:#1A1916";
+      var subAdd = document.createElement("button");
+      subAdd.textContent = "+ Agregar";
+      subAdd.style.cssText = "background:#1A1916;color:#fff;border:none;padding:6px 12px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap";
+      subAdd.addEventListener("click", (function(iii){ return function(){
+        var n = subInp.value.trim(); if(!n) return;
+        var fc = gCats()||[];
+        if(fc[iii].subs.indexOf(n) < 0) fc[iii].subs.push(n);
+        ss("cr_cats", fc); subInp.value=""; refreshPanel(iii);
+      }; })(ii));
+      addRow2.appendChild(subInp); addRow2.appendChild(subAdd);
+      panel.appendChild(addRow2);
     }
 
-    var open = false;
-    d.addEventListener("click", function(){
-      open = !open;
-      panel.style.display = open ? "block" : "none";
-      chevron.style.transform = open ? "rotate(90deg)" : "";
-      if(open) renderSubPanel();
-    });
+    row.addEventListener("click", (function(ii){ return function(){
+      isOpen = !isOpen;
+      panel.style.display = isOpen ? "block" : "none";
+      chevron.style.transform = isOpen ? "rotate(90deg)" : "rotate(0deg)";
+      if(isOpen) refreshPanel(ii);
+    }; })(i));
 
-    wrapper.appendChild(d);
+    wrapper.appendChild(row);
     wrapper.appendChild(panel);
     el.appendChild(wrapper);
   });
-  var el2 = document.getElementById("cfg-ing-el");
-  if (!el2) return;
-  el2.innerHTML = "";
+  
   ingCats.forEach(function(c, i) {
     var d = document.createElement("div");
     d.className = "cfg-row";
