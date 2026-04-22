@@ -3,8 +3,11 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v2.0</title>
+<title>Correa v2.6</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -12,7 +15,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
 /* ONBOARDING */
 #onboarding{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;}
-.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:36px 40px;width:100%;max-width:500px;margin:auto;}
+.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:32px 36px;width:100%;max-width:480px;margin:auto;box-shadow:0 1px 12px rgba(0,0,0,.04);}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
 .prog{display:flex;align-items:center;margin-bottom:32px;}
@@ -30,11 +33,9 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .btn-back:hover{border-color:#1A1916;color:#1A1916;}
 
 /* Welcome card */
-.hero{background:#1A1916;border-radius:12px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden;}
-.hero::before{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(127,119,221,.15);}
-.hero-star{font-size:20px;margin-bottom:8px;}
-.hero-name{font-size:18px;font-weight:600;color:#fff;margin-bottom:4px;}
-.hero-tag{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;}
+.hero{background:transparent;padding:0;margin-bottom:20px;}
+.hero-name{font-size:32px;font-weight:600;color:#1A1916;letter-spacing:-.04em;line-height:1;}
+.hero-tag{font-size:14px;color:#6B6760;line-height:1.7;}
 .feats{display:flex;flex-direction:column;gap:10px;}
 .feat{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#6B6760;line-height:1.5;}
 .feat-ck{width:18px;height:18px;border-radius:50%;background:#D8F3DC;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:10px;color:#2D6A4F;font-weight:700;}
@@ -173,6 +174,10 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 /* Recent */
 .recent{background:#fff;border:1px solid #E2DED6;border-radius:16px;overflow:hidden;margin-bottom:16px;}
 .rc-hdr{padding:11px 16px;border-bottom:1px solid #E2DED6;}
+.rc-filter-btn{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;border:1px solid #E2DED6;background:#fff;color:#A8A49E;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .15s;}
+.rc-filter-btn:hover{border-color:#CBC6BC;color:#6B6760;}
+.rc-filter-btn.active{background:#1A1916;border-color:#1A1916;color:#fff;}
+.day-group-hdr{padding:8px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#A8A49E;background:#F7F6F2;border-bottom:1px solid #E2DED6;}
 .rc-hdr span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
 .mv-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #E2DED6;}
 .mv-row:last-child{border-bottom:none;}
@@ -304,20 +309,29 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
   <!-- PASO 1 -->
   <div class="ob-step active" id="st0">
-    <div class="hero" style="text-align:center">
-      <svg viewBox="0 0 120 120" width="52" height="52" style="display:block;margin-bottom:10px">
-  <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
-  <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/>
-  <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" opacity="0.3"/>
-  <circle cx="60" cy="66" r="4" fill="#E8622A"/>
-</svg>
-      <div class="hero-name" style="font-size:24px;margin-bottom:6px">Hola, soy Correa!</div>
-      <div class="hero-tag">Estoy para que tomes el control de tus finanzas &mdash; sin formularios, sin Excel, sin drama. Vos pasame el gasto y me ocupo del resto.</div>
+    <div class="hero">
+      <!-- Logo centrado grande -->
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:64px;height:64px;position:relative;display:inline-block;margin-bottom:14px">
+          <svg viewBox="0 0 120 120" width="64" height="64" style="position:absolute;top:0;left:0">
+            <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/>
+            <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/>
+            <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/>
+            <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/>
+          </svg>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;line-height:1">
+          <span style="font-size:22px;font-weight:400;color:#A8A49E;letter-spacing:-.01em">Hola, soy</span>
+          <span style="font-size:32px;font-weight:600;color:#1A1916;letter-spacing:-.04em">Correa</span>
+        </div>
+        
+      </div>
+      <div class="hero-tag" style="text-align:center">Estoy para ayudarte a tomar el control de tus finanzas &mdash; sin formularios, sin Excel, sin drama.<br><strong style="color:#1A1916;font-weight:500">Vos contame qu&eacute; pas&oacute; y yo me ocupo del resto.</strong></div>
     </div>
     <div style="font-size:12px;font-weight:700;color:#A8A49E;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Para empezar, te hago unas preguntas rapidas</div>
     <div class="feats">
-      <div class="feat"><div class="feat-ck">&#10003;</div><span>Armamos tus categorias segun tu perfil</span></div>
-      <div class="feat"><div class="feat-ck">&#10003;</div><span>Registras gastos con voz o texto en segundos</span></div>
+      <div class="feat"><div class="feat-ck">&#10003;</div><span>Registra gastos e ingresos con voz o texto en segundos</span></div>
+      <div class="feat"><div class="feat-ck">&#10003;</div><span>La IA categoriza todo autom&aacute;ticamente</span></div>
       <div class="feat"><div class="feat-ck">&#10003;</div><span>Todo editable, siempre bajo tu control</span></div>
     </div>
     <div class="ob-actions">
@@ -506,7 +520,14 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <div id="det-body"></div>
     </div>
     <div class="recent">
-      <div class="rc-hdr"><span>Ultimos registros</span></div>
+      <div class="rc-hdr" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span>Ultimos registros</span>
+        <div style="display:flex;gap:4px" id="rc-filters">
+          <button class="rc-filter-btn active" data-days="5" onclick="setRecentFilter(5)">5 dias</button>
+          <button class="rc-filter-btn" data-days="10" onclick="setRecentFilter(10)">10 dias</button>
+          <button class="rc-filter-btn" data-days="30" onclick="setRecentFilter(30)">Este mes</button>
+        </div>
+      </div>
       <div id="rc-list"><div class="mv-empty">Aun no hay registros.</div></div>
     </div>
     <div class="insight">
@@ -582,6 +603,21 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- Edit/Delete modal -->
+<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:400;align-items:flex-end;justify-content:center">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:500px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-size:15px;font-weight:600;color:#1A1916" id="edit-modal-title">Editar registro</div>
+      <button onclick="closeEditModal()" style="background:none;border:none;font-size:20px;color:#A8A49E;cursor:pointer;padding:0 4px">&times;</button>
+    </div>
+    <div id="edit-modal-fields" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
+    <div style="display:flex;gap:8px">
+      <button onclick="saveEditModal()" style="flex:1;background:#1A1916;color:#fff;border:none;padding:13px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Guardar cambios</button>
+      <button onclick="deleteMovFromModal()" style="background:#FCE4E8;color:#9B2335;border:1px solid #f5c1c8;padding:13px 18px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Eliminar</button>
+    </div>
+  </div>
+</div>
 
 <script>
 (function() {
@@ -1229,6 +1265,174 @@ function decodeEm(em) {
   return div.textContent || div.innerText || em;
 }
 
+function setRecentFilter(days) {
+  recentFilter = days;
+  document.querySelectorAll(".rc-filter-btn").forEach(function(b) {
+    b.classList.toggle("active", parseInt(b.dataset.days) === days);
+  });
+  renderRecentList();
+}
+
+function renderRecentList() {
+  var rcList = document.getElementById("rc-list");
+  if (!rcList) return;
+  var allMovs = gMonthM();
+  // Filter by days
+  var cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - recentFilter);
+  var cutoffStr = cutoff.toISOString().split("T")[0];
+  var filtered = allMovs.filter(function(m) {
+    return !m.fecha || m.fecha >= cutoffStr;
+  }).reverse();
+
+  if (!filtered.length) {
+    rcList.innerHTML = '<div class="mv-empty">Sin registros en este periodo.</div>';
+    return;
+  }
+
+  // Group by date
+  var byDay = {};
+  var dayOrder = [];
+  filtered.forEach(function(m) {
+    var d = m.fecha || "sin-fecha";
+    if (!byDay[d]) { byDay[d] = []; dayOrder.push(d); }
+    byDay[d].push(m);
+  });
+
+  var html = "";
+  dayOrder.forEach(function(day) {
+    // Day header
+    var dayLabel = day;
+    if (day !== "sin-fecha") {
+      var parts = day.split("-");
+      var dt = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+      var today = new Date(); today.setHours(0,0,0,0);
+      var yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
+      if (dt.getTime() === today.getTime()) dayLabel = "Hoy";
+      else if (dt.getTime() === yesterday.getTime()) dayLabel = "Ayer";
+      else dayLabel = dt.getDate() + " de " + ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"][dt.getMonth()];
+    }
+    html += '<div class="day-group-hdr">' + dayLabel + '</div>';
+
+    byDay[day].forEach(function(m) {
+      var c = getCatObj(m.categoria);
+      var isIng = m.tipo === "ingreso";
+      var amtDisplay = fC(m.monto, m.cur);
+      var arsEquiv = (m.cur !== "ARS" && m.tc_usado) ?
+        '<div style="font-size:10px;color:#A8A49E;font-family:DM Mono,monospace">&asymp; ' + fA(Math.round(m.usd * gTC().usd)) + '</div>' : "";
+      html += '<div class="mv-row" data-mov-id="' + m.id + '" style="cursor:pointer">' +
+        '<div class="mv-l"><div class="mv-em">' + c.em + '</div>' +
+        '<div><div class="mv-cat-lbl">' + m.categoria + (isIng ? '<span class="badge bi">ingreso</span>' : '') + '</div>' +
+        '<div class="mv-note-lbl">' + m.subcategoria + ' &middot; &ldquo;' + m.inputOriginal + '&rdquo;</div></div></div>' +
+        '<div class="mv-r"><div class="mv-amt" style="color:' + (isIng ? "#2D6A4F" : "#1A1916") + '">' + amtDisplay + '</div>' +
+        arsEquiv +
+        '<div class="mv-date">' + (m.mp ? m.mp : '') + '</div></div></div>';
+    });
+  });
+  rcList.innerHTML = html;
+
+  // Add click listeners for edit
+  rcList.querySelectorAll(".mv-row[data-mov-id]").forEach(function(row) {
+    row.addEventListener("click", function() {
+      openEditModal(row.dataset.movId);
+    });
+  });
+}
+
+var editingMovId = null;
+
+function openEditModal(id) {
+  var movs = gMonthM();
+  var m = movs.find(function(x) { return String(x.id) === String(id); });
+  if (!m) return;
+  editingMovId = id;
+  var cats = gCats() || [];
+  var ingCats = gIngCats() || [];
+  var allCats = m.tipo === "ingreso" ? ingCats : cats;
+  var catObj = allCats.find(function(c) { return c.nom === m.categoria; });
+  var subs = catObj ? catObj.subs : ["General","Otros"];
+
+  document.getElementById("edit-modal-title").textContent = m.categoria + " — " + m.subcategoria;
+  var fields = document.getElementById("edit-modal-fields");
+  fields.innerHTML = "";
+
+  function addField(lbl, content) {
+    var wrap = document.createElement("div");
+    wrap.style.cssText = "background:#F7F6F2;border-radius:10px;padding:10px 14px";
+    var l = document.createElement("div");
+    l.style.cssText = "font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:5px";
+    l.textContent = lbl;
+    wrap.appendChild(l); wrap.appendChild(content);
+    fields.appendChild(wrap);
+  }
+
+  // Categoria
+  var selCat = document.createElement("select");
+  selCat.id = "em-cat";
+  selCat.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;color:#1A1916;padding:0";
+  allCats.forEach(function(c) {
+    var o = document.createElement("option"); o.value=c.nom; o.textContent=decodeEm(c.em)+" "+c.nom;
+    if(c.nom===m.categoria) o.selected=true;
+    selCat.appendChild(o);
+  });
+  addField("Categoria", selCat);
+
+  // Subcategoria
+  var selSub = document.createElement("select");
+  selSub.id = "em-sub";
+  selSub.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;color:#1A1916;padding:0";
+  subs.forEach(function(s) {
+    var o = document.createElement("option"); o.value=s; o.textContent=s;
+    if(s===m.subcategoria) o.selected=true;
+    selSub.appendChild(o);
+  });
+  addField("Subcategoria", selSub);
+
+  // Monto
+  var inpMonto = document.createElement("input");
+  inpMonto.id = "em-monto"; inpMonto.type="number"; inpMonto.value=m.monto;
+  inpMonto.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0";
+  addField("Monto (" + m.cur + ")", inpMonto);
+
+  // Fecha
+  var inpFecha = document.createElement("input");
+  inpFecha.id = "em-fecha"; inpFecha.type="date"; inpFecha.value=m.fecha||"";
+  inpFecha.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
+  addField("Fecha", inpFecha);
+
+  var modal = document.getElementById("edit-modal");
+  modal.style.display = "flex";
+}
+
+function closeEditModal() {
+  document.getElementById("edit-modal").style.display = "none";
+  editingMovId = null;
+}
+
+function saveEditModal() {
+  if (!editingMovId) return;
+  var movs = gMonthM();
+  var idx = movs.findIndex(function(x) { return String(x.id) === String(editingMovId); });
+  if (idx < 0) return;
+  movs[idx].categoria = document.getElementById("em-cat").value;
+  movs[idx].subcategoria = document.getElementById("em-sub").value;
+  movs[idx].monto = parseFloat(document.getElementById("em-monto").value) || movs[idx].monto;
+  movs[idx].fecha = document.getElementById("em-fecha").value;
+  sMonthM(movs);
+  closeEditModal();
+  renderHome();
+  showToast("Guardado \u2713");
+}
+
+function deleteMovFromModal() {
+  if (!editingMovId) return;
+  var movs = gMonthM().filter(function(x) { return String(x.id) !== String(editingMovId); });
+  sMonthM(movs);
+  closeEditModal();
+  renderHome();
+  showToast("Registro eliminado");
+}
+
 function getCatObj(nom) {
   var cats = (gCats() || []).concat(gIngCats() || []);
   return cats.find(function(c) { return c.nom === nom; }) || {em: "&#128717;"};
@@ -1242,6 +1446,7 @@ function getCatColor(nom) {
 
 
 var showUSD = false;
+var recentFilter = 30; // days to show in recent list
 function renderHome() {
   var movs = gMonthM();
   var gas = movs.filter(function(m) { return m.tipo === "gasto"; });
@@ -1295,25 +1500,7 @@ function renderHome() {
     });
     bd.innerHTML = bdHtml;
   }
-  var rcList = document.getElementById("rc-list");
-  var last = movs.slice(-6).reverse();
-  if (!last.length) {
-    rcList.innerHTML = '<div class="mv-empty">Aun no hay registros.</div>';
-    return;
-  }
-  var rcHtml = "";
-  last.forEach(function(m) {
-    var c = getCatObj(m.categoria);
-    var d = m.fecha ? m.fecha.split("-").reverse().slice(0,2).join("/") : "--";
-    var isIng = m.tipo === "ingreso";
-    rcHtml += '<div class="mv-row">' +
-      '<div class="mv-l"><div class="mv-em">' + c.em + '</div>' +
-      '<div><div class="mv-cat">' + m.categoria + (isIng ? '<span class="badge bi">ingreso</span>' : '') + '</div>' +
-      '<div class="mv-note">' + m.subcategoria + ' &middot; &ldquo;' + m.inputOriginal + '&rdquo;</div></div></div>' +
-      '<div class="mv-r"><div class="mv-amt" style="color:' + (isIng ? "#2D6A4F" : "#1A1916") + '">' + fC(m.monto, m.cur) + (m.cur !== "ARS" && m.tc_usado ? "<div style='font-size:10px;color:#A8A49E;font-family:DM Mono,monospace'>TC $" + Number(m.tc_usado).toLocaleString('es-AR') + "</div>" : "") + '</div>' +
-      '<div class="mv-date">' + d + (m.mp ? ' &middot; ' + m.mp : '') + '</div></div></div>';
-  });
-  rcList.innerHTML = rcHtml;
+  renderRecentList();
 }
 
 function showDetail(nom) {
