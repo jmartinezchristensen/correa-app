@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v3.3</title>
+<title>Correa v3.4</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -12,7 +12,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
 /* ONBOARDING */
 #onboarding{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:36px 40px;width:100%;max-width:500px;}
+.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:32px 36px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
 .prog{display:flex;align-items:center;margin-bottom:32px;}
@@ -30,11 +30,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .btn-back:hover{border-color:#1A1916;color:#1A1916;}
 
 /* Welcome card */
-.hero{background:#1A1916;border-radius:12px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden;}
-.hero::before{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(127,119,221,.15);}
-.hero-star{font-size:20px;margin-bottom:8px;}
-.hero-name{font-size:18px;font-weight:600;color:#fff;margin-bottom:4px;}
-.hero-tag{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;}
+.hero{background:transparent;padding:0;margin-bottom:20px;}
+.hero-tag{font-size:14px;color:#6B6760;line-height:1.7;}
 .feats{display:flex;flex-direction:column;gap:10px;}
 .feat{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#6B6760;line-height:1.5;}
 .feat-ck{width:18px;height:18px;border-radius:50%;background:#D8F3DC;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:10px;color:#2D6A4F;font-weight:700;}
