@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v1.7</title>
+<title>Correa v1.8</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -225,6 +225,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .toast{position:fixed;bottom:22px;right:22px;background:#1A1916;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;}
 .toast.show{opacity:1;}
 ::-webkit-scrollbar{width:4px;height:4px;}
+@keyframes arc-spin{0%{stroke-dashoffset:0;opacity:1}40%{stroke-dashoffset:-120;opacity:0.25}60%{stroke-dashoffset:-120;opacity:0.25}100%{stroke-dashoffset:0;opacity:1}}
+@keyframes dot-beat{0%,100%{r:4}50%{r:6}}
 ::-webkit-scrollbar-thumb{background:#CBC6BC;border-radius:2px;}
 @media(max-width:800px){
   #app{grid-template-columns:1fr;}
@@ -302,9 +304,14 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
   <!-- PASO 1 -->
   <div class="ob-step active" id="st0">
-    <div class="hero">
-      <div class="hero-star">&#10022;</div>
-      <div class="hero-name">Hola, soy Correa!</div>
+    <div class="hero" style="text-align:center">
+      <svg viewBox="0 0 120 120" width="52" height="52" style="display:block;margin-bottom:10px">
+  <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
+  <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/>
+  <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" opacity="0.3"/>
+  <circle cx="60" cy="66" r="4" fill="#E8622A"/>
+</svg>
+      <div class="hero-name" style="font-size:24px;margin-bottom:6px">Hola, soy Correa!</div>
       <div class="hero-tag">Estoy para que tomes el control de tus finanzas &mdash; sin formularios, sin Excel, sin drama. Vos pasame el gasto y me ocupo del resto.</div>
     </div>
     <div style="font-size:12px;font-weight:700;color:#A8A49E;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Para empezar, te hago unas preguntas rapidas</div>
@@ -421,7 +428,15 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 <!-- APP -->
 <div id="app">
 <aside class="sb">
-  <div class="sb-logo"><h2>Correa</h2><p>correa.app</p></div>
+  <div class="sb-logo" style="display:flex;align-items:center;gap:10px">
+    <svg viewBox="0 0 120 120" width="28" height="28" style="flex-shrink:0;margin-right:2px">
+  <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
+  <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/>
+  <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" opacity="0.3"/>
+  <circle cx="60" cy="66" r="4" fill="#E8622A"/>
+</svg>
+    <div><h2>Correa</h2><p>correa.app</p></div>
+  </div>
   <nav class="sb-nav">
     <div class="sb-sec">Principal</div>
     <div class="sb-item active" id="nav-home">&#10022; Inicio</div>
@@ -441,7 +456,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <div><div class="ph-title">Hola &#128075;</div><div class="ph-sub">Registra un movimiento con voz o texto</div></div>
     </div>
     <div class="inp-card">
-      <div class="inp-lbl">&#10022; Entrada inteligente</div>
+      <div class="inp-lbl" style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 120 120" width="14" height="14"><circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" opacity="0.9"/><circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/><circle cx="60" cy="66" r="4" fill="#E8622A"/></svg> Entrada inteligente</div>
       <div class="inp-row">
         <button class="inp-mic" id="mic-btn">&#127897;</button>
         <textarea class="inp-ta" id="ai-inp" placeholder="Ej: pague nafta $15.000 con debito..."></textarea>
@@ -495,7 +510,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <div id="rc-list"><div class="mv-empty">Aun no hay registros.</div></div>
     </div>
     <div class="insight">
-      <div class="ins-lbl">&#10022; Analisis del mes</div>
+      <div class="ins-lbl" style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 120 120" width="12" height="12"><circle cx="60" cy="66" r="38" fill="none" stroke="#A8A49E" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/><circle cx="60" cy="66" r="4" fill="#A8A49E"/></svg> Analisis del mes</div>
       <div id="ins-txt" style="font-size:14px;color:#A8A49E;line-height:1.7">Registra algunos gastos y te cuento como venis este mes.</div>
       <button class="btn-sm" id="ins-btn">Generar analisis</button>
     </div>
@@ -888,7 +903,7 @@ async function sendAI() {
   if (!key) { showToast("Configura tu API key en Configuracion"); return; }
   var btn = document.getElementById("send-btn");
   btn.disabled = true;
-  btn.innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
+  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"> <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/> <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/> <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/> <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
   inp.disabled = true;
   try {
     var resp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -1182,7 +1197,7 @@ async function confirmMov() {
   var p = pendMov;
   var btn = document.getElementById("conf-ok");
   btn.disabled = true;
-  btn.innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
+  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"> <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/> <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/> <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/> <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
   try {
     var usdVal = await toUSD(p.monto, p.cur, p.fecha);
     var tcUsado = p.cur !== "USD" ? Math.round(p.monto / usdVal) : null;
@@ -1401,7 +1416,7 @@ async function genInsight() {
   if (!movs.length) { showToast("Registra gastos primero"); return; }
   var btn = document.getElementById("ins-btn");
   btn.disabled = true;
-  btn.innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
+  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"> <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/> <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/> <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/> <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
   var el = document.getElementById("ins-txt");
   el.style.color = "#A8A49E";
   el.textContent = "Analizando...";
