@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v3.9-debug</title>
+<title>Correa v4.0</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -226,8 +226,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 @keyframes dp{0%,80%,100%{transform:scale(1);opacity:.4;}40%{transform:scale(1.3);opacity:1;}}
 .toast{position:fixed;bottom:22px;right:22px;background:#1A1916;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;}
 .toast.show{opacity:1;}
-.wt-overlay{position:fixed;inset:0;background:rgba(26,25,22,.55);z-index:500;display:none;}
-.wt-overlay.show{display:block;}
+.wt-overlay{position:fixed;inset:0;background:rgba(26,25,22,.55);z-index:500;display:none;pointer-events:none;}
+.wt-overlay.show{display:block;pointer-events:auto;}
 .wt-highlight{position:fixed;border-radius:12px;box-shadow:0 0 0 3px #E8622A,0 0 0 8px rgba(232,98,42,.2);z-index:501;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
 .wt-tooltip{position:fixed;z-index:502;background:#fff;border-radius:16px;padding:20px;width:min(300px,calc(100vw - 40px));box-shadow:0 8px 40px rgba(0,0,0,.2);}
 .wt-arrow{position:absolute;width:12px;height:12px;background:#fff;transform:rotate(45deg);}
@@ -571,7 +571,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 </div>
 
 <div class="toast" id="toast"></div>
-<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center">
+<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center;pointer-events:none">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:500px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div style="font-size:15px;font-weight:600;color:#1A1916" id="edit-modal-title">Editar</div>
@@ -732,7 +732,6 @@ function renderObCats() {
 }
 
 function goNext() {
-  console.log("goNext called, step="+step);
   if (step === 1) renderObCats();
   if (step === 2) {
     activeCats = [];
@@ -1177,9 +1176,9 @@ function openEditModal(id){
   subs.forEach(function(s){var o=document.createElement("option");o.value=s;o.textContent=s;if(s===m.subcategoria)o.selected=true;sS.appendChild(o);});aF("Subcategoria",sS);
   var iM=document.createElement("input");iM.id="em-monto";iM.type="number";iM.value=m.monto;iM.style.cssText="width:100%;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0";aF("Monto ("+m.cur+")",iM);
   var iF=document.createElement("input");iF.id="em-fecha";iF.type="date";iF.value=m.fecha||"";iF.style.cssText="width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";aF("Fecha",iF);
-  document.getElementById("edit-modal").style.display="flex";
+  var em=document.getElementById("edit-modal");em.style.display="flex";em.style.pointerEvents="auto";
 }
-function closeEditModal(){document.getElementById("edit-modal").style.display="none";editingMovId=null;}
+function closeEditModal(){var m=document.getElementById("edit-modal");m.style.display="none";m.style.pointerEvents="none";editingMovId=null;}
 function saveEditModal(){
   if(!editingMovId)return;var movs=gMonthM();
   var i=movs.findIndex(function(x){return String(x.id)===String(editingMovId);});if(i<0)return;
@@ -1590,11 +1589,7 @@ function maybeStartWT2() {
 document.addEventListener("DOMContentLoaded", function() {
 
   // Onboarding buttons
-  document.getElementById("btn0").addEventListener("click", function() { 
-    console.log("btn0 clicked, step="+step);
-    try { goNext(); console.log("goNext ok, now step="+step); } 
-    catch(e) { alert("ERROR en goNext: "+e.message); }
-  });
+  document.getElementById("btn0").addEventListener("click", function() { goNext(); });
   document.getElementById("btn1").addEventListener("click", function() { goNext(); });
   document.getElementById("btn1b").addEventListener("click", function() { goBack(); });
   document.getElementById("btn2").addEventListener("click", function() { goNext(); });
@@ -1689,14 +1684,11 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("cur-ars").addEventListener("click",function(){setCurT(false);});
   document.getElementById("cur-usd").addEventListener("click",function(){setCurT(true);});
   // Check if already set up
-  try {
-    if (ls("cr_done", false)) {
-      activeCats = gCats() || [];
-      activeIngCats = gIngCats() || [];
-      startApp();
-    }
-  } catch(e) { alert("ERROR en startApp: "+e.message); }
-  console.log("DOMContentLoaded complete");
+  if (ls("cr_done", false)) {
+    activeCats = gCats() || [];
+    activeIngCats = gIngCats() || [];
+    startApp();
+  }
 });
 
 })();
