@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v2.6</title>
+<title>Correa v2.7</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -523,9 +523,9 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <div class="rc-hdr" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
         <span>Ultimos registros</span>
         <div style="display:flex;gap:4px" id="rc-filters">
-          <button class="rc-filter-btn active" data-days="5" onclick="setRecentFilter(5)">5 dias</button>
-          <button class="rc-filter-btn" data-days="10" onclick="setRecentFilter(10)">10 dias</button>
-          <button class="rc-filter-btn" data-days="30" onclick="setRecentFilter(30)">Este mes</button>
+          <button class="rc-filter-btn active" data-days="5">5 dias</button>
+          <button class="rc-filter-btn" data-days="10">10 dias</button>
+          <button class="rc-filter-btn" data-days="30">Este mes</button>
         </div>
       </div>
       <div id="rc-list"><div class="mv-empty">Aun no hay registros.</div></div>
@@ -609,12 +609,12 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:500px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
       <div style="font-size:15px;font-weight:600;color:#1A1916" id="edit-modal-title">Editar registro</div>
-      <button onclick="closeEditModal()" style="background:none;border:none;font-size:20px;color:#A8A49E;cursor:pointer;padding:0 4px">&times;</button>
+      <button id="modal-close-btn" style="background:none;border:none;font-size:20px;color:#A8A49E;cursor:pointer;padding:0 4px">&times;</button>
     </div>
     <div id="edit-modal-fields" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
     <div style="display:flex;gap:8px">
-      <button onclick="saveEditModal()" style="flex:1;background:#1A1916;color:#fff;border:none;padding:13px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Guardar cambios</button>
-      <button onclick="deleteMovFromModal()" style="background:#FCE4E8;color:#9B2335;border:1px solid #f5c1c8;padding:13px 18px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Eliminar</button>
+      <button id="modal-save-btn" style="flex:1;background:#1A1916;color:#fff;border:none;padding:13px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Guardar cambios</button>
+      <button id="modal-delete-btn" style="background:#FCE4E8;color:#9B2335;border:1px solid #f5c1c8;padding:13px 18px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Eliminar</button>
     </div>
   </div>
 </div>
@@ -1564,7 +1564,7 @@ function showDetail(nom) {
   document.getElementById("detail-panel").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
-function toggleSubDetail(id) {
+window.toggleSubDetail = function toggleSubDetail(id) {
   var panel = document.getElementById(id);
   var chev = document.getElementById("chev-" + id);
   if (!panel) return;
@@ -1890,6 +1890,26 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
   document.getElementById("ing-back").addEventListener("click", function() { showPage("home"); });
+
+  // Filter buttons
+  document.querySelectorAll(".rc-filter-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      setRecentFilter(parseInt(btn.dataset.days));
+    });
+  });
+
+  // Edit modal buttons
+  var modalClose = document.getElementById("modal-close-btn");
+  var modalSave = document.getElementById("modal-save-btn");
+  var modalDelete = document.getElementById("modal-delete-btn");
+  if (modalClose) modalClose.addEventListener("click", function() { closeEditModal(); });
+  if (modalSave) modalSave.addEventListener("click", function() { saveEditModal(); });
+  if (modalDelete) modalDelete.addEventListener("click", function() { deleteMovFromModal(); });
+
+  // Close modal on backdrop click
+  document.getElementById("edit-modal").addEventListener("click", function(e) {
+    if (e.target === this) closeEditModal();
+  });
 
   // Check if already set up
   if (ls("cr_done", false)) {
