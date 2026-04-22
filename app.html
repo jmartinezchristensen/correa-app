@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v3.8</title>
+<title>Correa v3.9-debug</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -732,6 +732,7 @@ function renderObCats() {
 }
 
 function goNext() {
+  console.log("goNext called, step="+step);
   if (step === 1) renderObCats();
   if (step === 2) {
     activeCats = [];
@@ -1589,7 +1590,11 @@ function maybeStartWT2() {
 document.addEventListener("DOMContentLoaded", function() {
 
   // Onboarding buttons
-  document.getElementById("btn0").addEventListener("click", function() { goNext(); });
+  document.getElementById("btn0").addEventListener("click", function() { 
+    console.log("btn0 clicked, step="+step);
+    try { goNext(); console.log("goNext ok, now step="+step); } 
+    catch(e) { alert("ERROR en goNext: "+e.message); }
+  });
   document.getElementById("btn1").addEventListener("click", function() { goNext(); });
   document.getElementById("btn1b").addEventListener("click", function() { goBack(); });
   document.getElementById("btn2").addEventListener("click", function() { goNext(); });
@@ -1684,11 +1689,14 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("cur-ars").addEventListener("click",function(){setCurT(false);});
   document.getElementById("cur-usd").addEventListener("click",function(){setCurT(true);});
   // Check if already set up
-  if (ls("cr_done", false)) {
-    activeCats = gCats() || [];
-    activeIngCats = gIngCats() || [];
-    startApp();
-  }
+  try {
+    if (ls("cr_done", false)) {
+      activeCats = gCats() || [];
+      activeIngCats = gIngCats() || [];
+      startApp();
+    }
+  } catch(e) { alert("ERROR en startApp: "+e.message); }
+  console.log("DOMContentLoaded complete");
 });
 
 })();
