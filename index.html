@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -101,7 +102,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .inp-mic.proc{background:rgba(127,119,221,.25);border-color:rgba(127,119,221,.5);cursor:default;}
 @keyframes mpulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);}50%{box-shadow:0 0 0 7px rgba(231,76,60,0);}}
 .inp-ta{flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.13);border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;color:#fff;background:rgba(255,255,255,.07);resize:none;height:50px;line-height:1.4;}
-.inp-ta::placeholder{color:rgba(255,255,255,.24);}
+.inp-ta::placeholder{color:rgba(255,255,255,.24);font-size:12px;}
 .inp-ta:focus{outline:none;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.1);}
 .inp-send{height:50px;padding:0 18px;border-radius:10px;border:none;background:#fff;color:#1A1916;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;}
 .inp-send:hover{background:#e8e4dc;}.inp-send:disabled{opacity:.4;cursor:default;}
@@ -361,6 +362,16 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <div class="chip" data-g="ingreso-tipo" data-v="otros">Otros</div>
       </div>
     </div>
+
+    <div class="q-block">
+      <div class="q-lbl">Cuando gastas en dolares, que tipo de cambio usas?</div>
+      <div class="q-opts">
+        <div class="chip on" data-g="dolar-tipo" data-v="blue">Dolar blue</div>
+        <div class="chip" data-g="dolar-tipo" data-v="mep">Dolar MEP</div>
+        <div class="chip" data-g="dolar-tipo" data-v="oficial">Dolar oficial</div>
+      </div>
+      <div class="q-hint">Correa va a buscar la cotizacion del dia automaticamente</div>
+    </div>
     <div class="ob-actions">
       <button class="btn-back" id="btn1b">Atras</button>
       <button class="btn-next" id="btn1">Continuar &rarr;</button>
@@ -452,7 +463,13 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
     </div>
     <div class="bdown">
       <div class="bd-hdr">
-        <span class="bd-hl">Por categoria</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="bd-hl">Por categoria</span>
+          <div style="display:flex;background:#F0EEE8;border-radius:16px;padding:2px;gap:2px">
+            <button id="cur-ars" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">ARS</button>
+            <button id="cur-usd" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
+          </div>
+        </div>
         <div class="bd-mth">
           <button class="mbtn" id="btn-prev-month">&larr;</button>
           <span id="bd-month-lbl">Abril 2026</span>
@@ -573,7 +590,7 @@ var ING_DB = [
 
 // ── STATE ──
 var step = 0;
-var profile = {housing:"alquilo", vehicle:[], life:[], ingresos:"no", "ingreso-tipo":[]};
+var profile = {housing:"alquilo", vehicle:[], life:[], ingresos:"no", "ingreso-tipo":[], "dolar-tipo":"blue"};
 var activeCats = [];
 var activeIngCats = [];
 var curMonth = {y:2026, m:3};
@@ -627,7 +644,7 @@ function updateProg() {
 function chipToggle(el) {
   var g = el.dataset.g;
   var v = el.dataset.v;
-  var singles = ["housing", "ingresos"];
+  var singles = ["housing", "ingresos", "dolar-tipo"];
   if (singles.indexOf(g) >= 0) {
     var opts = document.querySelectorAll("[data-g='" + g + "']");
     for (var i = 0; i < opts.length; i++) opts[i].classList.remove("on");
@@ -796,6 +813,36 @@ function chMonth(d) {
 }
 
 // ── AI ──
+
+// ── TC FETCH ──
+var tcCache = {};
+async function fetchTC(fecha, tipo) {
+  var key = fecha + "_" + (tipo || "blue");
+  if (tcCache[key]) return tcCache[key];
+  try {
+    var resp = await fetch("https://api.bluelytics.com.ar/v2/historical?day=" + fecha);
+    if (!resp.ok) throw new Error("no data");
+    var d = await resp.json();
+    var tc;
+    if (tipo === "oficial") tc = d.oficial && d.oficial.value_sell;
+    else if (tipo === "mep") tc = d.oficial && d.oficial.value_sell * 1.015;
+    else tc = d.blue && d.blue.value_sell;
+    if (!tc) throw new Error("no tc");
+    tcCache[key] = parseFloat(tc);
+    return tcCache[key];
+  } catch(e) {
+    console.warn("TC fetch failed:", e.message);
+    return gTC().usd;
+  }
+}
+async function toUSD(monto, cur, fecha) {
+  if (cur === "USD") return monto;
+  var dolarTipo = (ls("cr_profile", {}) || {})["dolar-tipo"] || "blue";
+  var tc = await fetchTC(fecha, dolarTipo);
+  if (cur === "EUR") return parseFloat((monto / tc * 1.08).toFixed(2));
+  return parseFloat((monto / tc).toFixed(2));
+}
+
 function buildPrompt() {
   var cats = gCats() || [];
   var ingCats = gIngCats() || [];
@@ -809,10 +856,10 @@ function buildPrompt() {
     "Categorias de GASTOS: " + catStr + "\n" +
     "Categorias de INGRESOS: " + ingStr + "\n" +
     "Tipos: gasto = sale plata | ingreso = entra plata\n" +
-    "REGLAS: Si hay ambiguedad genuina (ej nafta con auto Y moto disponibles), usa ambiguo:true.\n" +
+    "REGLAS:\n" +"1. Si hay ambiguedad genuina (nafta con auto Y moto), usa ambiguo:true y lista opciones.\n" +"2. Si el gasto NO encaja en ninguna categoria disponible, usa categoria_nueva:true y sugiere nombre en cat_sugerida.\n" +"3. Medio de pago OPCIONAL, solo si fue mencionado.\n" +
     "El medio de pago es OPCIONAL, solo incluilo si fue mencionado explicitamente.\n" +
     "Responde SOLO con JSON sin texto extra:\n" +
-    '{"tipo":"gasto|ingreso","fecha":"YYYY-MM-DD","categoria":"nombre exacto","subcategoria":"subcategoria","cur":"ARS|USD|EUR","monto":numero,"mp":null,"ambiguo":false,"opciones":[],"mensaje":"frase corta amigable en rioplatense"}';
+    '{"tipo":"gasto|ingreso","fecha":"YYYY-MM-DD","categoria":"nombre exacto","subcategoria":"subcategoria","cur":"ARS|USD|EUR","monto":numero,"mp":null,"ambiguo":false,"opciones":[],"categoria_nueva":false,"cat_sugerida":null,"mensaje":"frase corta amigable en rioplatense"}';
 }
 
 async function sendAI() {
@@ -950,6 +997,34 @@ function showConf(p) {
   var msg = document.getElementById("conf-msg");
   var fields = document.getElementById("conf-fields");
   msg.textContent = p.mensaje || "Registramos esto?";
+
+  if (p.categoria_nueva && p.cat_sugerida) {
+    msg.textContent = "No tengo una categoria que encaje bien. Te propongo abrir \"" + p.cat_sugerida + "\" — ¿la creamos?";
+    fields.innerHTML = '<div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap" id="newcat-opts">' +
+      '<button id="btn-mknewcat" style="background:#1A1916;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer">+ Crear y registrar</button>' +
+      '<button id="btn-uservarios" style="background:none;border:1px solid #E2DED6;color:#6B6760;padding:9px 14px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;cursor:pointer">Usar Varios</button>' +
+      '</div>';
+    document.getElementById("conf-card").classList.add("show");
+    document.getElementById("conf-card").scrollIntoView({behavior:"smooth",block:"nearest"});
+    document.getElementById("btn-mknewcat").addEventListener("click", function() {
+      var cats = gCats() || [];
+      var newCat = {id:"c"+Date.now(), nom:p.cat_sugerida, em:"&#128717;", subs:["General"]};
+      cats.push(newCat);
+      ss("cr_cats", cats);
+      pendMov.categoria = p.cat_sugerida;
+      pendMov.categoria_nueva = false;
+      pendMov.subcategoria = "General";
+      confirmMov();
+    });
+    document.getElementById("btn-uservarios").addEventListener("click", function() {
+      pendMov.categoria = "Varios";
+      pendMov.categoria_nueva = false;
+      pendMov.cat_sugerida = null;
+      showConf(pendMov);
+    });
+    return;
+  }
+
   if (p.ambiguo && p.opciones && p.opciones.length > 0) {
     fields.innerHTML = '<div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap" id="ambig-opts"></div>';
     var opts = document.getElementById("ambig-opts");
@@ -987,30 +1062,32 @@ function showConf(p) {
   document.getElementById("conf-card").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
-function confirmMov() {
+async function confirmMov() {
   if (!pendMov) return;
   var p = pendMov;
-  var tc = gTC();
-  var usd = p.cur === "USD" ? p.monto : p.cur === "EUR" ? p.monto * (tc.usd / tc.usd * 1.1) : p.monto / tc.usd;
-  var mov = {
-    id: Date.now(),
-    tipo: p.tipo,
-    fecha: p.fecha,
-    categoria: p.categoria,
-    subcategoria: p.subcategoria,
-    cur: p.cur,
-    monto: p.monto,
-    usd: parseFloat(usd.toFixed(2)),
-    mp: p.mp || null,
-    inputOriginal: p.inputOriginal
-  };
-  var arr = gMonthM();
-  arr.push(mov);
-  sMonthM(arr);
-  cancelConf();
-  document.getElementById("ai-inp").value = "";
-  renderHome();
-  showToast("Registrado \u2713");
+  var btn = document.getElementById("conf-ok");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
+  try {
+    var usdVal = await toUSD(p.monto, p.cur, p.fecha);
+    var tcUsado = p.cur !== "USD" ? Math.round(p.monto / usdVal) : null;
+    var mov = {
+      id: Date.now(), tipo: p.tipo, fecha: p.fecha,
+      categoria: p.categoria, subcategoria: p.subcategoria,
+      cur: p.cur, monto: p.monto, usd: usdVal,
+      tc_usado: tcUsado, mp: p.mp || null,
+      inputOriginal: p.inputOriginal
+    };
+    var arr = gMonthM(); arr.push(mov); sMonthM(arr);
+    cancelConf();
+    document.getElementById("ai-inp").value = "";
+    renderHome();
+    showToast("Registrado ✓");
+  } catch(e) {
+    showToast("Error al guardar"); console.error(e);
+  }
+  btn.disabled = false;
+  btn.innerHTML = "✓ Confirmar";
 }
 
 function cancelConf() {
@@ -1046,6 +1123,7 @@ function renderExamples() {
   });
 }
 
+var showUSD = false;
 function renderHome() {
   var movs = gMonthM();
   var gas = movs.filter(function(m) { return m.tipo === "gasto"; });
@@ -1056,8 +1134,13 @@ function renderHome() {
   setText("hm-eg2", gas.length + " registro" + (gas.length !== 1 ? "s" : ""));
   setText("hm-ing", fA(totI));
   setText("hm-ing2", ing.length + " registro" + (ing.length !== 1 ? "s" : ""));
-  var byCat = {};
-  gas.forEach(function(m) { byCat[m.categoria] = (byCat[m.categoria] || 0) + m.monto; });
+  var byCatARS = {}, byCatUSD = {};
+  gas.forEach(function(m) {
+    var ars = m.cur === "ARS" ? m.monto : (m.usd || 0) * gTC().usd;
+    byCatARS[m.categoria] = (byCatARS[m.categoria] || 0) + ars;
+    byCatUSD[m.categoria] = (byCatUSD[m.categoria] || 0) + (m.usd || 0);
+  });
+  var byCat = byCatARS;
   var topArr = Object.keys(byCat).sort(function(a,b) { return byCat[b] - byCat[a]; });
   if (topArr.length) {
     setText("hm-top", topArr[0]);
@@ -1070,21 +1153,24 @@ function renderHome() {
   if (!gas.length) {
     bd.innerHTML = '<div class="bd-empty">Registra tu primer gasto para verlo aqui.</div>';
   } else {
-    var maxA = Math.max.apply(null, Object.values(byCat));
-    var html = "";
-    topArr.forEach(function(nom) {
-      var amt = byCat[nom];
+    var curMap = showUSD ? byCatUSD : byCatARS;
+    var sortedNoms = Object.keys(curMap).sort(function(a,b){ return curMap[b]-curMap[a]; });
+    var maxA = Math.max.apply(null, Object.values(curMap));
+    var bdHtml = "";
+    sortedNoms.forEach(function(nom) {
+      var amt = curMap[nom];
       var c = getCatObj(nom);
       var cnt = gas.filter(function(m) { return m.categoria === nom; }).length;
       var pct = maxA > 0 ? Math.round(amt / maxA * 100) : 0;
       var col = getCatColor(nom);
-      html += '<div class="bd-row" data-cat="' + encodeURIComponent(nom) + '">' +
+      var amtStr = showUSD ? ("US$ " + Math.round(amt).toLocaleString("es-AR")) : fA(amt);
+      bdHtml += '<div class="bd-row" data-cat="' + encodeURIComponent(nom) + '">' +
         '<div class="bd-em">' + c.em + '</div>' +
         '<div class="bd-info"><div class="bd-name">' + nom + '</div>' +
         '<div class="bd-bar-wrap"><div class="bd-bar" style="width:' + pct + '%;background:' + col + '"></div></div></div>' +
-        '<div class="bd-right"><div class="bd-amt">' + fA(amt) + '</div><div class="bd-cnt">' + cnt + ' registro' + (cnt !== 1 ? 's' : '') + '</div></div></div>';
+        '<div class="bd-right"><div class="bd-amt">' + amtStr + '</div><div class="bd-cnt">' + cnt + ' registro' + (cnt !== 1 ? "s" : "") + '</div></div></div>';
     });
-    bd.innerHTML = html;
+    bd.innerHTML = bdHtml;
   }
   var rcList = document.getElementById("rc-list");
   var last = movs.slice(-6).reverse();
@@ -1101,7 +1187,7 @@ function renderHome() {
       '<div class="mv-l"><div class="mv-em">' + c.em + '</div>' +
       '<div><div class="mv-cat">' + m.categoria + (isIng ? '<span class="badge bi">ingreso</span>' : '') + '</div>' +
       '<div class="mv-note">' + m.subcategoria + ' &middot; &ldquo;' + m.inputOriginal + '&rdquo;</div></div></div>' +
-      '<div class="mv-r"><div class="mv-amt" style="color:' + (isIng ? "#2D6A4F" : "#1A1916") + '">' + fC(m.monto, m.cur) + '</div>' +
+      '<div class="mv-r"><div class="mv-amt" style="color:' + (isIng ? "#2D6A4F" : "#1A1916") + '">' + fC(m.monto, m.cur) + (m.cur !== "ARS" && m.tc_usado ? "<div style='font-size:10px;color:#A8A49E;font-family:DM Mono,monospace'>TC $" + Number(m.tc_usado).toLocaleString('es-AR') + "</div>" : "") + '</div>' +
       '<div class="mv-date">' + d + (m.mp ? ' &middot; ' + m.mp : '') + '</div></div></div>';
   });
   rcList.innerHTML = rcHtml;
@@ -1201,7 +1287,7 @@ async function genInsight() {
     var resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body: JSON.stringify({model:"claude-sonnet-4-6", max_tokens:200, system:"Sos el asistente financiero de un usuario argentino que usa Correa. Con los datos del mes, escribi 2-3 oraciones en espanol rioplatense, amigable y directo. Sin asteriscos ni markdown. Solo texto.", messages:[{role:"user", content:ctx}]})
+      body: JSON.stringify({model:"claude-sonnet-4-6", max_tokens:200, system:"Sos el asistente financiero de un usuario argentino que usa Correa. Con los datos del mes, escribi 2-3 oraciones en espanol rioplatense, amigable y directo. Analiza patrones y categorias destacadas. NO sugieras que cambie como carga los datos ni que agregue subcategorias. Sin asteriscos ni markdown. Solo texto.", messages:[{role:"user", content:ctx}]})
     });
     if (!resp.ok) throw new Error("Error al generar");
     var data = await resp.json();
@@ -1344,6 +1430,15 @@ document.addEventListener("DOMContentLoaded", function() {
     var row = e.target.closest(".bd-row");
     if (row && row.dataset.cat) showDetail(decodeURIComponent(row.dataset.cat));
   });
+  // Currency toggle
+  function setCurToggle(usd) {
+    showUSD = usd;
+    document.getElementById("cur-ars").style.cssText = usd ? "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif" : "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif";
+    document.getElementById("cur-usd").style.cssText = usd ? "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif" : "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif";
+    renderHome();
+  }
+  document.getElementById("cur-ars").addEventListener("click", function() { setCurToggle(false); });
+  document.getElementById("cur-usd").addEventListener("click", function() { setCurToggle(true); });
 
   // Config
   document.getElementById("cfg-back").addEventListener("click", function() { showPage("home"); });
