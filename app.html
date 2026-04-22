@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v4.3</title>
+<title>Correa v4.5</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1167,7 +1167,7 @@ function openEditModal(id){
   var aC=m.tipo==="ingreso"?ingCats:cats;
   var cO=aC.find(function(c){return c.nom===m.categoria;});
   var subs=cO?cO.subs:["General","Otros"];
-  document.getElementById("edit-modal-title").textContent=m.categoria+" \u2014 "+m.subcategoria;
+  document.getElementById("edit-modal-title").textContent=m.categoria+" - "+m.subcategoria;
   var flds=document.getElementById("edit-modal-fields");flds.innerHTML="";
   function aF(lbl,el){var w=document.createElement("div");w.style.cssText="background:#F7F6F2;border-radius:10px;padding:10px 14px";var l=document.createElement("div");l.style.cssText="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:5px";l.textContent=lbl;w.appendChild(l);w.appendChild(el);flds.appendChild(w);}
   var sC=document.createElement("select");sC.id="em-cat";sC.style.cssText="width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;color:#1A1916;padding:0";
@@ -1463,7 +1463,7 @@ function delIngCat(i) {
 var WT1 = [
   {
     step:"Paso 1 de 4", title:"Escribi o graba",
-    body:"Contame el gasto en lenguaje natural. Algo como "pague nafta $15.000 con debito" \u2014 o graba tu voz con el microfono.",
+    body:'Contame el gasto en lenguaje natural. Algo como pague nafta $15.000 con debito - o graba tu voz con el microfono.',
     target:"wt-input", arrow:"bottom"
   },
   {
