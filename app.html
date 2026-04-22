@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v4.2</title>
+<title>Correa v4.3</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -588,7 +588,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 <script>
 (function() {
 
-// ── CONSTANTS ──
+//  CONSTANTS 
 var MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 var CAT_COLORS = ["#378ADD","#7F77DD","#EF9F27","#2D6A4F","#D4537E","#D85A30","#1D9E75","#888780","#0E6655","#9B2335","#4A235A","#7D4E24","#185FA5","#3B6D11"];
 
@@ -616,7 +616,7 @@ var ING_DB = [
   {id:"otros-ing", nom:"Otros ingresos", em:"&#128181;", subs:["Otros"], triggers:["si","relacion","independiente","ambos","otros"]}
 ];
 
-// ── STATE ──
+//  STATE 
 var step = 0;
 var profile = {housing:"alquilo", vehicle:[], life:[], ingresos:"no", "ingreso-tipo":[], "dolar-tipo":"blue"};
 var activeCats = [];
@@ -627,7 +627,7 @@ var isRec = false;
 var mediaR = null;
 var audChunks = [];
 
-// ── STORAGE ──
+//  STORAGE 
 function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return d; } }
 function ss(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 function gKey(p) { return localStorage.getItem("cr_k_" + p) || ""; }
@@ -641,7 +641,7 @@ function gAllM() { return ls("cr_m", {}); }
 function gMonthM() { return gAllM()[mk()] || []; }
 function sMonthM(a) { var all = gAllM(); all[mk()] = a; ss("cr_m", all); }
 
-// ── UTILS ──
+//  UTILS 
 function fA(n) { return "$" + Math.round(n).toLocaleString("es-AR"); }
 function fC(n, c) { return (c === "USD" ? "US$ " : c === "EUR" ? "\u20ac " : "$") + Math.round(n).toLocaleString("es-AR"); }
 function setText(id, v) { var e = document.getElementById(id); if (e) e.textContent = v; }
@@ -653,7 +653,7 @@ function showToast(m) {
   setTimeout(function() { t.classList.remove("show"); }, 2200);
 }
 
-// ── ONBOARDING ──
+//  ONBOARDING 
 function updateProg() {
   for (var i = 0; i < 4; i++) {
     var dot = document.getElementById("pd" + i);
@@ -788,7 +788,7 @@ function finishOb() {
   startApp();
 }
 
-// ── APP ──
+//  APP 
 function startApp() {
   document.getElementById("onboarding").style.display = "none";
   document.getElementById("app").style.display = "grid";
@@ -810,7 +810,7 @@ function startApp() {
   maybeStartWT1();
 }
 
-// ── NAV ──
+//  NAV 
 function showPage(p) {
   var pages = ["home", "ingresos", "config"];
   pages.forEach(function(pg) {
@@ -839,7 +839,7 @@ function chMonth(d) {
   maybeStartWT1();
 }
 
-// ── AI ──
+//  AI 
 function getVehicleCats() {
   var cats = gCats() || [];
   return cats.filter(function(c){ return ["auto","moto","bici"].indexOf(c.id) >= 0; }).map(function(c){ return c.nom; });
@@ -941,7 +941,7 @@ async function sendAI() {
   inp.focus();
 }
 
-// ── VOICE ──
+//  VOICE 
 async function startRec() {
   if (!gKey("ant")) { showToast("Configura API key de Anthropic"); return; }
   if (!gKey("oai")) { showToast("Configura API key de OpenAI para nota de voz"); return; }
@@ -1026,7 +1026,7 @@ function setEx(text) {
   document.getElementById("ai-inp").focus();
 }
 
-// ── CONFIRM ──
+//  CONFIRM 
 function showConf(p) {
   var msg = document.getElementById("conf-msg");
   var fields = document.getElementById("conf-fields");
@@ -1100,24 +1100,24 @@ async function confirmMov() {
   if (!pendMov) return;
   var p = pendMov;
   var btn = document.getElementById("conf-ok");
-  btn.disabled=true; btn.innerHTML="✓ Guardando...";
+  btn.disabled=true; btn.innerHTML="\u2713 Guardando...";
   try {
     var usdVal = await toUSD(p.monto, p.cur, p.fecha);
     var tcUsado = p.cur!=="USD" ? Math.round(p.monto/usdVal) : null;
     var mov = {id:Date.now(),tipo:p.tipo,fecha:p.fecha,categoria:p.categoria,subcategoria:p.subcategoria,cur:p.cur,monto:p.monto,usd:usdVal,tc_usado:tcUsado,mp:p.mp||null,inputOriginal:p.inputOriginal};
     var arr=gMonthM(); arr.push(mov); sMonthM(arr);
     cancelConf(); document.getElementById("ai-inp").value="";
-    renderHome(); showToast("Registrado ✓");
+    renderHome(); showToast("Registrado \u2713");
     maybeStartWT2();
   } catch(e) { showToast("Error al guardar"); console.error(e); }
-  btn.disabled=false; btn.innerHTML="✓ Confirmar";
+  btn.disabled=false; btn.innerHTML="\u2713 Confirmar";
 }
 function cancelConf() {
   pendMov = null;
   document.getElementById("conf-card").classList.remove("show");
 }
 
-// ── RENDER HOME ──
+//  RENDER HOME 
 function decodeEm(em) { var d=document.createElement("div");d.innerHTML=em;return d.textContent||d.innerText||em; }
 
 var showUSD = false;
@@ -1167,7 +1167,7 @@ function openEditModal(id){
   var aC=m.tipo==="ingreso"?ingCats:cats;
   var cO=aC.find(function(c){return c.nom===m.categoria;});
   var subs=cO?cO.subs:["General","Otros"];
-  document.getElementById("edit-modal-title").textContent=m.categoria+" — "+m.subcategoria;
+  document.getElementById("edit-modal-title").textContent=m.categoria+" \u2014 "+m.subcategoria;
   var flds=document.getElementById("edit-modal-fields");flds.innerHTML="";
   function aF(lbl,el){var w=document.createElement("div");w.style.cssText="background:#F7F6F2;border-radius:10px;padding:10px 14px";var l=document.createElement("div");l.style.cssText="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:5px";l.textContent=lbl;w.appendChild(l);w.appendChild(el);flds.appendChild(w);}
   var sC=document.createElement("select");sC.id="em-cat";sC.style.cssText="width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;color:#1A1916;padding:0";
@@ -1186,7 +1186,7 @@ function saveEditModal(){
   movs[i].subcategoria=document.getElementById("em-sub").value;
   movs[i].monto=parseFloat(document.getElementById("em-monto").value)||movs[i].monto;
   movs[i].fecha=document.getElementById("em-fecha").value;
-  sMonthM(movs);closeEditModal();renderHome();showToast("Guardado ✓");
+  sMonthM(movs);closeEditModal();renderHome();showToast("Guardado \u2713");
 }
 function deleteMovFromModal(){
   if(!editingMovId)return;
@@ -1322,7 +1322,7 @@ function renderIngresos() {
   }
 }
 
-// ── INSIGHT ──
+//  INSIGHT 
 async function genInsight() {
   var key = gKey("ant");
   if (!key) { showToast("Configura tu API key de Anthropic"); return; }
@@ -1370,7 +1370,7 @@ async function genInsight() {
   btn.innerHTML = "Actualizar analisis";
 }
 
-// ── CONFIG ──
+//  CONFIG 
 function renderCfgCats() {
   var prof=ls("cr_profile",{});var ds=document.getElementById("cfg-dolar-tipo");if(ds)ds.value=prof["dolar-tipo"]||"blue";
   var cats = gCats() || [];
@@ -1394,7 +1394,7 @@ function renderCfgCats() {
       pn.innerHTML="";var lb=document.createElement("div");lb.style.cssText="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";lb.textContent="Subcategorias";pn.appendChild(lb);
       var fc=gCats()||[];var cat=fc[ii];if(!cat)return;
       var tw=document.createElement("div");tw.style.cssText="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px";
-      cat.subs.forEach(function(s,si){var tg=document.createElement("div");tg.style.cssText="display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #E2DED6;border-radius:14px;padding:4px 10px;font-size:12px;color:#1A1916";tg.appendChild(document.createTextNode(s));var x=document.createElement("span");x.textContent="×";x.style.cssText="color:#A8A49E;cursor:pointer;font-size:15px;line-height:1;margin-left:2px";x.addEventListener("click",(function(iii,sii){return function(){var f=gCats()||[];f[iii].subs.splice(sii,1);ss("cr_cats",f);rP(iii);};})(ii,si));tg.appendChild(x);tw.appendChild(tg);});pn.appendChild(tw);
+      cat.subs.forEach(function(s,si){var tg=document.createElement("div");tg.style.cssText="display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #E2DED6;border-radius:14px;padding:4px 10px;font-size:12px;color:#1A1916";tg.appendChild(document.createTextNode(s));var x=document.createElement("span");x.textContent="\u00D7";x.style.cssText="color:#A8A49E;cursor:pointer;font-size:15px;line-height:1;margin-left:2px";x.addEventListener("click",(function(iii,sii){return function(){var f=gCats()||[];f[iii].subs.splice(sii,1);ss("cr_cats",f);rP(iii);};})(ii,si));tg.appendChild(x);tw.appendChild(tg);});pn.appendChild(tw);
       var ar=document.createElement("div");ar.style.cssText="display:flex;gap:6px";var si=document.createElement("input");si.type="text";si.placeholder="Nueva subcategoria...";si.style.cssText="flex:1;padding:6px 10px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;background:#fff;color:#1A1916";var sa=document.createElement("button");sa.textContent="+ Agregar";sa.style.cssText="background:#1A1916;color:#fff;border:none;padding:6px 12px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap";sa.addEventListener("click",(function(iii){return function(){var n=si.value.trim();if(!n)return;var f=gCats()||[];if(f[iii].subs.indexOf(n)<0)f[iii].subs.push(n);ss("cr_cats",f);si.value="";rP(iii);};})(ii));ar.appendChild(si);ar.appendChild(sa);pn.appendChild(ar);
     }
     row.addEventListener("click",(function(ii){return function(){op=!op;pn.style.display=op?"block":"none";ch.style.transform=op?"rotate(90deg)":"rotate(0deg)";if(op)rP(ii);};})(i));
@@ -1458,12 +1458,12 @@ function delIngCat(i) {
   showToast("Eliminada");
 }
 
-// ── EVENT LISTENERS ──
-// ── WALKTHROUGH ──
+//  EVENT LISTENERS 
+//  WALKTHROUGH 
 var WT1 = [
   {
     step:"Paso 1 de 4", title:"Escribi o graba",
-    body:"Contame el gasto en lenguaje natural. Algo como "pague nafta $15.000 con debito" — o graba tu voz con el microfono.",
+    body:"Contame el gasto en lenguaje natural. Algo como "pague nafta $15.000 con debito" \u2014 o graba tu voz con el microfono.",
     target:"wt-input", arrow:"bottom"
   },
   {
