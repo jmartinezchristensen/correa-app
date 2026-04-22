@@ -794,6 +794,7 @@ function startApp() {
   localStorage.setItem("cr_opens", String(opens + 1));
   renderExamples();
   renderHome();
+  renderCfgCats();
 }
 
 // ── NAV ──
@@ -854,6 +855,12 @@ async function toUSD(monto, cur, fecha) {
   return parseFloat((monto / tc).toFixed(2));
 }
 
+function getVehicleCats() {
+  var cats = gCats() || [];
+  var vehicleIds = ["auto","moto","bici"];
+  return cats.filter(function(c){ return vehicleIds.indexOf(c.id) >= 0; }).map(function(c){ return c.nom; });
+}
+
 function buildPrompt() {
   var cats = gCats() || [];
   var ingCats = gIngCats() || [];
@@ -867,7 +874,7 @@ function buildPrompt() {
     "Categorias de GASTOS: " + catStr + "\n" +
     "Categorias de INGRESOS: " + ingStr + "\n" +
     "Tipos: gasto = sale plata | ingreso = entra plata\n" +
-    "REGLAS CRITICAS:\n" +"1. AMBIGUEDAD: Si el usuario tiene Auto Y Moto y dice nafta/combustible, usa ambiguo:true. En opciones pon EXACTAMENTE los nombres de las categorias del plan: ej [Auto,Moto]. NUNCA pongas formato X > Y.\n" +"2. CATEGORIA NUEVA: Si el gasto no encaja en ninguna categoria, usa categoria_nueva:true y sugiere un nombre corto en cat_sugerida.\n" +"3. Medio de pago OPCIONAL, solo si fue mencionado explicitamente.\n" +"4. IMPORTANTE: categoria debe ser EXACTAMENTE el nombre de una categoria del plan, sin modificaciones.\n" +
+    "VEHICULOS DEL USUARIO: " + getVehicleCats().join(", ") + "\n" +"REGLAS CRITICAS:\n" +"1. AMBIGUEDAD DE VEHICULO: Si el usuario tiene MAS DE UN vehiculo (ej tiene Auto Y Moto) y menciona nafta, combustible, gasoil, seguro vehicular, patente, o similar SIN especificar cual, DEBES usar ambiguo:true y en opciones poner los nombres exactos de sus categorias de vehiculo. Ej: opciones:[Auto,Moto].\n" +"2. CATEGORIA NUEVA: Si el gasto no encaja en ninguna categoria disponible, usa categoria_nueva:true y sugiere un nombre corto y descriptivo en cat_sugerida. Ej: educacion, salud mental, etc.\n" +"3. Medio de pago OPCIONAL, solo si fue mencionado explicitamente por el usuario.\n" +"4. categoria y subcategoria deben ser EXACTAMENTE como estan escritas en el plan de cuentas.\n" +
     "El medio de pago es OPCIONAL, solo incluilo si fue mencionado explicitamente.\n" +
     "Responde SOLO con JSON sin texto extra:\n" +
     '{"tipo":"gasto|ingreso","fecha":"YYYY-MM-DD","categoria":"nombre exacto","subcategoria":"subcategoria","cur":"ARS|USD|EUR","monto":numero,"mp":null,"ambiguo":false,"opciones":[],"categoria_nueva":false,"cat_sugerida":null,"mensaje":"frase corta amigable en rioplatense"}';
