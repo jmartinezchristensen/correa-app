@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v1.6</title>
+<title>Correa v1.7</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -199,7 +199,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .k-inp{flex:1;padding:7px 11px;border:1px solid #E2DED6;border-radius:8px;font-family:"DM Mono",monospace;font-size:12px;background:#F7F6F2;color:#1A1916;}
 .k-inp:focus{outline:none;border-color:#1A1916;}
 .k-div{height:1px;background:#E2DED6;margin:12px 0;}
-.cfg-list{display:flex;flex-direction:column;gap:5px;max-height:240px;overflow-y:auto;margin-bottom:10px;}
+.cfg-list{display:flex;flex-direction:column;gap:5px;max-height:320px;overflow-y:auto;margin-bottom:10px;-webkit-overflow-scrolling:touch;}
 .cfg-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;background:#F7F6F2;}
 .cfg-em{font-size:15px;}
 .cfg-nom{flex:1;font-size:13px;font-weight:500;color:#1A1916;}
@@ -1051,7 +1051,9 @@ function showConf(p) {
     var defOpt = document.createElement("option"); defOpt.value=""; defOpt.textContent="-- Elegir --";
     existSel.appendChild(defOpt);
     (gCats()||[]).forEach(function(cat){
-      var o = document.createElement("option"); o.value=cat.nom; o.textContent=cat.em+" "+cat.nom;
+      var o = document.createElement("option");
+      o.value = cat.nom;
+      o.textContent = decodeEm(cat.em) + " " + cat.nom;
       existSel.appendChild(o);
     });
     existBox.appendChild(existLbl); existBox.appendChild(existSel);
@@ -1209,6 +1211,13 @@ function cancelConf() {
 }
 
 // ── RENDER HOME ──
+function decodeEm(em) {
+  // Decode HTML entities to real emoji for use in select options
+  var div = document.createElement("div");
+  div.innerHTML = em;
+  return div.textContent || div.innerText || em;
+}
+
 function getCatObj(nom) {
   var cats = (gCats() || []).concat(gIngCats() || []);
   return cats.find(function(c) { return c.nom === nom; }) || {em: "&#128717;"};
@@ -1436,13 +1445,16 @@ function renderCfgCats() {
   el.innerHTML = "";
   cats.forEach(function(c, i) {
     var wrapper = document.createElement("div");
-    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;overflow:hidden;margin-bottom:6px";
+    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;margin-bottom:6px";
 
     // Header row
     var row = document.createElement("div");
     row.className = "cfg-row";
-    row.style.cssText = "border:none;cursor:pointer;border-radius:0";
-    row.innerHTML = '<span class="cfg-em">'+c.em+'</span><span class="cfg-nom">'+c.nom+'</span><span class="cfg-subs" style="flex:1;font-size:11px;color:#A8A49E">'+c.subs.slice(0,2).join(", ")+(c.subs.length>2?"...":"")+'</span>';
+    row.style.cssText = "border:none;cursor:pointer;border-radius:0;display:flex;align-items:center;padding:9px 12px;background:#fff;min-height:42px";
+    var emSpan = document.createElement("span"); emSpan.className="cfg-em"; emSpan.innerHTML=c.em;
+    var nomSpan = document.createElement("span"); nomSpan.className="cfg-nom"; nomSpan.textContent=c.nom;
+    var subsSpan = document.createElement("span"); subsSpan.style.cssText="flex:1;font-size:11px;color:#A8A49E;margin-left:4px"; subsSpan.textContent=c.subs.slice(0,2).join(", ")+(c.subs.length>2?"...":"");
+    row.appendChild(emSpan); row.appendChild(nomSpan); row.appendChild(subsSpan);
 
     var chevron = document.createElement("span");
     chevron.textContent = "›";
@@ -1457,7 +1469,7 @@ function renderCfgCats() {
 
     // Subcategory panel
     var panel = document.createElement("div");
-    panel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:12px";
+    panel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:12px;border-radius:0 0 10px 10px";
     var isOpen = false;
 
     function refreshPanel(ii) {
