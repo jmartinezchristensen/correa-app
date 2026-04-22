@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v3.2</title>
+<title>Correa v3.3</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -232,6 +232,13 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 @keyframes arc-spin{0%{stroke-dashoffset:0;opacity:1}40%{stroke-dashoffset:-120;opacity:0.25}60%{stroke-dashoffset:-120;opacity:0.25}100%{stroke-dashoffset:0;opacity:1}}
 @keyframes dot-beat{0%,100%{r:4}50%{r:6}}
 ::-webkit-scrollbar-thumb{background:#CBC6BC;border-radius:2px;}
+/* Bottom nav (mobile) */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#1A1916;padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:100;justify-content:space-around;align-items:center;border-top:1px solid rgba(255,255,255,.08);}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 16px;border-radius:8px;color:rgba(255,255,255,.4);transition:color .15s;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;user-select:none;}
+.bn-item.active{color:#fff;}
+.bn-icon{font-size:18px;line-height:1;}
+@media(max-width:768px){.sb{display:none !important;}#app{grid-template-columns:1fr !important;}.main{padding:16px 16px 80px 16px;}.bottom-nav{display:flex !important;}.inp-ta{font-size:16px;}.metrics{grid-template-columns:1fr 1fr !important;}.conf-fields{grid-template-columns:1fr 1fr !important;}.ob-card{padding:24px 18px;border-radius:16px;}.bd-row{padding:12px 16px;}.mv-row{padding:12px 16px;}}
+@media(max-width:380px){.metrics{grid-template-columns:1fr !important;}.ob-card{padding:20px 14px;}}
 @media(max-width:800px){
   #app{grid-template-columns:1fr;}
   .sb{display:none;}
@@ -259,9 +266,21 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
   <!-- PASO 1 -->
   <div class="ob-step active" id="st0">
     <div class="hero">
-      <div class="hero-star">&#10022;</div>
-      <div class="hero-name">Hola, soy Correa!</div>
-      <div class="hero-tag">Estoy para que tomes el control de tus gastos &mdash; sin formularios, sin Excel, sin drama. Vos pasame el gasto y me ocupo del resto.</div>
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="width:64px;height:64px;position:relative;display:inline-block;margin-bottom:14px">
+          <svg viewBox="0 0 120 120" width="64" height="64" style="position:absolute;top:0;left:0">
+            <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/>
+            <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/>
+            <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/>
+            <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/>
+          </svg>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;line-height:1">
+          <span style="font-size:22px;font-weight:400;color:#A8A49E">Hola, soy</span>
+          <span style="font-size:32px;font-weight:600;color:#1A1916;letter-spacing:-.04em">Correa</span>
+        </div>
+      </div>
+      <div class="hero-tag" style="text-align:center">Estoy para ayudarte a tomar el control de tus finanzas &mdash; sin formularios, sin Excel, sin drama.<br><strong style="color:#1A1916;font-weight:500">Vos contame qu&eacute; pas&oacute; y yo me ocupo del resto.</strong></div>
     </div>
     <div style="font-size:12px;font-weight:700;color:#A8A49E;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Para empezar, te hago unas preguntas rapidas</div>
     <div class="feats">
@@ -758,12 +777,12 @@ function startApp() {
     document.getElementById("nav-ingresos").style.display = "";
     document.getElementById("hm-ing-card").style.display = "";
     document.getElementById("cfg-ing-card").style.display = "";
+    var bnIng=document.getElementById("bn-ingresos"); if(bnIng)bnIng.style.display="";
   }
   var ak=gKey("ant"),ok=gKey("oai");
   if(ak)document.getElementById("cfg-ant").value=ak;
   if(ok)document.getElementById("cfg-oai").value=ok;
   setText("bd-month-lbl", MONTHS[curMonth.m] + " " + curMonth.y);
-  renderExamples();
   renderHome();
 }
 
@@ -778,6 +797,8 @@ function showPage(p) {
   navs.forEach(function(n) {
     var el = document.getElementById("nav-" + n);
     if (el) el.classList.toggle("active", n === p);
+    var bn = document.getElementById("bn-" + n);
+    if (bn) bn.classList.toggle("active", n === p);
   });
   if (p === "config") renderCfgCats();
   if (p === "home") renderHome();
@@ -1143,21 +1164,6 @@ function getCatColor(nom) {
   return CAT_COLORS[idx >= 0 ? idx % CAT_COLORS.length : 0];
 }
 
-function renderExamples() {
-  var cats = gCats() || [];
-  var pairs = [["vivienda","alquiler del mes"],["super","supermercado $28.000 debito"],["auto","nafta $15.000 efectivo"],["moto","nafta moto $8.000"],["salidas","cena afuera $14.000 VISA"]];
-  var exs = pairs.filter(function(p) { return cats.find(function(c) { return c.id === p[0]; }); }).slice(0,3).map(function(p) { return p[1]; });
-  if (!exs.length) exs = ["pague supermercado $25.000", "compre farmacia $8.500"];
-  var wrap = document.getElementById("inp-exs");
-  wrap.innerHTML = "";
-  exs.forEach(function(e) {
-    var d = document.createElement("div");
-    d.className = "ex-chip";
-    d.textContent = e;
-    d.addEventListener("click", function() { setEx(e); });
-    wrap.appendChild(d);
-  });
-}
 
 function renderHome() {
   var movs = gMonthM();
@@ -1454,9 +1460,8 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("cfg-ant").addEventListener("input", function() { sKey("ant", this.value); });
   document.getElementById("cfg-oai").addEventListener("input", function() { sKey("oai", this.value); });
   document.getElementById("save-tc-btn").addEventListener("click", function() {
-    var u = parseFloat(document.getElementById("cfg-usd").value) || 1455;
-    var i = parseFloat(document.getElementById("cfg-inf").value) || 2.9;
-    sTC(u, i);
+    var dT = document.getElementById("cfg-dolar-tipo").value;
+    var prof = ls("cr_profile", {}); prof["dolar-tipo"] = dT; ss("cr_profile", prof);
     showToast("Guardado");
   });
   document.getElementById("add-cat-btn").addEventListener("click", function() { addCat(); });
@@ -1469,6 +1474,11 @@ document.addEventListener("DOMContentLoaded", function() {
   });
   document.getElementById("ing-back").addEventListener("click", function() { showPage("home"); });
 
+  // Bottom nav
+  var bnH=document.getElementById("bn-home"),bnC=document.getElementById("bn-config"),bnI=document.getElementById("bn-ingresos");
+  if(bnH)bnH.addEventListener("click",function(){showPage("home");});
+  if(bnC)bnC.addEventListener("click",function(){showPage("config");});
+  if(bnI)bnI.addEventListener("click",function(){showPage("ingresos");});
   // Filter buttons
   document.querySelectorAll(".rc-filter-btn").forEach(function(btn){
     btn.addEventListener("click",function(){setRecentFilter(parseInt(btn.dataset.days));});
@@ -1492,5 +1502,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 })();
 </script>
+<nav class="bottom-nav" id="bottom-nav">
+  <div class="bn-item active" id="bn-home"><span class="bn-icon">&#10022;</span><span>Inicio</span></div>
+  <div class="bn-item" id="bn-ingresos" style="display:none"><span class="bn-icon">&#8657;</span><span>Ingresos</span></div>
+  <div class="bn-item" id="bn-config"><span class="bn-icon">&#9881;</span><span>Config</span></div>
+</nav>
 </body>
 </html>
