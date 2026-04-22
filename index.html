@@ -3,19 +3,16 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v2.7</title>
+<title>Correa v3.0</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
-#onboarding{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;}
-.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:32px 36px;width:100%;max-width:480px;margin:auto;box-shadow:0 1px 12px rgba(0,0,0,.04);}
+#onboarding{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:36px 40px;width:100%;max-width:500px;}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
 .prog{display:flex;align-items:center;margin-bottom:32px;}
@@ -33,9 +30,11 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .btn-back:hover{border-color:#1A1916;color:#1A1916;}
 
 /* Welcome card */
-.hero{background:transparent;padding:0;margin-bottom:20px;}
-.hero-name{font-size:32px;font-weight:600;color:#1A1916;letter-spacing:-.04em;line-height:1;}
-.hero-tag{font-size:14px;color:#6B6760;line-height:1.7;}
+.hero{background:#1A1916;border-radius:12px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(127,119,221,.15);}
+.hero-star{font-size:20px;margin-bottom:8px;}
+.hero-name{font-size:18px;font-weight:600;color:#fff;margin-bottom:4px;}
+.hero-tag{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;}
 .feats{display:flex;flex-direction:column;gap:10px;}
 .feat{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#6B6760;line-height:1.5;}
 .feat-ck{width:18px;height:18px;border-radius:50%;background:#D8F3DC;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:10px;color:#2D6A4F;font-weight:700;}
@@ -102,15 +101,15 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .inp-mic.rec{background:#c0392b;border-color:#e74c3c;color:#fff;animation:mpulse 1s ease-in-out infinite;}
 .inp-mic.proc{background:rgba(127,119,221,.25);border-color:rgba(127,119,221,.5);cursor:default;}
 @keyframes mpulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);}50%{box-shadow:0 0 0 7px rgba(231,76,60,0);}}
-.inp-ta{flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.13);border-radius:10px;font-family:"DM Sans",sans-serif;font-size:13px;color:#fff;background:rgba(255,255,255,.07);resize:none;height:50px;line-height:1.4;}
-.inp-ta::placeholder{color:rgba(255,255,255,.24);font-size:12px;}
+.inp-ta{flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.13);border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;color:#fff;background:rgba(255,255,255,.07);resize:none;height:50px;line-height:1.4;}
+.inp-ta::placeholder{color:rgba(255,255,255,.24);}
 .inp-ta:focus{outline:none;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.1);}
 .inp-send{height:50px;padding:0 18px;border-radius:10px;border:none;background:#fff;color:#1A1916;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;}
 .inp-send:hover{background:#e8e4dc;}.inp-send:disabled{opacity:.4;cursor:default;}
 .inp-bot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:5px;}
-
-
-
+.inp-exs{display:flex;flex-wrap:wrap;gap:4px;}
+.ex-chip{font-size:11px;padding:3px 9px;border-radius:14px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.38);cursor:pointer;transition:all .15s;}
+.ex-chip:hover{border-color:rgba(255,255,255,.26);color:rgba(255,255,255,.78);}
 .vst{font-size:11px;height:14px;}
 .vst.rec{color:#e74c3c;}.vst.proc{color:rgba(127,119,221,.8);}
 
@@ -121,13 +120,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .conf-msg{font-size:14px;color:#1A1916;margin-bottom:12px;line-height:1.5;}
 .conf-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px;}
 .cf{background:#F0EEE8;border-radius:8px;padding:9px 12px;}
-.cf-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:4px;}
+.cf-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:2px;}
 .cf-v{font-size:13px;font-weight:600;color:#1A1916;}
-.cf-edit{background:#F0EEE8;border-radius:8px;padding:9px 12px;}
-.cf-select{width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:13px;font-weight:600;color:#1A1916;padding:0;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23A8A49E' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0 center;padding-right:16px;}
-.cf-select:focus{outline:none;}
-.cf-input{width:100%;border:none;background:transparent;font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#1A1916;padding:0;}
-.cf-input:focus{outline:none;}
 .conf-acts{display:flex;gap:8px;}
 .btn-ok{background:#2D6A4F;color:#fff;border:none;padding:8px 20px;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
 .btn-ok:hover{background:#245a41;}
@@ -174,10 +168,6 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 /* Recent */
 .recent{background:#fff;border:1px solid #E2DED6;border-radius:16px;overflow:hidden;margin-bottom:16px;}
 .rc-hdr{padding:11px 16px;border-bottom:1px solid #E2DED6;}
-.rc-filter-btn{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;border:1px solid #E2DED6;background:#fff;color:#A8A49E;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .15s;}
-.rc-filter-btn:hover{border-color:#CBC6BC;color:#6B6760;}
-.rc-filter-btn.active{background:#1A1916;border-color:#1A1916;color:#fff;}
-.day-group-hdr{padding:8px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#A8A49E;background:#F7F6F2;border-bottom:1px solid #E2DED6;}
 .rc-hdr span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
 .mv-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #E2DED6;}
 .mv-row:last-child{border-bottom:none;}
@@ -204,7 +194,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .k-inp{flex:1;padding:7px 11px;border:1px solid #E2DED6;border-radius:8px;font-family:"DM Mono",monospace;font-size:12px;background:#F7F6F2;color:#1A1916;}
 .k-inp:focus{outline:none;border-color:#1A1916;}
 .k-div{height:1px;background:#E2DED6;margin:12px 0;}
-.cfg-list{display:flex;flex-direction:column;gap:5px;max-height:320px;overflow-y:auto;margin-bottom:10px;-webkit-overflow-scrolling:touch;}
+.cfg-list{display:flex;flex-direction:column;gap:5px;max-height:240px;overflow-y:auto;margin-bottom:10px;}
 .cfg-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;background:#F7F6F2;}
 .cfg-em{font-size:15px;}
 .cfg-nom{flex:1;font-size:13px;font-weight:500;color:#1A1916;}
@@ -240,56 +230,6 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
   .conf-fields{grid-template-columns:repeat(2,1fr);}
   .ob-card{padding:28px 20px;}
 }
-
-/* ── MOBILE FIRST ── */
-@media(max-width:768px){
-  /* Hide sidebar, show bottom nav */
-  .sb{display:none !important;}
-  #app{grid-template-columns:1fr !important;}
-  .main{padding:16px 16px 80px 16px;}
-
-  /* Bottom navigation */
-  .bottom-nav{display:flex !important;}
-
-  /* Bigger touch targets */
-  .inp-mic{width:48px;height:48px;}
-  .inp-send{padding:0 16px;font-size:13px;}
-  .inp-ta{font-size:16px;} /* prevents zoom on iOS */
-
-  /* Full width cards */
-  .metrics{grid-template-columns:1fr 1fr !important;}
-  .conf-fields{grid-template-columns:1fr 1fr !important;}
-
-  /* Onboarding */
-  .ob-card{padding:24px 18px;border-radius:16px;}
-  .ob-title{font-size:20px;}
-
-  /* Breakdown rows bigger for touch */
-  .bd-row{padding:12px 16px;}
-  .mv-row{padding:12px 16px;}
-}
-@media(max-width:380px){
-  .metrics{grid-template-columns:1fr !important;}
-  .ob-card{padding:20px 14px;}
-}
-
-/* Bottom nav (hidden on desktop) */
-.bottom-nav{
-  display:none;
-  position:fixed;
-  bottom:0;left:0;right:0;
-  background:#1A1916;
-  padding:10px 0 calc(10px + env(safe-area-inset-bottom));
-  z-index:100;
-  justify-content:space-around;
-  align-items:center;
-  border-top:1px solid rgba(255,255,255,.08);
-}
-.bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 16px;border-radius:8px;color:rgba(255,255,255,.4);transition:color .15s;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;user-select:none;}
-.bn-item.active{color:#fff;}
-.bn-item:hover{color:rgba(255,255,255,.8);}
-.bn-icon{font-size:18px;line-height:1;}
-
 </style>
 </head>
 <body>
@@ -310,28 +250,14 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
   <!-- PASO 1 -->
   <div class="ob-step active" id="st0">
     <div class="hero">
-      <!-- Logo centrado grande -->
-      <div style="text-align:center;margin-bottom:20px">
-        <div style="width:64px;height:64px;position:relative;display:inline-block;margin-bottom:14px">
-          <svg viewBox="0 0 120 120" width="64" height="64" style="position:absolute;top:0;left:0">
-            <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/>
-            <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/>
-            <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/>
-            <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/>
-          </svg>
-        </div>
-        <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;line-height:1">
-          <span style="font-size:22px;font-weight:400;color:#A8A49E;letter-spacing:-.01em">Hola, soy</span>
-          <span style="font-size:32px;font-weight:600;color:#1A1916;letter-spacing:-.04em">Correa</span>
-        </div>
-        
-      </div>
-      <div class="hero-tag" style="text-align:center">Estoy para ayudarte a tomar el control de tus finanzas &mdash; sin formularios, sin Excel, sin drama.<br><strong style="color:#1A1916;font-weight:500">Vos contame qu&eacute; pas&oacute; y yo me ocupo del resto.</strong></div>
+      <div class="hero-star">&#10022;</div>
+      <div class="hero-name">Hola, soy Correa!</div>
+      <div class="hero-tag">Estoy para que tomes el control de tus gastos &mdash; sin formularios, sin Excel, sin drama. Vos pasame el gasto y me ocupo del resto.</div>
     </div>
     <div style="font-size:12px;font-weight:700;color:#A8A49E;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Para empezar, te hago unas preguntas rapidas</div>
     <div class="feats">
-      <div class="feat"><div class="feat-ck">&#10003;</div><span>Registra gastos e ingresos con voz o texto en segundos</span></div>
-      <div class="feat"><div class="feat-ck">&#10003;</div><span>La IA categoriza todo autom&aacute;ticamente</span></div>
+      <div class="feat"><div class="feat-ck">&#10003;</div><span>Armamos tus categorias segun tu perfil</span></div>
+      <div class="feat"><div class="feat-ck">&#10003;</div><span>Registras gastos con voz o texto en segundos</span></div>
       <div class="feat"><div class="feat-ck">&#10003;</div><span>Todo editable, siempre bajo tu control</span></div>
     </div>
     <div class="ob-actions">
@@ -388,16 +314,6 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <div class="chip" data-g="ingreso-tipo" data-v="otros">Otros</div>
       </div>
     </div>
-
-    <div class="q-block">
-      <div class="q-lbl">Cuando gastas en dolares, que tipo de cambio usas?</div>
-      <div class="q-opts">
-        <div class="chip on" data-g="dolar-tipo" data-v="blue">Dolar blue</div>
-        <div class="chip" data-g="dolar-tipo" data-v="mep">Dolar MEP</div>
-        <div class="chip" data-g="dolar-tipo" data-v="oficial">Dolar oficial</div>
-      </div>
-      <div class="q-hint">Correa va a buscar la cotizacion del dia automaticamente</div>
-    </div>
     <div class="ob-actions">
       <button class="btn-back" id="btn1b">Atras</button>
       <button class="btn-next" id="btn1">Continuar &rarr;</button>
@@ -443,12 +359,13 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 <div id="app">
 <aside class="sb">
   <div class="sb-logo" style="display:flex;align-items:center;gap:10px">
-    <svg viewBox="0 0 120 120" width="28" height="28" style="flex-shrink:0;margin-right:2px">
-  <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
-  <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/>
-  <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" opacity="0.3"/>
-  <circle cx="60" cy="66" r="4" fill="#E8622A"/>
-</svg>
+    <div style="width:28px;height:28px;flex-shrink:0;position:relative">
+    <svg viewBox="0 0 120 120" width="28" height="28" style="position:absolute;top:0;left:0">
+      <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
+      <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/>
+      <circle cx="60" cy="66" r="4" fill="#E8622A"/>
+    </svg>
+  </div>
     <div><h2>Correa</h2><p>correa.app</p></div>
   </div>
   <nav class="sb-nav">
@@ -470,14 +387,13 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <div><div class="ph-title">Hola &#128075;</div><div class="ph-sub">Registra un movimiento con voz o texto</div></div>
     </div>
     <div class="inp-card">
-      <div class="inp-lbl" style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 120 120" width="14" height="14"><circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" opacity="0.9"/><circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/><circle cx="60" cy="66" r="4" fill="#E8622A"/></svg> Entrada inteligente</div>
+      <div class="inp-lbl">&#10022; Entrada inteligente</div>
       <div class="inp-row">
         <button class="inp-mic" id="mic-btn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
         <textarea class="inp-ta" id="ai-inp" placeholder="Ej: pague nafta $15.000 con debito..."></textarea>
         <button class="inp-send" id="send-btn">Registrar</button>
       </div>
       <div class="inp-bot">
-        
         <div class="vst" id="vst-lbl"></div>
       </div>
     </div>
@@ -497,13 +413,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
     </div>
     <div class="bdown">
       <div class="bd-hdr">
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="bd-hl">Por categoria</span>
-          <div style="display:flex;background:#F0EEE8;border-radius:16px;padding:2px;gap:2px">
-            <button id="cur-ars" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">ARS</button>
-            <button id="cur-usd" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
-          </div>
-        </div>
+        <span class="bd-hl">Por categoria</span>
         <div class="bd-mth">
           <button class="mbtn" id="btn-prev-month">&larr;</button>
           <span id="bd-month-lbl">Abril 2026</span>
@@ -531,7 +441,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <div id="rc-list"><div class="mv-empty">Aun no hay registros.</div></div>
     </div>
     <div class="insight">
-      <div class="ins-lbl" style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 120 120" width="12" height="12"><circle cx="60" cy="66" r="38" fill="none" stroke="#A8A49E" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/><circle cx="60" cy="66" r="4" fill="#A8A49E"/></svg> Analisis del mes</div>
+      <div class="ins-lbl">&#10022; Analisis del mes</div>
       <div id="ins-txt" style="font-size:14px;color:#A8A49E;line-height:1.7">Registra algunos gastos y te cuento como venis este mes.</div>
       <button class="btn-sm" id="ins-btn">Generar analisis</button>
     </div>
@@ -570,14 +480,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <div class="k-row"><span class="k-lbl">Anthropic (Claude)</span><input class="k-inp" type="password" id="cfg-ant" placeholder="sk-ant-..."></div>
       <div class="k-row"><span class="k-lbl">OpenAI (Whisper)</span><input class="k-inp" type="password" id="cfg-oai" placeholder="sk-..."></div>
       <div class="k-div"></div>
-      <div class="k-row">
-        <span class="k-lbl">Tipo de dolar</span>
-        <select id="cfg-dolar-tipo" style="padding:7px 11px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#F7F6F2;color:#1A1916">
-          <option value="blue">Dolar blue</option>
-          <option value="mep">Dolar MEP</option>
-          <option value="oficial">Dolar oficial</option>
-        </select>
-      </div>
+      <div class="k-row"><span class="k-lbl">TC AR$/US$</span><input class="k-inp" type="number" id="cfg-usd" style="width:120px;flex:none"></div>
+      <div class="k-row"><span class="k-lbl">Inflacion mensual %</span><input class="k-inp" type="number" id="cfg-inf" step="0.1" style="width:80px;flex:none"></div>
       <div style="margin-top:12px"><button class="btn-sm" id="save-tc-btn">Guardar</button></div>
     </div>
     <div class="cfg-card">
@@ -603,18 +507,16 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 </div>
 
 <div class="toast" id="toast"></div>
-
-<!-- Edit/Delete modal -->
-<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:400;align-items:flex-end;justify-content:center">
-  <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 36px;width:100%;max-width:500px">
+<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:500px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-      <div style="font-size:15px;font-weight:600;color:#1A1916" id="edit-modal-title">Editar registro</div>
-      <button id="modal-close-btn" style="background:none;border:none;font-size:20px;color:#A8A49E;cursor:pointer;padding:0 4px">&times;</button>
+      <div style="font-size:15px;font-weight:600;color:#1A1916" id="edit-title">Editar</div>
+      <button id="btn-modal-close" style="background:none;border:none;font-size:22px;color:#A8A49E;cursor:pointer;line-height:1">&times;</button>
     </div>
-    <div id="edit-modal-fields" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
+    <div id="edit-fields" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
     <div style="display:flex;gap:8px">
-      <button id="modal-save-btn" style="flex:1;background:#1A1916;color:#fff;border:none;padding:13px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Guardar cambios</button>
-      <button id="modal-delete-btn" style="background:#FCE4E8;color:#9B2335;border:1px solid #f5c1c8;padding:13px 18px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Eliminar</button>
+      <button id="btn-modal-save" style="flex:1;background:#1A1916;color:#fff;border:none;padding:13px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Guardar</button>
+      <button id="btn-modal-delete" style="background:#FCE4E8;color:#9B2335;border:1px solid #f5c1c8;padding:13px 18px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Eliminar</button>
     </div>
   </div>
 </div>
@@ -652,7 +554,7 @@ var ING_DB = [
 
 // ── STATE ──
 var step = 0;
-var profile = {housing:"alquilo", vehicle:[], life:[], ingresos:"no", "ingreso-tipo":[], "dolar-tipo":"blue"};
+var profile = {housing:"alquilo", vehicle:[], life:[], ingresos:"no", "ingreso-tipo":[]};
 var activeCats = [];
 var activeIngCats = [];
 var curMonth = {y:2026, m:3};
@@ -706,7 +608,7 @@ function updateProg() {
 function chipToggle(el) {
   var g = el.dataset.g;
   var v = el.dataset.v;
-  var singles = ["housing", "ingresos", "dolar-tipo"];
+  var singles = ["housing", "ingresos"];
   if (singles.indexOf(g) >= 0) {
     var opts = document.querySelectorAll("[data-g='" + g + "']");
     for (var i = 0; i < opts.length; i++) opts[i].classList.remove("on");
@@ -833,15 +735,15 @@ function startApp() {
     document.getElementById("nav-ingresos").style.display = "";
     document.getElementById("hm-ing-card").style.display = "";
     document.getElementById("cfg-ing-card").style.display = "";
-    var bnIng = document.getElementById("bn-ingresos");
-    if (bnIng) bnIng.style.display = "";
   }
   var ak = gKey("ant"), ok = gKey("oai");
   if (ak) document.getElementById("cfg-ant").value = ak;
   if (ok) document.getElementById("cfg-oai").value = ok;
+  var tc = gTC();
+  document.getElementById("cfg-usd").value = tc.usd;
+  document.getElementById("cfg-inf").value = tc.inf;
   setText("bd-month-lbl", MONTHS[curMonth.m] + " " + curMonth.y);
   renderHome();
-  renderCfgCats();
 }
 
 // ── NAV ──
@@ -855,8 +757,6 @@ function showPage(p) {
   navs.forEach(function(n) {
     var el = document.getElementById("nav-" + n);
     if (el) el.classList.toggle("active", n === p);
-    var bn = document.getElementById("bn-" + n);
-    if (bn) bn.classList.toggle("active", n === p);
   });
   if (p === "config") renderCfgCats();
   if (p === "home") renderHome();
@@ -872,42 +772,6 @@ function chMonth(d) {
 }
 
 // ── AI ──
-
-// ── TC FETCH ──
-var tcCache = {};
-async function fetchTC(fecha, tipo) {
-  var key = fecha + "_" + (tipo || "blue");
-  if (tcCache[key]) return tcCache[key];
-  try {
-    var resp = await fetch("https://api.bluelytics.com.ar/v2/historical?day=" + fecha);
-    if (!resp.ok) throw new Error("no data");
-    var d = await resp.json();
-    var tc;
-    if (tipo === "oficial") tc = d.oficial && d.oficial.value_sell;
-    else if (tipo === "mep") tc = d.oficial && d.oficial.value_sell * 1.015;
-    else tc = d.blue && d.blue.value_sell;
-    if (!tc) throw new Error("no tc");
-    tcCache[key] = parseFloat(tc);
-    return tcCache[key];
-  } catch(e) {
-    console.warn("TC fetch failed:", e.message);
-    return gTC().usd;
-  }
-}
-async function toUSD(monto, cur, fecha) {
-  if (cur === "USD") return monto;
-  var dolarTipo = (ls("cr_profile", {}) || {})["dolar-tipo"] || "blue";
-  var tc = await fetchTC(fecha, dolarTipo);
-  if (cur === "EUR") return parseFloat((monto / tc * 1.08).toFixed(2));
-  return parseFloat((monto / tc).toFixed(2));
-}
-
-function getVehicleCats() {
-  var cats = gCats() || [];
-  var vehicleIds = ["auto","moto","bici"];
-  return cats.filter(function(c){ return vehicleIds.indexOf(c.id) >= 0; }).map(function(c){ return c.nom; });
-}
-
 function buildPrompt() {
   var cats = gCats() || [];
   var ingCats = gIngCats() || [];
@@ -921,10 +785,10 @@ function buildPrompt() {
     "Categorias de GASTOS: " + catStr + "\n" +
     "Categorias de INGRESOS: " + ingStr + "\n" +
     "Tipos: gasto = sale plata | ingreso = entra plata\n" +
-    "VEHICULOS DEL USUARIO: " + getVehicleCats().join(", ") + "\n" +"REGLAS CRITICAS:\n" +"1. AMBIGUEDAD DE VEHICULO: Si el usuario tiene MAS DE UN vehiculo (ej tiene Auto Y Moto) y menciona nafta, combustible, gasoil, seguro vehicular, patente, o similar SIN especificar cual, DEBES usar ambiguo:true y en opciones poner los nombres exactos de sus categorias de vehiculo. Ej: opciones:[Auto,Moto].\n" +"2. CATEGORIA NUEVA: Si el gasto no encaja en ninguna categoria disponible, usa categoria_nueva:true y sugiere un nombre corto y descriptivo en cat_sugerida. Ej: educacion, salud mental, etc.\n" +"3. Medio de pago OPCIONAL, solo si fue mencionado explicitamente por el usuario.\n" +"4. categoria y subcategoria deben ser EXACTAMENTE como estan escritas en el plan de cuentas.\n" +
+    "REGLAS: Si hay ambiguedad genuina (ej nafta con auto Y moto disponibles), usa ambiguo:true.\n" +
     "El medio de pago es OPCIONAL, solo incluilo si fue mencionado explicitamente.\n" +
     "Responde SOLO con JSON sin texto extra:\n" +
-    '{"tipo":"gasto|ingreso","fecha":"YYYY-MM-DD","categoria":"nombre exacto","subcategoria":"subcategoria","cur":"ARS|USD|EUR","monto":numero,"mp":null,"ambiguo":false,"opciones":[],"categoria_nueva":false,"cat_sugerida":null,"mensaje":"frase corta amigable en rioplatense"}';
+    '{"tipo":"gasto|ingreso","fecha":"YYYY-MM-DD","categoria":"nombre exacto","subcategoria":"subcategoria","cur":"ARS|USD|EUR","monto":numero,"mp":null,"ambiguo":false,"opciones":[],"mensaje":"frase corta amigable en rioplatense"}';
 }
 
 async function sendAI() {
@@ -935,7 +799,7 @@ async function sendAI() {
   if (!key) { showToast("Configura tu API key en Configuracion"); return; }
   var btn = document.getElementById("send-btn");
   btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"> <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/> <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/> <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/> <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
+  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"><circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/><circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/><circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/><circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
   inp.disabled = true;
   try {
     var resp = await fetch("https://api.anthropic.com/v1/messages", {
@@ -1005,7 +869,7 @@ function stopRec() {
     var b = document.getElementById("mic-btn");
     b.classList.remove("rec");
     b.classList.add("proc");
-    b.innerHTML = "<svg viewBox="0 0 120 120" width="28" height="28"><circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/><circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/><circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/><circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg>";
+    b.innerHTML = "<svg viewBox=\"0 0 120 120\" width=\"24\" height=\"24\" style=\"vertical-align:middle;margin-right:6px\"><circle cx=\"60\" cy=\"66\" r=\"38\" fill=\"none\" stroke=\"#E8622A\" stroke-width=\"5.5\" stroke-linecap=\"round\" stroke-dasharray=\"119 239\" transform=\"rotate(-200 60 66)\" style=\"animation:arc-spin 2.4s ease-in-out infinite\"/><circle cx=\"60\" cy=\"66\" r=\"25\" fill=\"none\" stroke=\"#E8622A\" stroke-width=\"5.5\" stroke-linecap=\"round\" stroke-dasharray=\"78 157\" transform=\"rotate(-200 60 66)\" style=\"animation:arc-spin 2.4s ease-in-out infinite .15s\"/><circle cx=\"60\" cy=\"66\" r=\"13\" fill=\"none\" stroke=\"#E8622A\" stroke-width=\"5.5\" stroke-linecap=\"round\" stroke-dasharray=\"41 82\" transform=\"rotate(-200 60 66)\" style=\"animation:arc-spin 2.4s ease-in-out infinite .3s\"/><circle cx=\"60\" cy=\"66\" r=\"4\" fill=\"#E8622A\" style=\"animation:dot-beat 2.4s ease-in-out infinite\"/></svg>";
     setVSt("proc", "Transcribiendo...");
   }
 }
@@ -1042,7 +906,7 @@ async function procAudio(mime) {
   }
   var b = document.getElementById("mic-btn");
   b.classList.remove("rec", "proc");
-  b.innerHTML = "<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>";
+  b.innerHTML = "<svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"rgba(255,255,255,0.7)\" stroke-width=\"2\" stroke-linecap=\"round\"><rect x=\"9\" y=\"2\" width=\"6\" height=\"11\" rx=\"3\"/><path d=\"M5 10a7 7 0 0014 0\"/><line x1=\"12\" y1=\"19\" x2=\"12\" y2=\"23\"/><line x1=\"8\" y1=\"23\" x2=\"16\" y2=\"23\"/></svg>";
   setVSt("", "");
 }
 
@@ -1062,194 +926,67 @@ function showConf(p) {
   var msg = document.getElementById("conf-msg");
   var fields = document.getElementById("conf-fields");
   msg.textContent = p.mensaje || "Registramos esto?";
-
-  if (p.categoria_nueva && p.cat_sugerida) {
-    msg.textContent = "No tengo una categoria que encaje bien. Te propongo \"" + p.cat_sugerida + "\".";
-    fields.innerHTML = "";
-    var ncDiv = document.createElement("div");
-    ncDiv.style.cssText = "grid-column:1/-1;display:flex;flex-direction:column;gap:10px";
-
-    // Option 1: create new
-    var createBox = document.createElement("div");
-    createBox.style.cssText = "background:#F0EEE8;border-radius:10px;padding:12px";
-    var createLbl = document.createElement("div");
-    createLbl.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";
-    createLbl.textContent = "Crear categoria nueva";
-    var createRow = document.createElement("div");
-    createRow.style.cssText = "display:flex;gap:8px;align-items:center";
-    var ncInp = document.createElement("input");
-    ncInp.id = "inp-newcat-nom"; ncInp.type = "text"; ncInp.value = p.cat_sugerida;
-    ncInp.style.cssText = "flex:1;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#fff;color:#1A1916";
-    var ncBtn = document.createElement("button");
-    ncBtn.id = "btn-mknewcat"; ncBtn.textContent = "+ Crear";
-    ncBtn.style.cssText = "background:#1A1916;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap";
-    createRow.appendChild(ncInp); createRow.appendChild(ncBtn);
-    createBox.appendChild(createLbl); createBox.appendChild(createRow);
-
-    // Option 2: use existing
-    var existBox = document.createElement("div");
-    existBox.style.cssText = "background:#F0EEE8;border-radius:10px;padding:12px";
-    var existLbl = document.createElement("div");
-    existLbl.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";
-    existLbl.textContent = "O elegir una que ya tengo";
-    var existSel = document.createElement("select");
-    existSel.id = "sel-existing-cat";
-    existSel.style.cssText = "width:100%;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#fff;color:#1A1916";
-    var defOpt = document.createElement("option"); defOpt.value=""; defOpt.textContent="-- Elegir --";
-    existSel.appendChild(defOpt);
-    (gCats()||[]).forEach(function(cat){
-      var o = document.createElement("option");
-      o.value = cat.nom;
-      o.textContent = decodeEm(cat.em) + " " + cat.nom;
-      existSel.appendChild(o);
-    });
-    existBox.appendChild(existLbl); existBox.appendChild(existSel);
-
-    ncDiv.appendChild(createBox); ncDiv.appendChild(existBox);
-    fields.appendChild(ncDiv);
-    document.getElementById("conf-card").classList.add("show");
-    document.getElementById("conf-card").scrollIntoView({behavior:"smooth",block:"nearest"});
-    document.getElementById("btn-mknewcat").addEventListener("click", function() {
-      var nomInp = document.getElementById("inp-newcat-nom");
-      var nomFinal = nomInp ? nomInp.value.trim() : p.cat_sugerida;
-      if (!nomFinal) return;
-      var cats = gCats() || [];
-      if (!cats.find(function(c){ return c.nom === nomFinal; })) {
-        cats.push({id:"c"+Date.now(), nom:nomFinal, em:"&#128717;", subs:["General"]});
-        ss("cr_cats", cats);
-      }
-      pendMov.categoria = nomFinal;
-      pendMov.categoria_nueva = false;
-      pendMov.subcategoria = "General";
-      confirmMov();
-    });
-    document.getElementById("sel-existing-cat").addEventListener("change", function() {
-      var chosen = this.value;
-      if (!chosen) return;
-      var cats = gCats() || [];
-      var cat = cats.find(function(c){ return c.nom === chosen; });
-      pendMov.categoria = chosen;
-      pendMov.categoria_nueva = false;
-      pendMov.subcategoria = cat ? cat.subs[0] : "General";
-      pendMov.cat_sugerida = null;
-      confirmMov();
-    });
-    return;
-  }
-
   if (p.ambiguo && p.opciones && p.opciones.length > 0) {
-    msg.textContent = p.mensaje || "Para cual categoria lo registro?";
-    var allCats = gCats() || [];
-    // Robustly match options to real category names
-    var matchedCats = [];
-    p.opciones.forEach(function(raw) {
-      var exact = allCats.find(function(c){ return c.nom.toLowerCase()===raw.toLowerCase(); });
-      if (exact && !matchedCats.find(function(x){return x.id===exact.id;})) { matchedCats.push(exact); return; }
-      allCats.forEach(function(c){
-        var inRaw = raw.toLowerCase().indexOf(c.nom.toLowerCase())>=0;
-        var inCat = c.nom.toLowerCase().indexOf(raw.toLowerCase())>=0;
-        if ((inRaw||inCat) && !matchedCats.find(function(x){return x.id===c.id;})) matchedCats.push(c);
-      });
-    });
-    if (!matchedCats.length) matchedCats = allCats.filter(function(c){return ["auto","moto","bici"].indexOf(c.id)>=0;});
-    var optsDiv = document.createElement("div");
-    optsDiv.style.cssText = "grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap";
-    matchedCats.forEach(function(cat){
+    fields.innerHTML = '<div style="grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap" id="ambig-opts"></div>';
+    var opts = document.getElementById("ambig-opts");
+    p.opciones.forEach(function(nom) {
+      var cats = gCats() || [];
+      var cat = cats.find(function(c) { return c.nom === nom; }) || {em: "", nom: nom};
       var b = document.createElement("button");
       b.className = "chip";
-      b.style.cssText = "font-size:14px;padding:10px 20px;";
-      b.innerHTML = cat.em+" "+cat.nom;
-      b.addEventListener("click", function(){
-        pendMov.categoria = cat.nom;
-        pendMov.subcategoria = cat.subs[0]||"General";
+      b.innerHTML = cat.em + " " + cat.nom;
+      b.addEventListener("click", function() {
+        pendMov.categoria = nom;
         pendMov.ambiguo = false;
-        pendMov.opciones = [];
-        pendMov.mensaje = "Perfecto, anotado en "+cat.nom+".";
+        pendMov.mensaje = "Anotado en " + nom + "!";
         showConf(pendMov);
       });
-      optsDiv.appendChild(b);
+      opts.appendChild(b);
     });
-    fields.innerHTML = "";
-    fields.appendChild(optsDiv);
   } else {
-    var cats = gCats() || [];
-    var ingCats = gIngCats() || [];
-    var allCats = (p.tipo === "ingreso" ? ingCats : cats).map(function(c){ return c.nom; });
-    var catSubs = (p.tipo === "ingreso" ? ingCats : cats).find(function(c){ return c.nom === p.categoria; });
-    var subs = catSubs ? catSubs.subs : ["General","Otros"];
-
+    var flds = [
+      {l: "Categoria", v: p.categoria || "-"},
+      {l: "Subcategoria", v: p.subcategoria || "-"},
+      {l: "Monto", v: fC(p.monto, p.cur)},
+      {l: "Fecha", v: p.fecha || "-"}
+    ];
+    if (p.mp) flds.push({l: "Medio pago", v: p.mp});
     fields.innerHTML = "";
-
-    // Categoria - dropdown
-    var dCat = document.createElement("div"); dCat.className = "cf cf-edit";
-    dCat.innerHTML = '<div class="cf-l">Categoria</div>';
-    var selCat = document.createElement("select"); selCat.className = "cf-select";
-    allCats.forEach(function(n){ var o=document.createElement("option");o.value=n;o.textContent=n;if(n===p.categoria)o.selected=true;selCat.appendChild(o); });
-    selCat.addEventListener("change", function(){
-      pendMov.categoria = selCat.value;
-      var newCatObj = (p.tipo==="ingreso"?ingCats:cats).find(function(c){return c.nom===selCat.value;});
-      if(newCatObj){ pendMov.subcategoria = newCatObj.subs[0]; selSub.innerHTML=""; newCatObj.subs.forEach(function(s){var o=document.createElement("option");o.value=s;o.textContent=s;selSub.appendChild(o);}); }
+    flds.forEach(function(f) {
+      var d = document.createElement("div");
+      d.className = "cf";
+      d.innerHTML = '<div class="cf-l">' + f.l + '</div><div class="cf-v">' + f.v + "</div>";
+      fields.appendChild(d);
     });
-    dCat.appendChild(selCat); fields.appendChild(dCat);
-
-    // Subcategoria - dropdown
-    var dSub = document.createElement("div"); dSub.className = "cf cf-edit";
-    dSub.innerHTML = '<div class="cf-l">Subcategoria</div>';
-    var selSub = document.createElement("select"); selSub.className = "cf-select";
-    subs.forEach(function(s){ var o=document.createElement("option");o.value=s;o.textContent=s;if(s===p.subcategoria)o.selected=true;selSub.appendChild(o); });
-    selSub.addEventListener("change", function(){ pendMov.subcategoria = selSub.value; });
-    dSub.appendChild(selSub); fields.appendChild(dSub);
-
-    // Monto - editable input
-    var dMonto = document.createElement("div"); dMonto.className = "cf cf-edit";
-    dMonto.innerHTML = '<div class="cf-l">Monto (' + p.cur + ')</div>';
-    var inpMonto = document.createElement("input"); inpMonto.type="number"; inpMonto.className="cf-input"; inpMonto.value=p.monto;
-    inpMonto.addEventListener("change", function(){ pendMov.monto = parseFloat(inpMonto.value)||p.monto; });
-    dMonto.appendChild(inpMonto); fields.appendChild(dMonto);
-
-    // Fecha - date picker
-    var dFecha = document.createElement("div"); dFecha.className = "cf cf-edit";
-    dFecha.innerHTML = '<div class="cf-l">Fecha</div>';
-    var inpFecha = document.createElement("input"); inpFecha.type="date"; inpFecha.className="cf-input"; inpFecha.value=p.fecha||new Date().toISOString().split("T")[0];
-    inpFecha.addEventListener("change", function(){ pendMov.fecha = inpFecha.value; });
-    dFecha.appendChild(inpFecha); fields.appendChild(dFecha);
-
-    if (p.mp) {
-      var dMp = document.createElement("div"); dMp.className = "cf";
-      dMp.innerHTML = '<div class="cf-l">Medio pago</div><div class="cf-v">' + p.mp + "</div>";
-      fields.appendChild(dMp);
-    }
   }
   document.getElementById("conf-card").classList.add("show");
   document.getElementById("conf-card").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
-async function confirmMov() {
+function confirmMov() {
   if (!pendMov) return;
   var p = pendMov;
-  var btn = document.getElementById("conf-ok");
-  btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"> <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/> <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/> <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/> <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
-  try {
-    var usdVal = await toUSD(p.monto, p.cur, p.fecha);
-    var tcUsado = p.cur !== "USD" ? Math.round(p.monto / usdVal) : null;
-    var mov = {
-      id: Date.now(), tipo: p.tipo, fecha: p.fecha,
-      categoria: p.categoria, subcategoria: p.subcategoria,
-      cur: p.cur, monto: p.monto, usd: usdVal,
-      tc_usado: tcUsado, mp: p.mp || null,
-      inputOriginal: p.inputOriginal
-    };
-    var arr = gMonthM(); arr.push(mov); sMonthM(arr);
-    cancelConf();
-    document.getElementById("ai-inp").value = "";
-    renderHome();
-    showToast("Registrado ✓");
-  } catch(e) {
-    showToast("Error al guardar"); console.error(e);
-  }
-  btn.disabled = false;
-  btn.innerHTML = "✓ Confirmar";
+  var tc = gTC();
+  var usd = p.cur === "USD" ? p.monto : p.cur === "EUR" ? p.monto * (tc.usd / tc.usd * 1.1) : p.monto / tc.usd;
+  var mov = {
+    id: Date.now(),
+    tipo: p.tipo,
+    fecha: p.fecha,
+    categoria: p.categoria,
+    subcategoria: p.subcategoria,
+    cur: p.cur,
+    monto: p.monto,
+    usd: parseFloat(usd.toFixed(2)),
+    mp: p.mp || null,
+    inputOriginal: p.inputOriginal
+  };
+  var arr = gMonthM();
+  arr.push(mov);
+  sMonthM(arr);
+  cancelConf();
+  document.getElementById("ai-inp").value = "";
+  renderHome();
+  showToast("Registrado \u2713");
 }
 
 function cancelConf() {
@@ -1258,12 +995,8 @@ function cancelConf() {
 }
 
 // ── RENDER HOME ──
-function decodeEm(em) {
-  // Decode HTML entities to real emoji for use in select options
-  var div = document.createElement("div");
-  div.innerHTML = em;
-  return div.textContent || div.innerText || em;
-}
+var recentFilter = 30;
+var editingMovId = null;
 
 function setRecentFilter(days) {
   recentFilter = days;
@@ -1276,130 +1009,90 @@ function setRecentFilter(days) {
 function renderRecentList() {
   var rcList = document.getElementById("rc-list");
   if (!rcList) return;
-  var allMovs = gMonthM();
-  // Filter by days
+  var movs = gMonthM().slice().reverse();
   var cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - recentFilter);
-  var cutoffStr = cutoff.toISOString().split("T")[0];
-  var filtered = allMovs.filter(function(m) {
-    return !m.fecha || m.fecha >= cutoffStr;
-  }).reverse();
-
+  var cutStr = cutoff.toISOString().split("T")[0];
+  var filtered = movs.filter(function(m) { return !m.fecha || m.fecha >= cutStr; });
   if (!filtered.length) {
     rcList.innerHTML = '<div class="mv-empty">Sin registros en este periodo.</div>';
     return;
   }
-
-  // Group by date
-  var byDay = {};
-  var dayOrder = [];
+  var byDay = {}, dayOrder = [];
   filtered.forEach(function(m) {
     var d = m.fecha || "sin-fecha";
     if (!byDay[d]) { byDay[d] = []; dayOrder.push(d); }
     byDay[d].push(m);
   });
-
-  var html = "";
+  var h = "";
+  var today = new Date(); today.setHours(0,0,0,0);
+  var yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
+  var months = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   dayOrder.forEach(function(day) {
-    // Day header
-    var dayLabel = day;
+    var lbl = day;
     if (day !== "sin-fecha") {
-      var parts = day.split("-");
-      var dt = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
-      var today = new Date(); today.setHours(0,0,0,0);
-      var yesterday = new Date(today); yesterday.setDate(yesterday.getDate()-1);
-      if (dt.getTime() === today.getTime()) dayLabel = "Hoy";
-      else if (dt.getTime() === yesterday.getTime()) dayLabel = "Ayer";
-      else dayLabel = dt.getDate() + " de " + ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"][dt.getMonth()];
+      var p = day.split("-");
+      var dt = new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2]));
+      if (dt.getTime() === today.getTime()) lbl = "Hoy";
+      else if (dt.getTime() === yesterday.getTime()) lbl = "Ayer";
+      else lbl = dt.getDate() + " de " + months[dt.getMonth()];
     }
-    html += '<div class="day-group-hdr">' + dayLabel + '</div>';
-
+    h += '<div class="day-grp">' + lbl + '</div>';
     byDay[day].forEach(function(m) {
       var c = getCatObj(m.categoria);
       var isIng = m.tipo === "ingreso";
-      var amtDisplay = fC(m.monto, m.cur);
-      var arsEquiv = (m.cur !== "ARS" && m.tc_usado) ?
-        '<div style="font-size:10px;color:#A8A49E;font-family:DM Mono,monospace">&asymp; ' + fA(Math.round(m.usd * gTC().usd)) + '</div>' : "";
-      html += '<div class="mv-row" data-mov-id="' + m.id + '" style="cursor:pointer">' +
+      var amt = fC(m.monto, m.cur);
+      var arsEq = (m.cur !== "ARS" && m.tc_usado) ? '<div style="font-size:10px;color:#A8A49E;font-family:DM Mono,monospace">&asymp; ' + fA(Math.round((m.usd||0)*gTC().usd)) + '</div>' : "";
+      h += '<div class="mv-row" data-id="' + m.id + '" style="cursor:pointer">' +
         '<div class="mv-l"><div class="mv-em">' + c.em + '</div>' +
         '<div><div class="mv-cat-lbl">' + m.categoria + (isIng ? '<span class="badge bi">ingreso</span>' : '') + '</div>' +
         '<div class="mv-note-lbl">' + m.subcategoria + ' &middot; &ldquo;' + m.inputOriginal + '&rdquo;</div></div></div>' +
-        '<div class="mv-r"><div class="mv-amt" style="color:' + (isIng ? "#2D6A4F" : "#1A1916") + '">' + amtDisplay + '</div>' +
-        arsEquiv +
-        '<div class="mv-date">' + (m.mp ? m.mp : '') + '</div></div></div>';
+        '<div class="mv-r"><div class="mv-amt" style="color:' + (isIng?"#2D6A4F":"#1A1916") + '">' + amt + '</div>' + arsEq +
+        '<div class="mv-date">' + (m.mp||"") + '</div></div></div>';
     });
   });
-  rcList.innerHTML = html;
-
-  // Add click listeners for edit
-  rcList.querySelectorAll(".mv-row[data-mov-id]").forEach(function(row) {
-    row.addEventListener("click", function() {
-      openEditModal(row.dataset.movId);
-    });
+  rcList.innerHTML = h;
+  rcList.querySelectorAll(".mv-row[data-id]").forEach(function(row) {
+    row.addEventListener("click", function() { openEditModal(row.dataset.id); });
   });
 }
-
-var editingMovId = null;
 
 function openEditModal(id) {
   var movs = gMonthM();
   var m = movs.find(function(x) { return String(x.id) === String(id); });
   if (!m) return;
   editingMovId = id;
-  var cats = gCats() || [];
-  var ingCats = gIngCats() || [];
-  var allCats = m.tipo === "ingreso" ? ingCats : cats;
-  var catObj = allCats.find(function(c) { return c.nom === m.categoria; });
+  var cats = (m.tipo === "ingreso" ? gIngCats() : gCats()) || [];
+  var catObj = cats.find(function(c) { return c.nom === m.categoria; });
   var subs = catObj ? catObj.subs : ["General","Otros"];
-
-  document.getElementById("edit-modal-title").textContent = m.categoria + " — " + m.subcategoria;
-  var fields = document.getElementById("edit-modal-fields");
+  document.getElementById("edit-title").textContent = m.categoria;
+  var fields = document.getElementById("edit-fields");
   fields.innerHTML = "";
-
-  function addField(lbl, content) {
-    var wrap = document.createElement("div");
-    wrap.style.cssText = "background:#F7F6F2;border-radius:10px;padding:10px 14px";
+  function addF(lbl, el) {
+    var w = document.createElement("div");
+    w.style.cssText = "background:#F7F6F2;border-radius:10px;padding:10px 14px";
     var l = document.createElement("div");
     l.style.cssText = "font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:5px";
-    l.textContent = lbl;
-    wrap.appendChild(l); wrap.appendChild(content);
-    fields.appendChild(wrap);
+    l.textContent = lbl; w.appendChild(l); w.appendChild(el); fields.appendChild(w);
   }
-
-  // Categoria
   var selCat = document.createElement("select");
   selCat.id = "em-cat";
   selCat.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;color:#1A1916;padding:0";
-  allCats.forEach(function(c) {
-    var o = document.createElement("option"); o.value=c.nom; o.textContent=decodeEm(c.em)+" "+c.nom;
-    if(c.nom===m.categoria) o.selected=true;
-    selCat.appendChild(o);
-  });
-  addField("Categoria", selCat);
-
-  // Subcategoria
+  cats.forEach(function(c) { var o=document.createElement("option");o.value=c.nom;o.textContent=decodeEm(c.em)+" "+c.nom;if(c.nom===m.categoria)o.selected=true;selCat.appendChild(o); });
+  addF("Categoria", selCat);
   var selSub = document.createElement("select");
   selSub.id = "em-sub";
   selSub.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;color:#1A1916;padding:0";
-  subs.forEach(function(s) {
-    var o = document.createElement("option"); o.value=s; o.textContent=s;
-    if(s===m.subcategoria) o.selected=true;
-    selSub.appendChild(o);
-  });
-  addField("Subcategoria", selSub);
-
-  // Monto
-  var inpMonto = document.createElement("input");
-  inpMonto.id = "em-monto"; inpMonto.type="number"; inpMonto.value=m.monto;
-  inpMonto.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0";
-  addField("Monto (" + m.cur + ")", inpMonto);
-
-  // Fecha
-  var inpFecha = document.createElement("input");
-  inpFecha.id = "em-fecha"; inpFecha.type="date"; inpFecha.value=m.fecha||"";
-  inpFecha.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
-  addField("Fecha", inpFecha);
-
+  subs.forEach(function(s) { var o=document.createElement("option");o.value=s;o.textContent=s;if(s===m.subcategoria)o.selected=true;selSub.appendChild(o); });
+  addF("Subcategoria", selSub);
+  var inpM = document.createElement("input");
+  inpM.id="em-monto";inpM.type="number";inpM.value=m.monto;
+  inpM.style.cssText="width:100%;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0";
+  addF("Monto ("+m.cur+")", inpM);
+  var inpF = document.createElement("input");
+  inpF.id="em-fecha";inpF.type="date";inpF.value=m.fecha||"";
+  inpF.style.cssText="width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
+  addF("Fecha", inpF);
   var modal = document.getElementById("edit-modal");
   modal.style.display = "flex";
 }
@@ -1418,19 +1111,13 @@ function saveEditModal() {
   movs[idx].subcategoria = document.getElementById("em-sub").value;
   movs[idx].monto = parseFloat(document.getElementById("em-monto").value) || movs[idx].monto;
   movs[idx].fecha = document.getElementById("em-fecha").value;
-  sMonthM(movs);
-  closeEditModal();
-  renderHome();
-  showToast("Guardado \u2713");
+  sMonthM(movs); closeEditModal(); renderHome(); showToast("Guardado ✓");
 }
 
 function deleteMovFromModal() {
   if (!editingMovId) return;
   var movs = gMonthM().filter(function(x) { return String(x.id) !== String(editingMovId); });
-  sMonthM(movs);
-  closeEditModal();
-  renderHome();
-  showToast("Registro eliminado");
+  sMonthM(movs); closeEditModal(); renderHome(); showToast("Eliminado");
 }
 
 function getCatObj(nom) {
@@ -1444,31 +1131,34 @@ function getCatColor(nom) {
   return CAT_COLORS[idx >= 0 ? idx % CAT_COLORS.length : 0];
 }
 
+function renderExamples() {
+  var cats = gCats() || [];
+  var pairs = [["vivienda","alquiler del mes"],["super","supermercado $28.000 debito"],["auto","nafta $15.000 efectivo"],["moto","nafta moto $8.000"],["salidas","cena afuera $14.000 VISA"]];
+  var exs = pairs.filter(function(p) { return cats.find(function(c) { return c.id === p[0]; }); }).slice(0,3).map(function(p) { return p[1]; });
+  if (!exs.length) exs = ["pague supermercado $25.000", "compre farmacia $8.500"];
+  var wrap = document.getElementById("inp-exs");
+  wrap.innerHTML = "";
+  exs.forEach(function(e) {
+    var d = document.createElement("div");
+    d.className = "ex-chip";
+    d.textContent = e;
+    d.addEventListener("click", function() { setEx(e); });
+    wrap.appendChild(d);
+  });
+}
 
-var showUSD = false;
-var recentFilter = 30; // days to show in recent list
 function renderHome() {
   var movs = gMonthM();
   var gas = movs.filter(function(m) { return m.tipo === "gasto"; });
   var ing = movs.filter(function(m) { return m.tipo === "ingreso"; });
-  var tc = gTC();
-  var totGars = gas.reduce(function(s,m){ return s+(m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd); },0);
-  var totIars = ing.reduce(function(s,m){ return s+(m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd); },0);
-  var totGusd = gas.reduce(function(s,m){ return s+(m.usd||0); },0);
-  var totIusd = ing.reduce(function(s,m){ return s+(m.usd||0); },0);
-  var hasUSDgas = gas.some(function(m){ return m.cur!=="ARS"; });
-  var hasUSDing = ing.some(function(m){ return m.cur!=="ARS"; });
-  setText("hm-eg", fA(totGars));
-  setHTML("hm-eg2", gas.length+" registro"+(gas.length!==1?"s":"")+(hasUSDgas?" &middot; US$ "+Math.round(totGusd).toLocaleString("es-AR"):""));
-  setText("hm-ing", fA(totIars));
-  setHTML("hm-ing2", ing.length+" registro"+(ing.length!==1?"s":"")+(hasUSDing?" &middot; US$ "+Math.round(totIusd).toLocaleString("es-AR"):""));
-  var byCatARS = {}, byCatUSD = {};
-  gas.forEach(function(m) {
-    var ars = m.cur === "ARS" ? m.monto : (m.usd || 0) * gTC().usd;
-    byCatARS[m.categoria] = (byCatARS[m.categoria] || 0) + ars;
-    byCatUSD[m.categoria] = (byCatUSD[m.categoria] || 0) + (m.usd || 0);
-  });
-  var byCat = byCatARS;
+  var totG = gas.reduce(function(s,m) { return s + m.monto; }, 0);
+  var totI = ing.reduce(function(s,m) { return s + m.monto; }, 0);
+  setText("hm-eg", fA(totG));
+  setText("hm-eg2", gas.length + " registro" + (gas.length !== 1 ? "s" : ""));
+  setText("hm-ing", fA(totI));
+  setText("hm-ing2", ing.length + " registro" + (ing.length !== 1 ? "s" : ""));
+  var byCat = {};
+  gas.forEach(function(m) { byCat[m.categoria] = (byCat[m.categoria] || 0) + m.monto; });
   var topArr = Object.keys(byCat).sort(function(a,b) { return byCat[b] - byCat[a]; });
   if (topArr.length) {
     setText("hm-top", topArr[0]);
@@ -1481,98 +1171,70 @@ function renderHome() {
   if (!gas.length) {
     bd.innerHTML = '<div class="bd-empty">Registra tu primer gasto para verlo aqui.</div>';
   } else {
-    var curMap = showUSD ? byCatUSD : byCatARS;
-    var sortedNoms = Object.keys(curMap).sort(function(a,b){ return curMap[b]-curMap[a]; });
-    var maxA = Math.max.apply(null, Object.values(curMap));
-    var bdHtml = "";
-    sortedNoms.forEach(function(nom) {
-      var amt = curMap[nom];
+    var maxA = Math.max.apply(null, Object.values(byCat));
+    var html = "";
+    topArr.forEach(function(nom) {
+      var amt = byCat[nom];
       var c = getCatObj(nom);
       var cnt = gas.filter(function(m) { return m.categoria === nom; }).length;
       var pct = maxA > 0 ? Math.round(amt / maxA * 100) : 0;
       var col = getCatColor(nom);
-      var amtStr = showUSD ? ("US$ " + Math.round(amt).toLocaleString("es-AR")) : fA(amt);
-      bdHtml += '<div class="bd-row" data-cat="' + encodeURIComponent(nom) + '">' +
+      html += '<div class="bd-row" data-cat="' + encodeURIComponent(nom) + '">' +
         '<div class="bd-em">' + c.em + '</div>' +
         '<div class="bd-info"><div class="bd-name">' + nom + '</div>' +
         '<div class="bd-bar-wrap"><div class="bd-bar" style="width:' + pct + '%;background:' + col + '"></div></div></div>' +
-        '<div class="bd-right"><div class="bd-amt">' + amtStr + '</div><div class="bd-cnt">' + cnt + ' registro' + (cnt !== 1 ? "s" : "") + '</div></div></div>';
+        '<div class="bd-right"><div class="bd-amt">' + fA(amt) + '</div><div class="bd-cnt">' + cnt + ' registro' + (cnt !== 1 ? 's' : '') + '</div></div></div>';
     });
-    bd.innerHTML = bdHtml;
+    bd.innerHTML = html;
   }
-  renderRecentList();
+  var rcList = document.getElementById("rc-list");
+  var last = movs.slice(-6).reverse();
+  if (!last.length) {
+    rcList.innerHTML = '<div class="mv-empty">Aun no hay registros.</div>';
+    return;
+  }
+  var rcHtml = "";
+  last.forEach(function(m) {
+    var c = getCatObj(m.categoria);
+    var d = m.fecha ? m.fecha.split("-").reverse().slice(0,2).join("/") : "--";
+    var isIng = m.tipo === "ingreso";
+    rcHtml += '<div class="mv-row">' +
+      '<div class="mv-l"><div class="mv-em">' + c.em + '</div>' +
+      '<div><div class="mv-cat">' + m.categoria + (isIng ? '<span class="badge bi">ingreso</span>' : '') + '</div>' +
+      '<div class="mv-note">' + m.subcategoria + ' &middot; &ldquo;' + m.inputOriginal + '&rdquo;</div></div></div>' +
+      '<div class="mv-r"><div class="mv-amt" style="color:' + (isIng ? "#2D6A4F" : "#1A1916") + '">' + fC(m.monto, m.cur) + '</div>' +
+      '<div class="mv-date">' + d + (m.mp ? ' &middot; ' + m.mp : '') + '</div></div></div>';
+  });
+  rcList.innerHTML = rcHtml;
 }
 
 function showDetail(nom) {
-  var tc = gTC();
   var movs = gMonthM().filter(function(m) { return m.tipo === "gasto" && m.categoria === nom; });
   var c = getCatObj(nom);
-
-  // Convert all to ARS for totals
-  function mARS(m) { return m.cur === "ARS" ? m.monto : (m.usd || 0) * tc.usd; }
-  var totalARS = movs.reduce(function(s,m) { return s + mARS(m); }, 0);
-
-  // Group by subcategory in ARS
+  var total = movs.reduce(function(s,m) { return s + m.monto; }, 0);
   var bySub = {};
-  var bySubMovs = {};
-  movs.forEach(function(m) {
-    var s = m.subcategoria || "General";
-    bySub[s] = (bySub[s] || 0) + mARS(m);
-    if (!bySubMovs[s]) bySubMovs[s] = [];
-    bySubMovs[s].push(m);
-  });
-
+  movs.forEach(function(m) { bySub[m.subcategoria] = (bySub[m.subcategoria] || 0) + m.monto; });
   document.getElementById("det-title").innerHTML = c.em + " " + nom;
-
-  // Build HTML
-  var h = '<div style="padding:10px 16px;background:#F0EEE8;border-bottom:1px solid #E2DED6;display:flex;justify-content:space-between;align-items:center">' +
+  var h = '<div style="padding:10px 16px;background:#F0EEE8;border-bottom:1px solid #E2DED6;display:flex;justify-content:space-between">' +
     '<span style="font-size:12px;font-weight:700;color:#A8A49E">TOTAL</span>' +
-    '<span style="font-family:DM Mono,monospace;font-weight:600;font-size:15px">' + fA(totalARS) + '</span></div>';
-
-  // Subcategory rows - each expandable
-  Object.keys(bySub).sort(function(a,b){ return bySub[b]-bySub[a]; }).forEach(function(sub, si) {
-    var subId = "sub-" + si + "-" + Date.now();
-    var subMovs = bySubMovs[sub] || [];
-    var subARS = bySub[sub];
-    var hasMovs = subMovs.length > 0;
-
-    // Subcategory header row
-    h += '<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #E2DED6;cursor:' + (hasMovs ? 'pointer' : 'default') + '"' +
-      (hasMovs ? ' onclick="toggleSubDetail('' + subId + '')"' : '') + '>' +
-      '<div style="display:flex;align-items:center;gap:8px">' +
-      (hasMovs ? '<span id="chev-' + subId + '" style="color:#A8A49E;font-size:16px;transition:transform .2s;display:inline-block">&#8250;</span>' : '<span style="width:16px"></span>') +
-      '<span style="font-size:13px;color:#1A1916">' + sub + '</span></div>' +
-      '<span style="font-family:DM Mono,monospace;font-size:13px;font-weight:500">' + fA(subARS) + '</span></div>';
-
-    // Transactions (hidden by default, expandable)
-    if (hasMovs) {
-      h += '<div id="' + subId + '" style="display:none;background:#F7F6F2;border-bottom:1px solid #E2DED6">';
-      subMovs.forEach(function(m) {
-        var d = m.fecha ? m.fecha.split("-").reverse().slice(0,2).join("/") : "--";
-        var amtStr = fC(m.monto, m.cur);
-        h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 16px 8px 36px;border-bottom:1px solid #E2DED6">' +
-          '<div><div style="font-size:12px;color:#6B6760">&ldquo;' + m.inputOriginal + '&rdquo;</div>' +
-          '<div style="font-size:10px;color:#A8A49E;margin-top:2px">' + d + (m.mp ? ' &middot; ' + m.mp : '') + '</div></div>' +
-          '<div style="font-family:DM Mono,monospace;font-size:12px;font-weight:500;white-space:nowrap;margin-left:12px">' + amtStr + '</div></div>';
-      });
-      h += '</div>';
-    }
+    '<span style="font-family:DM Mono,monospace;font-weight:600">' + fA(total) + '</span></div>';
+  var subs = Object.keys(bySub);
+  if (subs.length > 1) {
+    subs.sort(function(a,b) { return bySub[b] - bySub[a]; }).forEach(function(k) {
+      h += '<div class="mv-row" style="padding:8px 16px"><span style="font-size:13px;color:#6B6760;flex:1">' + k + '</span><span style="font-family:DM Mono,monospace;font-size:13px;font-weight:500">' + fA(bySub[k]) + '</span></div>';
+    });
+  }
+  movs.slice(-5).reverse().forEach(function(m) {
+    var d = m.fecha ? m.fecha.split("-").reverse().slice(0,2).join("/") : "--";
+    h += '<div class="mv-row"><div><div class="mv-note">' + m.subcategoria + '</div><div class="mv-note">&ldquo;' + m.inputOriginal + '&rdquo;</div></div>' +
+      '<div class="mv-r"><div class="mv-amt">' + fC(m.monto, m.cur) + '</div><div class="mv-date">' + d + '</div></div></div>';
   });
-
   setHTML("det-body", h);
   document.getElementById("detail-panel").classList.add("show");
   document.getElementById("detail-panel").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
-window.toggleSubDetail = function toggleSubDetail(id) {
-  var panel = document.getElementById(id);
-  var chev = document.getElementById("chev-" + id);
-  if (!panel) return;
-  var isOpen = panel.style.display !== "none";
-  panel.style.display = isOpen ? "none" : "block";
-  if (chev) chev.style.transform = isOpen ? "" : "rotate(90deg)";
-}
-
+// ── INGRESOS ──
 function renderIngresos() {
   var movs = gMonthM();
   var gas = movs.filter(function(m) { return m.tipo === "gasto"; });
@@ -1624,26 +1286,23 @@ async function genInsight() {
   if (!movs.length) { showToast("Registra gastos primero"); return; }
   var btn = document.getElementById("ins-btn");
   btn.disabled = true;
-  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"> <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/> <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/> <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/> <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
+  btn.innerHTML = '<svg viewBox="0 0 120 120" width="24" height="24" style="vertical-align:middle;margin-right:6px"><circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/><circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/><circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/><circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg> Procesando...';
   var el = document.getElementById("ins-txt");
   el.style.color = "#A8A49E";
   el.textContent = "Analizando...";
   try {
-    var tc = gTC();
     var gas = movs.filter(function(m) { return m.tipo === "gasto"; });
     var ing = movs.filter(function(m) { return m.tipo === "ingreso"; });
-    // Convert all to ARS for consistent analysis
-    function toARS(m) { return m.cur === "ARS" ? m.monto : (m.usd || 0) * tc.usd; }
-    var totG = gas.reduce(function(s,m) { return s + toARS(m); }, 0);
-    var totI = ing.reduce(function(s,m) { return s + toARS(m); }, 0);
+    var totG = gas.reduce(function(s,m) { return s + m.monto; }, 0);
+    var totI = ing.reduce(function(s,m) { return s + m.monto; }, 0);
     var byCat = {};
-    gas.forEach(function(m) { byCat[m.categoria] = (byCat[m.categoria] || 0) + toARS(m); });
+    gas.forEach(function(m) { byCat[m.categoria] = (byCat[m.categoria] || 0) + m.monto; });
     var top = Object.keys(byCat).sort(function(a,b) { return byCat[b] - byCat[a]; }).slice(0,3).map(function(k) { return k + ": " + fA(byCat[k]); }).join(", ");
-    var ctx = "Mes: " + MONTHS[curMonth.m] + " " + curMonth.y + ". Gastos totales en ARS: " + fA(totG) + (totI > 0 ? ". Ingresos: " + fA(totI) : "") + ". Top categorias (en ARS): " + top + ". Registros: " + movs.length + ". TC usado: 1 USD = " + tc.usd + " ARS.";
+    var ctx = "Mes: " + MONTHS[curMonth.m] + " " + curMonth.y + ". Gastos: " + fA(totG) + (totI > 0 ? ". Ingresos: " + fA(totI) : "") + ". Top categorias: " + top + ". Registros: " + movs.length + ".";
     var resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body: JSON.stringify({model:"claude-sonnet-4-6", max_tokens:200, system:"Sos el asistente financiero de un usuario argentino que usa Correa. Con los datos del mes, escribi 2-3 oraciones en espanol rioplatense, amigable y directo. Analiza patrones y categorias destacadas. NO sugieras que cambie como carga los datos ni que agregue subcategorias. Sin asteriscos ni markdown. Solo texto.", messages:[{role:"user", content:ctx}]})
+      body: JSON.stringify({model:"claude-sonnet-4-6", max_tokens:200, system:"Sos el asistente financiero de un usuario argentino que usa Correa. Con los datos del mes, escribi 2-3 oraciones en espanol rioplatense, amigable y directo. Sin asteriscos ni markdown. Solo texto.", messages:[{role:"user", content:ctx}]})
     });
     if (!resp.ok) throw new Error("Error al generar");
     var data = await resp.json();
@@ -1659,100 +1318,26 @@ async function genInsight() {
 
 // ── CONFIG ──
 function renderCfgCats() {
-  var prof = ls("cr_profile", {});
-  var dolarSel = document.getElementById("cfg-dolar-tipo");
-  if (dolarSel) dolarSel.value = prof["dolar-tipo"] || "blue";
   var cats = gCats() || [];
   var ingCats = gIngCats() || [];
   var el = document.getElementById("cfg-cats-el");
   el.innerHTML = "";
   cats.forEach(function(c, i) {
-    var wrapper = document.createElement("div");
-    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;margin-bottom:6px";
-
-    // Header row
-    var row = document.createElement("div");
-    row.className = "cfg-row";
-    row.style.cssText = "border:none;cursor:pointer;border-radius:0;display:flex;align-items:center;padding:9px 12px;background:#fff;min-height:42px";
-    var emSpan = document.createElement("span"); emSpan.className="cfg-em"; emSpan.innerHTML=c.em;
-    var nomSpan = document.createElement("span"); nomSpan.className="cfg-nom"; nomSpan.textContent=c.nom;
-    var subsSpan = document.createElement("span"); subsSpan.style.cssText="flex:1;font-size:11px;color:#A8A49E;margin-left:4px"; subsSpan.textContent=c.subs.slice(0,2).join(", ")+(c.subs.length>2?"...":"");
-    row.appendChild(emSpan); row.appendChild(nomSpan); row.appendChild(subsSpan);
-
-    var chevron = document.createElement("span");
-    chevron.textContent = "›";
-    chevron.style.cssText = "color:#A8A49E;font-size:18px;transition:transform .2s;margin-right:4px";
-    row.appendChild(chevron);
-
-    var delBtn = document.createElement("button");
-    delBtn.className = "del-btn";
-    delBtn.textContent = "Quitar";
-    delBtn.addEventListener("click", (function(ii){ return function(e){ e.stopPropagation(); delCat(ii); }; })(i));
-    row.appendChild(delBtn);
-
-    // Subcategory panel
-    var panel = document.createElement("div");
-    panel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:12px;border-radius:0 0 10px 10px";
-    var isOpen = false;
-
-    function refreshPanel(ii) {
-      panel.innerHTML = "";
-      var lbl = document.createElement("div");
-      lbl.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px";
-      lbl.textContent = "Subcategorias";
-      panel.appendChild(lbl);
-
-      var freshCats = gCats() || [];
-      var cat = freshCats[ii];
-      if (!cat) return;
-
-      var tagWrap = document.createElement("div");
-      tagWrap.style.cssText = "display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px";
-      cat.subs.forEach(function(s, si) {
-        var tag = document.createElement("div");
-        tag.style.cssText = "display:flex;align-items:center;gap:5px;background:#fff;border:1px solid #E2DED6;border-radius:14px;padding:4px 10px;font-size:12px;color:#1A1916";
-        tag.appendChild(document.createTextNode(s));
-        var x = document.createElement("span");
-        x.textContent = "×";
-        x.style.cssText = "color:#A8A49E;cursor:pointer;font-size:15px;line-height:1;margin-left:2px";
-        x.addEventListener("click", (function(iii, sii){ return function(){
-          var fc = gCats()||[]; fc[iii].subs.splice(sii,1); ss("cr_cats",fc); refreshPanel(iii);
-        }; })(ii, si));
-        tag.appendChild(x);
-        tagWrap.appendChild(tag);
-      });
-      panel.appendChild(tagWrap);
-
-      var addRow2 = document.createElement("div");
-      addRow2.style.cssText = "display:flex;gap:6px";
-      var subInp = document.createElement("input");
-      subInp.type = "text"; subInp.placeholder = "Nueva subcategoria...";
-      subInp.style.cssText = "flex:1;padding:6px 10px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;background:#fff;color:#1A1916";
-      var subAdd = document.createElement("button");
-      subAdd.textContent = "+ Agregar";
-      subAdd.style.cssText = "background:#1A1916;color:#fff;border:none;padding:6px 12px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap";
-      subAdd.addEventListener("click", (function(iii){ return function(){
-        var n = subInp.value.trim(); if(!n) return;
-        var fc = gCats()||[];
-        if(fc[iii].subs.indexOf(n) < 0) fc[iii].subs.push(n);
-        ss("cr_cats", fc); subInp.value=""; refreshPanel(iii);
-      }; })(ii));
-      addRow2.appendChild(subInp); addRow2.appendChild(subAdd);
-      panel.appendChild(addRow2);
-    }
-
-    row.addEventListener("click", (function(ii){ return function(){
-      isOpen = !isOpen;
-      panel.style.display = isOpen ? "block" : "none";
-      chevron.style.transform = isOpen ? "rotate(90deg)" : "rotate(0deg)";
-      if(isOpen) refreshPanel(ii);
-    }; })(i));
-
-    wrapper.appendChild(row);
-    wrapper.appendChild(panel);
-    el.appendChild(wrapper);
+    var d = document.createElement("div");
+    d.className = "cfg-row";
+    d.innerHTML = '<span class="cfg-em">' + c.em + '</span><span class="cfg-nom">' + c.nom + '</span><span class="cfg-subs">' + c.subs.slice(0,2).join(", ") + '</span>';
+    var btn = document.createElement("button");
+    btn.className = "del-btn";
+    btn.textContent = "Quitar";
+    (function(idx) {
+      btn.addEventListener("click", function() { delCat(idx); });
+    })(i);
+    d.appendChild(btn);
+    el.appendChild(d);
   });
-  
+  var el2 = document.getElementById("cfg-ing-el");
+  if (!el2) return;
+  el2.innerHTML = "";
   ingCats.forEach(function(c, i) {
     var d = document.createElement("div");
     d.className = "cfg-row";
@@ -1832,12 +1417,6 @@ document.addEventListener("DOMContentLoaded", function() {
   var navIng = document.getElementById("nav-ingresos");
   if (navIng) navIng.addEventListener("click", function() { showPage("ingresos"); });
 
-  // Bottom nav (mobile)
-  document.getElementById("bn-home").addEventListener("click", function() { showPage("home"); });
-  document.getElementById("bn-config").addEventListener("click", function() { showPage("config"); });
-  var bnIng = document.getElementById("bn-ingresos");
-  if (bnIng) bnIng.addEventListener("click", function() { showPage("ingresos"); });
-
   // Home buttons
   document.getElementById("send-btn").addEventListener("click", function() { sendAI(); });
   document.getElementById("ai-inp").addEventListener("keydown", function(e) {
@@ -1860,25 +1439,15 @@ document.addEventListener("DOMContentLoaded", function() {
     var row = e.target.closest(".bd-row");
     if (row && row.dataset.cat) showDetail(decodeURIComponent(row.dataset.cat));
   });
-  // Currency toggle
-  function setCurToggle(usd) {
-    showUSD = usd;
-    document.getElementById("cur-ars").style.cssText = usd ? "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif" : "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif";
-    document.getElementById("cur-usd").style.cssText = usd ? "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif" : "font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif";
-    renderHome();
-  }
-  document.getElementById("cur-ars").addEventListener("click", function() { setCurToggle(false); });
-  document.getElementById("cur-usd").addEventListener("click", function() { setCurToggle(true); });
 
   // Config
   document.getElementById("cfg-back").addEventListener("click", function() { showPage("home"); });
   document.getElementById("cfg-ant").addEventListener("input", function() { sKey("ant", this.value); });
   document.getElementById("cfg-oai").addEventListener("input", function() { sKey("oai", this.value); });
   document.getElementById("save-tc-btn").addEventListener("click", function() {
-    var dolarTipo = document.getElementById("cfg-dolar-tipo").value;
-    var prof = ls("cr_profile", {});
-    prof["dolar-tipo"] = dolarTipo;
-    ss("cr_profile", prof);
+    var u = parseFloat(document.getElementById("cfg-usd").value) || 1455;
+    var i = parseFloat(document.getElementById("cfg-inf").value) || 2.9;
+    sTC(u, i);
     showToast("Guardado");
   });
   document.getElementById("add-cat-btn").addEventListener("click", function() { addCat(); });
@@ -1893,20 +1462,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Filter buttons
   document.querySelectorAll(".rc-filter-btn").forEach(function(btn) {
-    btn.addEventListener("click", function() {
-      setRecentFilter(parseInt(btn.dataset.days));
-    });
+    btn.addEventListener("click", function() { setRecentFilter(parseInt(btn.dataset.days)); });
   });
 
-  // Edit modal buttons
-  var modalClose = document.getElementById("modal-close-btn");
-  var modalSave = document.getElementById("modal-save-btn");
-  var modalDelete = document.getElementById("modal-delete-btn");
-  if (modalClose) modalClose.addEventListener("click", function() { closeEditModal(); });
-  if (modalSave) modalSave.addEventListener("click", function() { saveEditModal(); });
-  if (modalDelete) modalDelete.addEventListener("click", function() { deleteMovFromModal(); });
-
-  // Close modal on backdrop click
+  // Edit modal
+  document.getElementById("btn-modal-close").addEventListener("click", closeEditModal);
+  document.getElementById("btn-modal-save").addEventListener("click", saveEditModal);
+  document.getElementById("btn-modal-delete").addEventListener("click", deleteMovFromModal);
   document.getElementById("edit-modal").addEventListener("click", function(e) {
     if (e.target === this) closeEditModal();
   });
@@ -1921,22 +1483,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
 })();
 </script>
-
-<!-- BOTTOM NAV (mobile only) -->
-<nav class="bottom-nav" id="bottom-nav">
-  <div class="bn-item active" id="bn-home">
-    <span class="bn-icon">&#10022;</span>
-    <span>Inicio</span>
-  </div>
-  <div class="bn-item" id="bn-ingresos" style="display:none">
-    <span class="bn-icon">&#8657;</span>
-    <span>Ingresos</span>
-  </div>
-  <div class="bn-item" id="bn-config">
-    <span class="bn-icon">&#9881;</span>
-    <span>Config</span>
-  </div>
-</nav>
-
 </body>
 </html>
