@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v4.7</title>
+<title>Correa v4.9</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -92,17 +92,17 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .inp-card{background:#fff;border-bottom:1px solid #E2DED6;padding:16px 20px;margin-bottom:0;}
 
 .inp-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;margin-bottom:8px;}
-.inp-row{display:flex;gap:8px;align-items:flex-end;}
-.inp-mic{height:50px;width:50px;border-radius:10px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.inp-mic:hover{background:rgba(255,255,255,.12);color:#fff;}
+.inp-row{display:flex;gap:8px;align-items:center;}
+.inp-mic{height:44px;width:44px;border-radius:10px;border:1px solid #E2DED6;background:#F7F6F2;color:#6B6760;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.inp-mic:hover{background:#ECEAE4;color:#1A1916;}
 .inp-mic.rec{background:#c0392b;border-color:#e74c3c;color:#fff;animation:mpulse 1s ease-in-out infinite;}
-.inp-mic.proc{background:rgba(127,119,221,.25);border-color:rgba(127,119,221,.5);cursor:default;}
+.inp-mic.proc{background:#F7F6F2;border-color:#E2DED6;cursor:default;}
 @keyframes mpulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);}50%{box-shadow:0 0 0 7px rgba(231,76,60,0);}}
-.inp-ta{flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.13);border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;color:#fff;background:rgba(255,255,255,.07);resize:none;height:50px;line-height:1.4;}
-.inp-ta::placeholder{color:rgba(255,255,255,.24);}
+.inp-ta{flex:1;padding:11px 14px;border:1px solid #E2DED6;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;color:#1A1916;background:#F7F6F2;resize:none;height:44px;line-height:1.4;}
+.inp-ta::placeholder{color:#A8A49E;font-size:13px;}
 .inp-ta:focus{outline:none;border-color:#A8A49E;background:rgba(255,255,255,.1);}
-.inp-send{height:50px;padding:0 18px;border-radius:10px;border:none;background:#fff;color:#1A1916;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;}
-.inp-send:hover{background:#e8e4dc;}.inp-send:disabled{opacity:.4;cursor:default;}
+.inp-send{height:44px;padding:0 14px;border-radius:10px;border:none;background:#1A1916;color:#fff;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;display:flex;align-items:center;gap:7px;}
+.inp-send:hover{background:#333;}.inp-send:disabled{opacity:.4;cursor:default;}
 .inp-bot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:5px;}
 .inp-exs{display:flex;flex-wrap:wrap;gap:4px;}
 .ex-chip{font-size:11px;padding:3px 9px;border-radius:14px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.38);cursor:pointer;transition:all .15s;}
@@ -226,22 +226,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 @keyframes dp{0%,80%,100%{transform:scale(1);opacity:.4;}40%{transform:scale(1.3);opacity:1;}}
 .toast{position:fixed;bottom:22px;right:22px;background:#1A1916;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;}
 .toast.show{opacity:1;}
-.wt-overlay{position:fixed;inset:0;background:rgba(26,25,22,.55);z-index:500;display:none;pointer-events:none;}
-.wt-overlay.show{display:block;pointer-events:auto;}
-.wt-highlight{position:fixed;border-radius:12px;box-shadow:0 0 0 3px #E8622A,0 0 0 8px rgba(232,98,42,.2);z-index:501;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
-.wt-tooltip{position:fixed;z-index:502;background:#fff;border-radius:16px;padding:20px;width:auto;left:16px;right:16px;bottom:80px;box-shadow:0 8px 40px rgba(0,0,0,.2);}
-.wt-arrow{display:none;}
-.wt-arrow.top{top:-6px;left:24px;}
-.wt-arrow.bottom{bottom:-6px;left:24px;}
-.wt-step{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#E8622A;margin-bottom:6px;}
-.wt-title{font-size:16px;font-weight:600;color:#1A1916;margin-bottom:6px;letter-spacing:-.02em;}
-.wt-body{font-size:13px;color:#6B6760;line-height:1.6;margin-bottom:16px;}
-.wt-actions{display:flex;align-items:center;justify-content:space-between;}
-.wt-dots{display:flex;gap:5px;align-items:center;}
-.wt-dot{width:6px;height:6px;border-radius:50%;background:#E2DED6;transition:all .2s;}
-.wt-dot.on{background:#1A1916;width:18px;border-radius:3px;}
-.wt-btn{background:#1A1916;color:#fff;border:none;padding:8px 18px;border-radius:9px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
-.wt-skip{font-size:12px;color:#A8A49E;cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;}
+
 ::-webkit-scrollbar{width:4px;height:4px;}
 @keyframes arc-spin{0%{stroke-dashoffset:0;opacity:1}40%{stroke-dashoffset:-120;opacity:0.25}60%{stroke-dashoffset:-120;opacity:0.25}100%{stroke-dashoffset:0;opacity:1}}
 @keyframes dot-beat{0%,100%{r:4}50%{r:6}}
@@ -806,7 +791,6 @@ function startApp() {
   setText("bd-month-lbl", MONTHS[curMonth.m] + " " + curMonth.y);
   renderHome();
   renderCfgCats();
-  maybeStartWT1();
 }
 
 //  NAV 
@@ -835,7 +819,6 @@ function chMonth(d) {
   setText("bd-month-lbl", MONTHS[curMonth.m] + " " + curMonth.y);
   renderHome();
   renderCfgCats();
-  maybeStartWT1();
 }
 
 //  AI 
@@ -1107,7 +1090,6 @@ async function confirmMov() {
     var arr=gMonthM(); arr.push(mov); sMonthM(arr);
     cancelConf(); document.getElementById("ai-inp").value="";
     renderHome(); showToast("Registrado \u2713");
-    maybeStartWT2();
   } catch(e) { showToast("Error al guardar"); console.error(e); }
   btn.disabled=false; btn.innerHTML="\u2713 Confirmar";
 }
@@ -1459,132 +1441,23 @@ function delIngCat(i) {
 
 //  EVENT LISTENERS 
 //  WALKTHROUGH 
-var WT1 = [
-  {
-    step:"Paso 1 de 4", title:"Escribi o graba",
-    body:'Contame el gasto en lenguaje natural. Algo como pague nafta $15.000 con debito - o graba tu voz con el microfono.',
-    target:"ai-inp", arrow:"bottom"
-  },
-  {
-    step:"Paso 2 de 4", title:"Correa lo interpreta",
-    body:"Antes de guardar te muestra como clasifico el gasto. Podes cambiar la categoria, el monto o la fecha.",
-    target:"conf-card", arrow:"bottom"
-  },
-  {
-    step:"Paso 3 de 4", title:"Todo por categoria",
-    body:"Ves cuanto gastaste en cada rubro. Toca cualquier categoria para ver el detalle. Switchea entre ARS y USD.",
-    target:"bd-body", arrow:"top"
-  },
-  {
-    step:"Paso 4 de 4", title:"Edita cuando quieras",
-    body:"Toca cualquier registro para editarlo o eliminarlo. Tus datos siempre bajo tu control.",
-    target:"rc-list", arrow:"top"
-  }
-];
 
-var WT2 = [
-  {
-    step:"Paso 1 de 3", title:"Analisis del mes",
-    body:"Con varios gastos registrados, Correa puede contarte como venis, que categoria peso mas y como comparas con el mes anterior.",
-    target:"ins-btn", arrow:"top"
-  },
-  {
-    step:"Paso 2 de 3", title:"Tus categorias",
-    body:"En Configuracion podes editar tus categorias, agregar subcategorias y organizarlo a tu manera.",
-    target:"nav-config", arrow:"bottom"
-  },
-  {
-    step:"Paso 3 de 3", title:"Tipo de dolar",
-    body:"Elegi si convertis al blue, MEP u oficial. Correa busca la cotizacion del dia automaticamente.",
-    target:"nav-config", arrow:"bottom"
-  }
-];
 
-var wtActive = false;
-var wtSteps = [];
-var wtCurrent = 0;
 
-function startWT(steps) {
-  wtSteps = steps;
-  wtCurrent = 0;
-  wtActive = true;
-  document.getElementById("wt-overlay").classList.add("show");
-  document.getElementById("wt-highlight").style.display = "block";
-  document.getElementById("wt-tooltip").style.display = "block";
-  renderWT();
-}
 
-function renderWT() {
-  var s = wtSteps[wtCurrent];
-  document.getElementById("wt-step").textContent = s.step;
-  document.getElementById("wt-title").textContent = s.title;
-  document.getElementById("wt-body").textContent = s.body;
-  document.getElementById("wt-next").innerHTML = wtCurrent === wtSteps.length - 1 ? "Entendido!" : "Siguiente →";
 
-  // Dots
-  var dots = document.getElementById("wt-dots");
-  dots.innerHTML = "";
-  wtSteps.forEach(function(_, i) {
-    var d = document.createElement("div");
-    d.className = "wt-dot" + (i === wtCurrent ? " on" : "");
-    dots.appendChild(d);
-  });
 
-  // Highlight target element
-  var target = document.getElementById(s.target);
-  var hl = document.getElementById("wt-highlight");
-  var tt = document.getElementById("wt-tooltip");
-  var arr = document.getElementById("wt-arrow");
 
-  if (target) {
-    target.scrollIntoView({behavior:"smooth", block:"center"});
-    setTimeout(function() {
-      var rect = target.getBoundingClientRect();
-      var pad = 8;
-      hl.style.top = (rect.top - pad) + "px";
-      hl.style.left = (rect.left - pad) + "px";
-      hl.style.width = (rect.width + pad*2) + "px";
-      hl.style.height = (rect.height + pad*2) + "px";
-    }, 350);
-  }
 
-  // Tooltip always fixed at bottom on mobile, or near element on desktop
-  arr.style.display = "none"; // hide arrow - tooltip is at bottom
-  tt.style.left = "16px";
-  tt.style.right = "16px";
-  tt.style.width = "auto";
-  tt.style.bottom = "80px";
-  tt.style.top = "auto";
-}
 
-function closeWT() {
-  wtActive = false;
-  document.getElementById("wt-overlay").classList.remove("show");
-  document.getElementById("wt-highlight").style.display = "none";
-  document.getElementById("wt-tooltip").style.display = "none";
-}
 
-function nextWT() {
-  if (wtCurrent < wtSteps.length - 1) {
-    wtCurrent++;
-    renderWT();
-  } else {
-    closeWT();
-  }
-}
 
-function maybeStartWT1() {
-  if (!ls("cr_wt1_done", false)) {
-    setTimeout(function() { startWT(WT1); }, 600);
-  }
-}
 
-function maybeStartWT2() {
-  var movs = gMonthM();
-  if (movs.length >= 5 && !ls("cr_wt2_done", false)) {
-    setTimeout(function() { startWT(WT2); }, 800);
-  }
-}
+
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -1650,19 +1523,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // Walkthrough buttons
-  document.getElementById("wt-next").addEventListener("click", function() {
-    if (wtCurrent === wtSteps.length - 1) {
-      if (wtSteps === WT1) ss("cr_wt1_done", true);
-      else ss("cr_wt2_done", true);
-    }
-    nextWT();
-  });
-  document.getElementById("wt-skip").addEventListener("click", function() {
-    if (wtSteps === WT1) ss("cr_wt1_done", true);
-    else ss("cr_wt2_done", true);
-    closeWT();
-  });
+
   document.getElementById("ing-back").addEventListener("click", function() { showPage("home"); });
 
   // Bottom nav
@@ -1698,21 +1559,6 @@ document.addEventListener("DOMContentLoaded", function() {
   <div class="bn-item" id="bn-ingresos" style="display:none"><span class="bn-icon">&#8657;</span><span>Ingresos</span></div>
   <div class="bn-item" id="bn-config"><span class="bn-icon">&#9881;</span><span>Config</span></div>
 </nav>
-<!-- WALKTHROUGH -->
-<div class="wt-overlay" id="wt-overlay"></div>
-<div class="wt-highlight" id="wt-highlight" style="display:none"></div>
-<div class="wt-tooltip" id="wt-tooltip" style="display:none">
-  <div class="wt-arrow" id="wt-arrow"></div>
-  <div class="wt-step" id="wt-step"></div>
-  <div class="wt-title" id="wt-title"></div>
-  <div class="wt-body" id="wt-body"></div>
-  <div class="wt-actions">
-    <div class="wt-dots" id="wt-dots"></div>
-    <div style="display:flex;align-items:center;gap:12px">
-      <button class="wt-skip" id="wt-skip">Saltar</button>
-      <button class="wt-btn" id="wt-next">Siguiente &rarr;</button>
-    </div>
-  </div>
-</div>
+
 </body>
 </html>
