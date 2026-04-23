@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v5.5</title>
+<title>Correa v5.6</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -89,7 +89,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .ph-sub{font-size:13px;color:#6B6760;margin-top:2px;}
 
 /* Input */
-.inp-card{background:#fff;border:1px solid #E2DED6;border-radius:16px;padding:16px;margin-bottom:16px;}
+.inp-card{background:#fff;border:1px solid #E2DED6;border-radius:16px;padding:14px 16px;margin-bottom:20px;}
 
 .inp-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;margin-bottom:8px;}
 .inp-row{display:flex;gap:8px;align-items:center;}
@@ -130,7 +130,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .btn-no{background:none;border:none;color:#A8A49E;font-family:"DM Sans",sans-serif;font-size:13px;cursor:pointer;padding:8px 10px;}
 
 /* Metrics */
-.metrics{display:grid;gap:10px;margin-bottom:16px;}
+.metrics{display:grid;gap:10px;margin-bottom:20px;}
 .m2{grid-template-columns:repeat(2,1fr);}.m3{grid-template-columns:repeat(3,1fr);}
 .metric{background:#fff;border:1px solid #E2DED6;border-radius:16px;padding:14px 16px;}
 .metric.hlr{border-color:#f5c1c8;background:#fff8f9;}
@@ -142,21 +142,21 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .ms{font-size:11px;color:#A8A49E;margin-top:3px;}
 
 /* Breakdown */
-.bdown{background:#fff;border:1px solid #E2DED6;border-radius:16px;overflow:hidden;margin-bottom:16px;}
+.bdown{background:#fff;border:1px solid #E2DED6;border-radius:16px;overflow:hidden;margin-bottom:20px;}
 .bd-hdr{padding:12px 16px;border-bottom:1px solid #E2DED6;display:flex;justify-content:space-between;align-items:center;}
 .bd-hl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
 .bd-mth{font-size:13px;font-weight:600;color:#1A1916;display:flex;align-items:center;gap:8px;}
 .mbtn{background:none;border:1px solid #E2DED6;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:12px;color:#6B6760;font-family:"DM Sans",sans-serif;}
 .mbtn:hover{border-color:#1A1916;color:#1A1916;}
-.bd-row{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;transition:background .15s;}
+.bd-row{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;transition:background .15s;}
 .bd-row:hover{background:#F7F6F2;}
-.bd-em{font-size:16px;flex-shrink:0;width:24px;text-align:center;}
+.bd-em{font-size:22px;flex-shrink:0;width:32px;text-align:center;}
 .bd-info{flex:1;min-width:0;}
 .bd-name{font-size:13px;font-weight:500;color:#1A1916;}
-.bd-bar-wrap{height:3px;background:#F0EEE8;border-radius:2px;margin-top:4px;}
-.bd-bar{height:100%;border-radius:2px;transition:width .5s ease;}
+.bd-bar-wrap{height:7px;background:#F0EEE8;border-radius:4px;margin-top:6px;}
+.bd-bar{height:100%;border-radius:4px;transition:width .5s ease;}
 .bd-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0;}
-.bd-amt{font-size:13px;font-weight:600;font-family:"DM Mono",monospace;color:#1A1916;}
+.bd-amt{font-size:14px;font-weight:700;font-family:"DM Mono",monospace;color:#1A1916;}
 .bd-cnt{font-size:10px;color:#A8A49E;}
 .bd-empty{text-align:center;padding:32px;color:#A8A49E;font-size:13px;}
 
@@ -172,15 +172,15 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .recent{background:#fff;border:1px solid #E2DED6;border-radius:16px;overflow:hidden;margin-bottom:16px;}
 .rc-hdr{padding:11px 16px;border-bottom:1px solid #E2DED6;}
 .rc-hdr span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
-.mv-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #E2DED6;}
+.mv-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #E2DED6;}
 .mv-row:last-child{border-bottom:none;}
 .mv-row:hover{background:#F7F6F2;}
 .mv-l{display:flex;align-items:center;gap:10px;}
-.mv-em{font-size:16px;width:24px;text-align:center;flex-shrink:0;}
+.mv-em{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
 .mv-cat{font-size:13px;font-weight:500;color:#1A1916;}
 .mv-note{font-size:11px;color:#A8A49E;}
 .mv-r{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
-.mv-amt{font-size:13px;font-weight:600;font-family:"DM Mono",monospace;}
+.mv-amt{font-size:15px;font-weight:700;font-family:"DM Mono",monospace;}
 .mv-date{font-size:10px;color:#A8A49E;font-family:"DM Mono",monospace;}
 .mv-empty{text-align:center;padding:28px;color:#A8A49E;font-size:13px;}
 .rc-filter-btn{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;border:1px solid #E2DED6;background:#fff;color:#A8A49E;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .15s;}
@@ -423,10 +423,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
   <div id="pg-home" class="page active">
 
     <div class="inp-card" id="wt-input">
-      <div class="inp-lbl">
-        <svg viewBox="0 0 120 120" width="12" height="12"><circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" opacity="0.9"/><circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/><circle cx="60" cy="66" r="4" fill="#E8622A"/></svg>
-        Registrar movimiento
-      </div>
+
       <div class="inp-row">
         <button class="inp-mic" id="mic-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10a7 7 0 0014 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
         <textarea class="inp-ta" id="ai-inp" placeholder="Ej: pague nafta $15.000..."></textarea>
@@ -456,9 +453,9 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       </div>
     </div>
     <div class="metrics m3" id="home-metrics">
-      <div class="metric hlr" id="wt-metrics"><div class="ml">Gastos del mes</div><div class="mv red main" id="hm-eg">$0</div><div class="ms" id="hm-eg2">0 registros</div></div>
+      <div class="metric hlr" id="wt-metrics" style="padding:14px 16px 12px"><div class="ml">Gastos del mes</div><div class="mv red" style="font-size:44px;letter-spacing:-.04em;line-height:1" id="hm-eg">$0</div><div class="ms" id="hm-eg2">0 registros</div></div>
       <div class="metric hlg" id="hm-ing-card" style="display:none"><div class="ml">Ingresos del mes</div><div class="mv green" id="hm-ing">$0</div><div class="ms" id="hm-ing2">0 registros</div></div>
-      <div class="metric"><div class="ml">Mayor categoria</div><div class="mv" id="hm-top">-</div><div class="ms" id="hm-top2">este mes</div></div>
+      <div class="metric" style="padding:14px 16px 12px"><div class="ml">Mayor categoria</div><div class="mv" id="hm-top" style="font-size:15px;letter-spacing:-.01em">-</div><div class="ms" id="hm-top2">este mes</div></div>
     </div>
     <div class="bdown">
       <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between">
