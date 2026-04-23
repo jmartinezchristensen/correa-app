@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v5.8</title>
+<title>Correa v5.9</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -179,8 +179,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .mv-em{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
 .mv-cat{font-size:13px;font-weight:500;color:#1A1916;}
 .mv-note{font-size:11px;color:#A8A49E;}
-.mv-r{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
-.mv-amt{font-size:15px;font-weight:700;font-family:"DM Mono",monospace;}
+.mv-r{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0;min-width:90px;text-align:right;}
+.mv-amt{font-size:14px;font-weight:700;font-family:"DM Mono",monospace;white-space:nowrap;}
 .mv-date{font-size:10px;color:#A8A49E;font-family:"DM Mono",monospace;}
 .mv-empty{text-align:center;padding:28px;color:#A8A49E;font-size:13px;}
 .rc-filter-btn{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;border:1px solid #E2DED6;background:#fff;color:#A8A49E;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .15s;}
@@ -452,23 +452,23 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <button class="btn-no" id="conf-no">Cancelar</button>
       </div>
     </div>
-    <div class="metrics m2" id="home-metrics">
-      <div class="metric hlr" id="wt-metrics" style="padding:14px 16px 12px"><div class="ml">Gastos del mes</div><div class="mv red" style="font-size:clamp(22px,8vw,44px);letter-spacing:-.04em;line-height:1;word-break:break-all" id="hm-eg">$0</div><div class="ms" id="hm-eg2">0 registros</div></div>
+    <div class="metrics" style="grid-template-columns:1fr" id="home-metrics">
+      <div class="metric hlr" id="wt-metrics" style="padding:18px 20px 16px"><div class="ml">Gastos del mes</div><div class="mv red" style="font-size:clamp(22px,8vw,44px);letter-spacing:-.04em;line-height:1;word-break:break-all" id="hm-eg">$0</div><div class="ms" id="hm-eg2">0 registros</div></div>
       <div class="metric hlg" id="hm-ing-card" style="display:none"><div class="ml">Ingresos del mes</div><div class="mv green" id="hm-ing">$0</div><div class="ms" id="hm-ing2">0 registros</div></div>
-      <div class="metric" style="padding:14px 16px 12px"><div class="ml">Mayor categoria</div><div class="mv" id="hm-top" style="font-size:15px;letter-spacing:-.01em">-</div><div class="ms" id="hm-top2">este mes</div></div>
+      
     </div>
     <div class="bdown">
       <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between">
         <span class="bd-hl">Por categoria</span>
-        <div style="display:flex;align-items:center;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px">
           <div style="display:flex;background:#F0EEE8;border-radius:16px;padding:2px;gap:2px">
             <button id="cur-ars" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">ARS</button>
             <button id="cur-usd" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
           </div>
-          <div style="display:flex;align-items:center;gap:4px">
-            <button class="mbtn" id="btn-prev-month" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0">&larr;</button>
-            <span id="bd-month-lbl" style="font-size:12px;font-weight:600;color:#1A1916;min-width:70px;text-align:center">Abril 2026</span>
-            <button class="mbtn" id="btn-next-month" style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0">&rarr;</button>
+          <div style="display:flex;align-items:center;gap:2px">
+            <button class="mbtn" id="btn-prev-month" style="width:24px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0">&larr;</button>
+            <span id="bd-month-lbl" style="font-size:11px;font-weight:600;color:#1A1916;min-width:36px;text-align:center;line-height:1.2">Abril 2026</span>
+            <button class="mbtn" id="btn-next-month" style="width:24px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0">&rarr;</button>
           </div>
         </div>
       </div>
@@ -905,7 +905,8 @@ function startApp() {
   var ak=gKey("ant"),ok=gKey("oai");
   if(ak)document.getElementById("cfg-ant").value=ak;
   if(ok)document.getElementById("cfg-oai").value=ok;
-  setText("bd-month-lbl", MONTHS[curMonth.m] + " " + curMonth.y);
+  var mLabel = MONTHS[curMonth.m].slice(0,4) + "<br>" + curMonth.y;
+  document.getElementById("bd-month-lbl").innerHTML = mLabel;
   renderHome();
   renderCfgCats();
 }
@@ -933,7 +934,8 @@ function chMonth(d) {
   curMonth.m += d;
   if (curMonth.m > 11) { curMonth.m = 0; curMonth.y++; }
   if (curMonth.m < 0)  { curMonth.m = 11; curMonth.y--; }
-  setText("bd-month-lbl", MONTHS[curMonth.m] + " " + curMonth.y);
+  var mLabel = MONTHS[curMonth.m].slice(0,4) + "<br>" + curMonth.y;
+  document.getElementById("bd-month-lbl").innerHTML = mLabel;
   renderHome();
   renderCfgCats();
 }
