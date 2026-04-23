@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v5.2</title>
+<title>Correa v5.3</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -708,70 +708,138 @@ function renderObCats() {
   var list = document.getElementById("ob-cats");
   list.innerHTML = "";
   var emojis = ["🏠","🛒","🚗","🏍","🚲","❤","🍽","🏋","👶","🐾","✈","👗","📺","🎁","💊","🎓","💼","🐕","🏖","🎮","🍕","☕","🚌","💰","📱","🔧","🏥","🎵","🛍","🌿","⚽","🎨","📚","🧴","🏦","💡","🎂","🍷","🥗","🚿"];
+
   cats.forEach(function(c) {
     var wrapper = document.createElement("div");
-    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;margin-bottom:6px;overflow:hidden";
+    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;margin-bottom:6px;overflow:hidden;background:#fff";
+
+    // ── MAIN ROW ──
     var row = document.createElement("div");
-    row.className = "cat-item on";
+    row.style.cssText = "display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;user-select:none";
     row.dataset.id = c.id;
-    row.style.cssText = "border:none;border-radius:0;display:flex;align-items:center;gap:8px;padding:9px 12px;background:#fff";
-    var cb = document.createElement("div"); cb.className="cat-cb"; cb.innerHTML="&#10003;";
-    var emBtn = document.createElement("button");
-    emBtn.style.cssText = "background:none;border:1px solid #E2DED6;border-radius:6px;padding:2px 5px;cursor:pointer;font-size:16px;min-width:32px;flex-shrink:0";
-    emBtn.innerHTML = c.em;
-    var nameSpan = document.createElement("span"); nameSpan.className="cat-name"; nameSpan.textContent=c.nom;
-    var chev = document.createElement("span"); chev.innerHTML="&#8250;";
-    chev.style.cssText = "color:#A8A49E;font-size:18px;margin-left:auto;cursor:pointer;transition:transform .2s;flex-shrink:0";
-    row.appendChild(cb); row.appendChild(emBtn); row.appendChild(nameSpan); row.appendChild(chev);
+    row.dataset.checked = "1";
+
+    // Checkbox
+    var cb = document.createElement("div");
+    cb.style.cssText = "width:18px;height:18px;border-radius:5px;border:1px solid #CBC6BC;background:#1A1916;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:#fff;font-weight:700";
+    cb.textContent = "v";
+
+    // Emoji (shows current, click opens picker)
+    var emSpan = document.createElement("span");
+    emSpan.style.cssText = "font-size:20px;flex-shrink:0;cursor:pointer";
+    emSpan.innerHTML = c.em;
+
+    // Name
+    var nameSpan = document.createElement("span");
+    nameSpan.style.cssText = "flex:1;font-size:13px;font-weight:500;color:#1A1916";
+    nameSpan.textContent = c.nom;
+
+    // Expand arrow for subcats
+    var chev = document.createElement("span");
+    chev.style.cssText = "font-size:18px;color:#A8A49E;transition:transform .2s;flex-shrink:0";
+    chev.textContent = "›";
+
+    row.appendChild(cb);
+    row.appendChild(emSpan);
+    row.appendChild(nameSpan);
+    row.appendChild(chev);
+
+    // Toggle check
     row.addEventListener("click", function(e) {
-      if (e.target === emBtn || e.target.parentNode === emBtn || e.target === chev) return;
-      row.classList.toggle("on");
-      cb.innerHTML = row.classList.contains("on") ? "&#10003;" : "";
+      if (e.target === emSpan || e.target === chev) return;
+      var on = row.dataset.checked === "1";
+      row.dataset.checked = on ? "0" : "1";
+      cb.style.background = on ? "#fff" : "#1A1916";
+      cb.style.borderColor = on ? "#CBC6BC" : "#1A1916";
+      cb.textContent = on ? "" : "v";
     });
+
+    // ── EMOJI PICKER ──
     var epanel = document.createElement("div");
-    epanel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:8px;flex-wrap:wrap;gap:4px";
-    emojis.forEach(function(em){
-      var eb=document.createElement("button");
-      eb.style.cssText="font-size:18px;width:34px;height:34px;border:none;background:none;border-radius:8px;cursor:pointer";
-      eb.textContent=em;
-      eb.addEventListener("click",function(ev){ev.stopPropagation();c.em=em;emBtn.textContent=em;epanel.style.display="none";});
+    epanel.style.cssText = "display:none;flex-wrap:wrap;gap:4px;padding:8px 10px;background:#F7F6F2;border-top:1px solid #E2DED6";
+    emojis.forEach(function(em) {
+      var eb = document.createElement("button");
+      eb.style.cssText = "font-size:20px;width:36px;height:36px;border:none;background:none;border-radius:8px;cursor:pointer";
+      eb.textContent = em;
+      eb.addEventListener("click", function(ev) {
+        ev.stopPropagation();
+        c.em = em;
+        emSpan.textContent = em;
+        epanel.style.display = "none";
+      });
       epanel.appendChild(eb);
     });
-    emBtn.addEventListener("click",function(ev){ev.stopPropagation();epanel.style.display=epanel.style.display==="flex"?"none":"flex";if(epanel.style.display==="flex")epanel.style.flexWrap="wrap";});
-    var isOpen = false;
-    chev.addEventListener("click",function(ev){ev.stopPropagation();isOpen=!isOpen;chev.style.transform=isOpen?"rotate(90deg)":"";subPanel.style.display=isOpen?"block":"none";});
+    emSpan.addEventListener("click", function(ev) {
+      ev.stopPropagation();
+      var open = epanel.style.display === "flex";
+      epanel.style.display = open ? "none" : "flex";
+    });
+
+    // ── SUBCATEGORY PANEL ──
     var subPanel = document.createElement("div");
-    subPanel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:10px 12px";
+    subPanel.style.cssText = "display:none;padding:10px 12px;background:#F7F6F2;border-top:1px solid #E2DED6";
+
+    var isOpen = false;
+    chev.addEventListener("click", function(ev) {
+      ev.stopPropagation();
+      isOpen = !isOpen;
+      chev.style.transform = isOpen ? "rotate(90deg)" : "";
+      subPanel.style.display = isOpen ? "block" : "none";
+    });
+
     function refreshSubs() {
-      subPanel.innerHTML="";
-      var subLbl=document.createElement("div");subLbl.style.cssText="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:6px";subLbl.textContent="Subcategorias";subPanel.appendChild(subLbl);
-      var tags=document.createElement("div");tags.style.cssText="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px";
-      c.subs.forEach(function(s,si){
-        var tag=document.createElement("div");tag.style.cssText="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #E2DED6;border-radius:12px;padding:3px 8px;font-size:12px;color:#1A1916";
+      subPanel.innerHTML = "";
+      var lbl = document.createElement("div");
+      lbl.style.cssText = "font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:6px";
+      lbl.textContent = "Subcategorias";
+      subPanel.appendChild(lbl);
+
+      var tags = document.createElement("div");
+      tags.style.cssText = "display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px";
+      c.subs.forEach(function(s, si) {
+        var tag = document.createElement("div");
+        tag.style.cssText = "display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #E2DED6;border-radius:12px;padding:3px 10px;font-size:12px;color:#1A1916";
         tag.appendChild(document.createTextNode(s));
-        var x=document.createElement("span");x.textContent="x";x.style.cssText="color:#A8A49E;cursor:pointer;margin-left:2px";
-        x.addEventListener("click",(function(sii){return function(){c.subs.splice(sii,1);refreshSubs();};})(si));
-        tag.appendChild(x);tags.appendChild(tag);
+        var x = document.createElement("span");
+        x.textContent = " x";
+        x.style.cssText = "color:#A8A49E;cursor:pointer";
+        x.addEventListener("click", (function(sii) {
+          return function() { c.subs.splice(sii, 1); refreshSubs(); };
+        })(si));
+        tag.appendChild(x);
+        tags.appendChild(tag);
       });
       subPanel.appendChild(tags);
-      var ar=document.createElement("div");ar.style.cssText="display:flex;gap:6px";
-      var inp=document.createElement("input");inp.type="text";inp.placeholder="Nueva subcategoria...";inp.style.cssText="flex:1;padding:5px 9px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;background:#fff;color:#1A1916";
-      var btn=document.createElement("button");btn.textContent="+ Agregar";btn.style.cssText="background:#1A1916;color:#fff;border:none;padding:5px 10px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;cursor:pointer;white-space:nowrap";
-      btn.addEventListener("click",function(){var n=inp.value.trim();if(!n)return;c.subs.push(n);inp.value="";refreshSubs();});
-      ar.appendChild(inp);ar.appendChild(btn);subPanel.appendChild(ar);
+
+      var ar = document.createElement("div");
+      ar.style.cssText = "display:flex;gap:6px";
+      var inp = document.createElement("input");
+      inp.type = "text"; inp.placeholder = "Nueva subcategoria...";
+      inp.style.cssText = "flex:1;padding:6px 9px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;background:#fff;color:#1A1916";
+      var addBtn = document.createElement("button");
+      addBtn.textContent = "+ Agregar";
+      addBtn.style.cssText = "background:#1A1916;color:#fff;border:none;padding:6px 10px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;cursor:pointer;white-space:nowrap";
+      addBtn.addEventListener("click", function() {
+        var n = inp.value.trim(); if (!n) return;
+        c.subs.push(n); inp.value = ""; refreshSubs();
+      });
+      ar.appendChild(inp); ar.appendChild(addBtn);
+      subPanel.appendChild(ar);
     }
     refreshSubs();
-    wrapper.appendChild(row);wrapper.appendChild(epanel);wrapper.appendChild(subPanel);
+
+    wrapper.appendChild(row);
+    wrapper.appendChild(epanel);
+    wrapper.appendChild(subPanel);
     list.appendChild(wrapper);
   });
 }
-
 function goNext() {
   if (step === 1) renderObCats();
   if (step === 2) {
     activeCats = [];
-    var items = document.querySelectorAll("#ob-cats .cat-item.on");
-    items.forEach(function(el) {
+    var rows = document.querySelectorAll("#ob-cats div[data-id][data-checked=\"1\"]");
+    rows.forEach(function(el) {
       var c = CAT_DB.find(function(x) { return x.id === el.dataset.id; });
       if (c) {
         activeCats.push(c);
