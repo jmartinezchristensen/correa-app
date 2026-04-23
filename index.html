@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v4.5</title>
+<title>Correa v4.6 [23-Apr-04:18]</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -89,9 +89,9 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .ph-sub{font-size:13px;color:#6B6760;margin-top:2px;}
 
 /* Input */
-.inp-card{background:#1A1916;border-radius:16px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden;}
-.inp-card::before{content:"";position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:rgba(127,119,221,.12);pointer-events:none;}
-.inp-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:8px;}
+.inp-card{background:#fff;border-bottom:1px solid #E2DED6;padding:16px 20px;margin-bottom:0;}
+
+.inp-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;margin-bottom:8px;}
 .inp-row{display:flex;gap:8px;align-items:flex-end;}
 .inp-mic{height:50px;width:50px;border-radius:10px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .inp-mic:hover{background:rgba(255,255,255,.12);color:#fff;}
@@ -100,7 +100,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 @keyframes mpulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);}50%{box-shadow:0 0 0 7px rgba(231,76,60,0);}}
 .inp-ta{flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.13);border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;color:#fff;background:rgba(255,255,255,.07);resize:none;height:50px;line-height:1.4;}
 .inp-ta::placeholder{color:rgba(255,255,255,.24);}
-.inp-ta:focus{outline:none;border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.1);}
+.inp-ta:focus{outline:none;border-color:#A8A49E;background:rgba(255,255,255,.1);}
 .inp-send{height:50px;padding:0 18px;border-radius:10px;border:none;background:#fff;color:#1A1916;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;}
 .inp-send:hover{background:#e8e4dc;}.inp-send:disabled{opacity:.4;cursor:default;}
 .inp-bot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:5px;}
@@ -423,15 +423,13 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
     <div class="sb-sec">Sistema</div>
     <div class="sb-item" id="nav-config">&#9881; Configuracion</div>
   </nav>
-  <div class="sb-foot">Version BASE</div>
+  <div class="sb-foot">v4.6 · 23-Apr-04:18</div>
 </aside>
 <main class="main">
 
   <!-- HOME -->
   <div id="pg-home" class="page active">
-    <div class="ph">
-      <div><div class="ph-title">Hola &#128075;</div><div class="ph-sub">Registra un movimiento con voz o texto</div></div>
-    </div>
+
     <div class="inp-card" id="wt-input">
       <div class="inp-lbl">
         <svg viewBox="0 0 120 120" width="12" height="12"><circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" opacity="0.9"/><circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/><circle cx="60" cy="66" r="4" fill="#E8622A"/></svg>
@@ -790,6 +788,7 @@ function finishOb() {
 
 //  APP 
 function startApp() {
+  document.title = "Correa v4.6";
   document.getElementById("onboarding").style.display = "none";
   document.getElementById("app").style.display = "grid";
   var cats = gCats() || activeCats;
@@ -1464,7 +1463,7 @@ var WT1 = [
   {
     step:"Paso 1 de 4", title:"Escribi o graba",
     body:'Contame el gasto en lenguaje natural. Algo como pague nafta $15.000 con debito - o graba tu voz con el microfono.',
-    target:"wt-input", arrow:"bottom"
+    target:"ai-inp", arrow:"bottom"
   },
   {
     step:"Paso 2 de 4", title:"Correa lo interpreta",
