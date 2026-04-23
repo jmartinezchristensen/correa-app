@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v5.0</title>
+<title>Correa v5.2</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -227,6 +227,13 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .toast{position:fixed;bottom:22px;right:22px;background:#1A1916;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;}
 .toast.show{opacity:1;}
 
+
+.emoji-picker{display:none;position:absolute;z-index:200;background:#fff;border:1px solid #E2DED6;border-radius:14px;padding:10px;box-shadow:0 8px 32px rgba(0,0,0,.12);width:240px;flex-wrap:wrap;gap:4px;}
+.emoji-picker.open{display:flex;}
+.ep-emoji{font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;border:none;background:none;}
+.ep-emoji:hover{background:#F0EEE8;}
+.em-btn{background:none;border:1px solid #E2DED6;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:16px;min-width:36px;height:32px;display:flex;align-items:center;justify-content:center;}
+.em-btn:hover{background:#F0EEE8;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 @keyframes arc-spin{0%{stroke-dashoffset:0;opacity:1}40%{stroke-dashoffset:-120;opacity:0.25}60%{stroke-dashoffset:-120;opacity:0.25}100%{stroke-dashoffset:0;opacity:1}}
 @keyframes dot-beat{0%,100%{r:4}50%{r:6}}
@@ -462,10 +469,10 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
             <button id="cur-usd" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
           </div>
         </div>
-        <div class="bd-mth">
-          <button class="mbtn" id="btn-prev-month">&larr;</button>
-          <span id="bd-month-lbl">Abril 2026</span>
-          <button class="mbtn" id="btn-next-month">&rarr;</button>
+        <div class="bd-mth" style="display:flex;align-items:center;gap:0">
+          <button class="mbtn" id="btn-prev-month" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;padding:0">&larr;</button>
+          <span id="bd-month-lbl" style="min-width:100px;text-align:center;display:inline-block">Abril 2026</span>
+          <button class="mbtn" id="btn-next-month" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;padding:0">&rarr;</button>
         </div>
       </div>
       <div id="bd-body" data-wt="breakdown"><div class="bd-empty">Registra tu primer gasto para verlo aqui.</div></div>
@@ -700,17 +707,62 @@ function renderObCats() {
   var cats = buildActiveCats();
   var list = document.getElementById("ob-cats");
   list.innerHTML = "";
+  var emojis = ["🏠","🛒","🚗","🏍","🚲","❤","🍽","🏋","👶","🐾","✈","👗","📺","🎁","💊","🎓","💼","🐕","🏖","🎮","🍕","☕","🚌","💰","📱","🔧","🏥","🎵","🛍","🌿","⚽","🎨","📚","🧴","🏦","💡","🎂","🍷","🥗","🚿"];
   cats.forEach(function(c) {
-    var d = document.createElement("div");
-    d.className = "cat-item on";
-    d.dataset.id = c.id;
-    d.innerHTML = '<div class="cat-cb">&#10003;</div><span class="cat-em">' + c.em + '</span><span class="cat-name">' + c.nom + '</span><span class="cat-sub">' + c.subs.slice(0,3).join(" &middot; ") + '...</span>';
-    d.addEventListener("click", function() {
-      d.classList.toggle("on");
-      var cb = d.querySelector(".cat-cb");
-      cb.innerHTML = d.classList.contains("on") ? "&#10003;" : "";
+    var wrapper = document.createElement("div");
+    wrapper.style.cssText = "border:1px solid #E2DED6;border-radius:10px;margin-bottom:6px;overflow:hidden";
+    var row = document.createElement("div");
+    row.className = "cat-item on";
+    row.dataset.id = c.id;
+    row.style.cssText = "border:none;border-radius:0;display:flex;align-items:center;gap:8px;padding:9px 12px;background:#fff";
+    var cb = document.createElement("div"); cb.className="cat-cb"; cb.innerHTML="&#10003;";
+    var emBtn = document.createElement("button");
+    emBtn.style.cssText = "background:none;border:1px solid #E2DED6;border-radius:6px;padding:2px 5px;cursor:pointer;font-size:16px;min-width:32px;flex-shrink:0";
+    emBtn.innerHTML = c.em;
+    var nameSpan = document.createElement("span"); nameSpan.className="cat-name"; nameSpan.textContent=c.nom;
+    var chev = document.createElement("span"); chev.innerHTML="&#8250;";
+    chev.style.cssText = "color:#A8A49E;font-size:18px;margin-left:auto;cursor:pointer;transition:transform .2s;flex-shrink:0";
+    row.appendChild(cb); row.appendChild(emBtn); row.appendChild(nameSpan); row.appendChild(chev);
+    row.addEventListener("click", function(e) {
+      if (e.target === emBtn || e.target.parentNode === emBtn || e.target === chev) return;
+      row.classList.toggle("on");
+      cb.innerHTML = row.classList.contains("on") ? "&#10003;" : "";
     });
-    list.appendChild(d);
+    var epanel = document.createElement("div");
+    epanel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:8px;flex-wrap:wrap;gap:4px";
+    emojis.forEach(function(em){
+      var eb=document.createElement("button");
+      eb.style.cssText="font-size:18px;width:34px;height:34px;border:none;background:none;border-radius:8px;cursor:pointer";
+      eb.textContent=em;
+      eb.addEventListener("click",function(ev){ev.stopPropagation();c.em=em;emBtn.textContent=em;epanel.style.display="none";});
+      epanel.appendChild(eb);
+    });
+    emBtn.addEventListener("click",function(ev){ev.stopPropagation();epanel.style.display=epanel.style.display==="flex"?"none":"flex";if(epanel.style.display==="flex")epanel.style.flexWrap="wrap";});
+    var isOpen = false;
+    chev.addEventListener("click",function(ev){ev.stopPropagation();isOpen=!isOpen;chev.style.transform=isOpen?"rotate(90deg)":"";subPanel.style.display=isOpen?"block":"none";});
+    var subPanel = document.createElement("div");
+    subPanel.style.cssText = "display:none;background:#F7F6F2;border-top:1px solid #E2DED6;padding:10px 12px";
+    function refreshSubs() {
+      subPanel.innerHTML="";
+      var subLbl=document.createElement("div");subLbl.style.cssText="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:6px";subLbl.textContent="Subcategorias";subPanel.appendChild(subLbl);
+      var tags=document.createElement("div");tags.style.cssText="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px";
+      c.subs.forEach(function(s,si){
+        var tag=document.createElement("div");tag.style.cssText="display:flex;align-items:center;gap:4px;background:#fff;border:1px solid #E2DED6;border-radius:12px;padding:3px 8px;font-size:12px;color:#1A1916";
+        tag.appendChild(document.createTextNode(s));
+        var x=document.createElement("span");x.textContent="x";x.style.cssText="color:#A8A49E;cursor:pointer;margin-left:2px";
+        x.addEventListener("click",(function(sii){return function(){c.subs.splice(sii,1);refreshSubs();};})(si));
+        tag.appendChild(x);tags.appendChild(tag);
+      });
+      subPanel.appendChild(tags);
+      var ar=document.createElement("div");ar.style.cssText="display:flex;gap:6px";
+      var inp=document.createElement("input");inp.type="text";inp.placeholder="Nueva subcategoria...";inp.style.cssText="flex:1;padding:5px 9px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;background:#fff;color:#1A1916";
+      var btn=document.createElement("button");btn.textContent="+ Agregar";btn.style.cssText="background:#1A1916;color:#fff;border:none;padding:5px 10px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:12px;cursor:pointer;white-space:nowrap";
+      btn.addEventListener("click",function(){var n=inp.value.trim();if(!n)return;c.subs.push(n);inp.value="";refreshSubs();});
+      ar.appendChild(inp);ar.appendChild(btn);subPanel.appendChild(ar);
+    }
+    refreshSubs();
+    wrapper.appendChild(row);wrapper.appendChild(epanel);wrapper.appendChild(subPanel);
+    list.appendChild(wrapper);
   });
 }
 
@@ -1361,7 +1413,22 @@ function renderCfgCats() {
   cats.forEach(function(c,i){
     var wr=document.createElement("div");wr.style.cssText="border:1px solid #E2DED6;border-radius:10px;margin-bottom:6px";
     var row=document.createElement("div");row.className="cfg-row";row.style.cssText="border:none;cursor:pointer;border-radius:0;display:flex;align-items:center;padding:9px 12px;background:#fff;min-height:42px";
-    var eS=document.createElement("span");eS.className="cfg-em";eS.innerHTML=c.em;
+    // Emoji button
+    var eBtn=document.createElement("button");eBtn.className="em-btn";eBtn.innerHTML=c.em;eBtn.title="Cambiar emoji";eBtn.style.position="relative";
+    var ePicker=document.createElement("div");ePicker.className="emoji-picker";
+    var emojis=["🏠", "🛒", "🚗", "🏍️", "🚲", "❤️", "🍽️", "🏋️", "👶", "🐾", "✈️", "👗", "📺", "🎁", "💊", "🎓", "💼", "🐕", "🏖️", "🎮", "🍕", "☕", "🚌", "💰", "📱", "🔧", "🏥", "🎵", "🛍️", "🌿", "⚽", "🎨", "📚", "🧴", "🏦", "💡", "🎂", "🍷", "🥗", "🚿"];
+    emojis.forEach(function(em){
+      var eb=document.createElement("button");eb.className="ep-emoji";eb.textContent=em;
+      eb.addEventListener("click",function(ev){ev.stopPropagation();
+        var fc=gCats()||[];fc[i].em=em;ss("cr_cats",fc);
+        eBtn.textContent=em;ePicker.classList.remove("open");
+      });
+      ePicker.appendChild(eb);
+    });
+    eBtn.appendChild(ePicker);
+    eBtn.addEventListener("click",function(ev){ev.stopPropagation();ePicker.classList.toggle("open");});
+    document.addEventListener("click",function(){ePicker.classList.remove("open");},{once:false});
+    var eS=eBtn;
     var nS=document.createElement("span");nS.className="cfg-nom";nS.textContent=c.nom;
     var sS=document.createElement("span");sS.style.cssText="flex:1;font-size:11px;color:#A8A49E;margin-left:4px";sS.textContent=c.subs.slice(0,2).join(", ")+(c.subs.length>2?"...":"");
     var ch=document.createElement("span");ch.innerHTML=" &#8250;";ch.style.cssText="color:#A8A49E;font-size:18px;transition:transform .2s";
