@@ -3,15 +3,15 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v5.9</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Correa v6.1</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
-#onboarding{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;}
+#onboarding{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;scroll-behavior:auto;}
 .ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:auto;}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
@@ -82,7 +82,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .sb-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);}
 .sb-item.active{background:rgba(255,255,255,.1);color:#fff;}
 .sb-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:10px;color:rgba(255,255,255,.16);font-family:"DM Mono",monospace;}
-.main{padding:28px 32px;overflow-y:auto;}
+.main{padding:28px 32px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .page{display:none;}.page.active{display:block;}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
 .ph-title{font-size:22px;font-weight:600;letter-spacing:-.03em;}
@@ -243,7 +243,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 16px;border-radius:8px;color:rgba(255,255,255,.4);transition:color .15s;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;user-select:none;}
 .bn-item.active{color:#fff;}
 .bn-icon{font-size:18px;line-height:1;}
-@media(max-width:768px){.sb{display:none !important;}#app{grid-template-columns:1fr !important;}.main{padding:16px 16px 80px 16px;}.bottom-nav{display:flex !important;}.inp-ta{font-size:16px;}.metrics{grid-template-columns:1fr 1fr !important;}.conf-fields{grid-template-columns:1fr 1fr !important;}.ob-card{padding:24px 18px;border-radius:16px;}.bd-row{padding:12px 16px;}.mv-row{padding:12px 16px;}}
+@media(max-width:768px){.sb{display:none !important;}#app{grid-template-columns:1fr !important;}.main{padding:16px 16px 80px 16px;-webkit-overflow-scrolling:touch;}.bottom-nav{display:flex !important;}.inp-ta{font-size:16px;}.metrics{grid-template-columns:1fr 1fr !important;}.conf-fields{grid-template-columns:1fr 1fr !important;}.ob-card{padding:24px 18px;border-radius:16px;}.bd-row{padding:12px 16px;}.mv-row{padding:12px 16px;}}
 @media(max-width:380px){.metrics{grid-template-columns:1fr !important;}.ob-card{padding:20px 14px;}}
 @media(max-width:800px){
   #app{grid-template-columns:1fr;}
@@ -654,6 +654,10 @@ function updateProg() {
     var st = document.getElementById("st" + j);
     if (st) st.classList.toggle("active", j === step);
   }
+  // Always scroll to top of onboarding on step change
+  var ob = document.getElementById("onboarding");
+  if (ob) ob.scrollTop = 0;
+  window.scrollTo(0, 0);
 }
 
 function chipToggle(el) {
@@ -851,11 +855,13 @@ function goNext() {
     }).join("") + (activeIngCats.length ? '<span class="cp" style="background:#D8F3DC;color:#2D6A4F">+' + activeIngCats.length + " ingresos</span>" : "");
   }
   step++;
+  if (document.activeElement) document.activeElement.blur();
   updateProg();
 }
 
 function goBack() {
   step--;
+  if (document.activeElement) document.activeElement.blur();
   updateProg();
 }
 
@@ -925,6 +931,9 @@ function showPage(p) {
     var bn = document.getElementById("bn-" + n);
     if (bn) bn.classList.toggle("active", n === p);
   });
+  // Reset scroll position when changing pages
+  var main = document.querySelector(".main");
+  if (main) main.scrollTop = 0;
   if (p === "config") renderCfgCats();
   if (p === "home") renderHome();
   if (p === "ingresos") renderIngresos();
@@ -1600,6 +1609,18 @@ function delIngCat(i) {
 
 
 
+
+// Prevent iOS scroll jump on input blur
+document.addEventListener("focusout", function(e) {
+  if (document.getElementById("pg-config") && 
+      document.getElementById("pg-config").classList.contains("active")) {
+    var scrollY = window.scrollY;
+    setTimeout(function() {
+      window.scrollTo(0, scrollY);
+    }, 50);
+  }
+});
+
 document.addEventListener("DOMContentLoaded", function() {
 
   // Onboarding buttons
@@ -1685,6 +1706,10 @@ document.addEventListener("DOMContentLoaded", function() {
   function setCurT(usd){showUSD=usd;var a=document.getElementById("cur-ars"),b=document.getElementById("cur-usd");a.style.cssText=usd?"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif":"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif";b.style.cssText=usd?"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif":"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif";renderHome();}
   document.getElementById("cur-ars").addEventListener("click",function(){setCurT(false);});
   document.getElementById("cur-usd").addEventListener("click",function(){setCurT(true);});
+  // Scroll to top on load
+  window.scrollTo(0, 0);
+  document.getElementById("onboarding").scrollTop = 0;
+
   // Check if already set up
   if (ls("cr_done", false)) {
     activeCats = gCats() || [];
