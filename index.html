@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v6.1</title>
+<title>Correa v6.2</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -259,7 +259,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 <!-- ONBOARDING -->
 <div id="onboarding">
 <div class="ob-card">
-  <div class="prog" id="prog">
+  <div class="prog" id="prog" style="scroll-margin-top:0">
     <div class="pdot cur" id="pd0"></div>
     <div class="pline" id="pl0"></div>
     <div class="pdot" id="pd1"></div>
@@ -654,10 +654,16 @@ function updateProg() {
     var st = document.getElementById("st" + j);
     if (st) st.classList.toggle("active", j === step);
   }
-  // Always scroll to top of onboarding on step change
-  var ob = document.getElementById("onboarding");
-  if (ob) ob.scrollTop = 0;
-  window.scrollTo(0, 0);
+  // Scroll to top - try all methods for iOS compatibility
+  setTimeout(function() {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    var ob = document.getElementById("onboarding");
+    if (ob) ob.scrollTop = 0;
+    var prog = document.getElementById("prog");
+    if (prog) prog.scrollIntoView({block:"start", behavior:"instant"});
+  }, 10);
 }
 
 function chipToggle(el) {
