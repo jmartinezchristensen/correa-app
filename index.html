@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v4.6 [23-Apr-04:18]</title>
+<title>Correa v4.7</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -229,8 +229,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .wt-overlay{position:fixed;inset:0;background:rgba(26,25,22,.55);z-index:500;display:none;pointer-events:none;}
 .wt-overlay.show{display:block;pointer-events:auto;}
 .wt-highlight{position:fixed;border-radius:12px;box-shadow:0 0 0 3px #E8622A,0 0 0 8px rgba(232,98,42,.2);z-index:501;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);}
-.wt-tooltip{position:fixed;z-index:502;background:#fff;border-radius:16px;padding:20px;width:min(300px,calc(100vw - 40px));box-shadow:0 8px 40px rgba(0,0,0,.2);}
-.wt-arrow{position:absolute;width:12px;height:12px;background:#fff;transform:rotate(45deg);}
+.wt-tooltip{position:fixed;z-index:502;background:#fff;border-radius:16px;padding:20px;width:auto;left:16px;right:16px;bottom:80px;box-shadow:0 8px 40px rgba(0,0,0,.2);}
+.wt-arrow{display:none;}
 .wt-arrow.top{top:-6px;left:24px;}
 .wt-arrow.bottom{bottom:-6px;left:24px;}
 .wt-step{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#E8622A;margin-bottom:6px;}
@@ -1519,7 +1519,7 @@ function renderWT() {
   document.getElementById("wt-step").textContent = s.step;
   document.getElementById("wt-title").textContent = s.title;
   document.getElementById("wt-body").textContent = s.body;
-  document.getElementById("wt-next").innerHTML = wtCurrent === wtSteps.length - 1 ? "Entendido!" : "Siguiente &rarr;";
+  document.getElementById("wt-next").innerHTML = wtCurrent === wtSteps.length - 1 ? "Entendido!" : "Siguiente →";
 
   // Dots
   var dots = document.getElementById("wt-dots");
@@ -1530,30 +1530,31 @@ function renderWT() {
     dots.appendChild(d);
   });
 
-  // Position highlight on target
+  // Highlight target element
   var target = document.getElementById(s.target);
-  if (target) {
-    var rect = target.getBoundingClientRect();
-    var pad = 6;
-    var hl = document.getElementById("wt-highlight");
-    hl.style.top = (rect.top - pad) + "px";
-    hl.style.left = (rect.left - pad) + "px";
-    hl.style.width = (rect.width + pad*2) + "px";
-    hl.style.height = (rect.height + pad*2) + "px";
+  var hl = document.getElementById("wt-highlight");
+  var tt = document.getElementById("wt-tooltip");
+  var arr = document.getElementById("wt-arrow");
 
-    // Position tooltip
-    var tt = document.getElementById("wt-tooltip");
-    var arr = document.getElementById("wt-arrow");
-    arr.className = "wt-arrow " + s.arrow;
-    if (s.arrow === "bottom") {
-      tt.style.top = (rect.top - pad - 170) + "px";
-    } else {
-      tt.style.top = (rect.bottom + pad + 14) + "px";
-    }
-    tt.style.left = Math.max(16, Math.min(rect.left, window.innerWidth - 320)) + "px";
-    // Scroll target into view
-    target.scrollIntoView({behavior:"smooth", block:"nearest"});
+  if (target) {
+    target.scrollIntoView({behavior:"smooth", block:"center"});
+    setTimeout(function() {
+      var rect = target.getBoundingClientRect();
+      var pad = 8;
+      hl.style.top = (rect.top - pad) + "px";
+      hl.style.left = (rect.left - pad) + "px";
+      hl.style.width = (rect.width + pad*2) + "px";
+      hl.style.height = (rect.height + pad*2) + "px";
+    }, 350);
   }
+
+  // Tooltip always fixed at bottom on mobile, or near element on desktop
+  arr.style.display = "none"; // hide arrow - tooltip is at bottom
+  tt.style.left = "16px";
+  tt.style.right = "16px";
+  tt.style.width = "auto";
+  tt.style.bottom = "80px";
+  tt.style.top = "auto";
 }
 
 function closeWT() {
