@@ -4,15 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v6.6</title>
+<title>Correa v6.7</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
-#onboarding{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:auto;align-self:flex-start;margin-top:auto;margin-bottom:auto;}
+#onboarding{min-height:100vh;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:0 auto;}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
 .prog{display:flex;align-items:center;margin-bottom:32px;}
@@ -654,15 +654,17 @@ function updateProg() {
     var st = document.getElementById("st" + j);
     if (st) st.classList.toggle("active", j === step);
   }
-  // Align card to top for content-heavy steps, center for step 0
+  // Center card vertically on step 0, top-align on other steps
   var ob = document.getElementById("onboarding");
-  if (ob) {
-    ob.style.alignItems = step === 0 ? "center" : "flex-start";
-    if (step > 0) {
-      setTimeout(function() {
-        ob.scrollTop = 0;
-        window.scrollTo(0, 0);
-      }, 10);
+  var card = document.querySelector(".ob-card");
+  if (ob && card) {
+    if (step === 0) {
+      var topPad = Math.max(0, (window.innerHeight - card.offsetHeight) / 2 - 24);
+      ob.style.paddingTop = Math.max(topPad, 24) + "px";
+      ob.scrollTop = 0;
+    } else {
+      ob.style.paddingTop = "max(24px, env(safe-area-inset-top))";
+      setTimeout(function() { ob.scrollTop = 0; window.scrollTo(0,0); }, 10);
     }
   }
 }
@@ -1716,6 +1718,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Scroll to top on load
   window.scrollTo(0, 0);
   document.getElementById("onboarding").scrollTop = 0;
+  // Set initial centering for step 0
+  setTimeout(function() { updateProg(); }, 50);
 
   // Check if already set up
   if (ls("cr_done", false)) {
