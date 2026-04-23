@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v6.7</title>
+<title>Correa v6.8</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -654,18 +654,23 @@ function updateProg() {
     var st = document.getElementById("st" + j);
     if (st) st.classList.toggle("active", j === step);
   }
-  // Center card vertically on step 0, top-align on other steps
+  // Center card if content fits screen, top-align if it doesn't
   var ob = document.getElementById("onboarding");
   var card = document.querySelector(".ob-card");
   if (ob && card) {
-    if (step === 0) {
-      var topPad = Math.max(0, (window.innerHeight - card.offsetHeight) / 2 - 24);
-      ob.style.paddingTop = Math.max(topPad, 24) + "px";
+    setTimeout(function() {
+      var cardH = card.offsetHeight;
+      var screenH = window.innerHeight;
+      var fits = cardH < screenH - 80;
+      if (fits) {
+        var topPad = Math.max(24, Math.floor((screenH - cardH) / 2) - 24);
+        ob.style.paddingTop = topPad + "px";
+      } else {
+        ob.style.paddingTop = "24px";
+      }
       ob.scrollTop = 0;
-    } else {
-      ob.style.paddingTop = "max(24px, env(safe-area-inset-top))";
-      setTimeout(function() { ob.scrollTop = 0; window.scrollTo(0,0); }, 10);
-    }
+      window.scrollTo(0, 0);
+    }, 20);
   }
 }
 
