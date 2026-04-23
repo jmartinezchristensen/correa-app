@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v6.2</title>
+<title>Correa v6.3</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -661,8 +661,8 @@ function updateProg() {
     document.body.scrollTop = 0;
     var ob = document.getElementById("onboarding");
     if (ob) ob.scrollTop = 0;
-    var prog = document.getElementById("prog");
-    if (prog) prog.scrollIntoView({block:"start", behavior:"instant"});
+    var card = document.querySelector(".ob-card");
+    if (card) card.scrollIntoView({block:"start", behavior:"instant"});
   }, 10);
 }
 
