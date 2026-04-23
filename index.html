@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Correa v5.6</title>
+<title>Correa v5.7</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -89,16 +89,16 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .ph-sub{font-size:13px;color:#6B6760;margin-top:2px;}
 
 /* Input */
-.inp-card{background:#fff;border:1px solid #E2DED6;border-radius:16px;padding:14px 16px;margin-bottom:20px;}
+.inp-card{background:#fff;border:1px solid #E2DED6;border-radius:16px;padding:16px;margin-bottom:20px;display:flex;align-items:center;}
 
 .inp-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;margin-bottom:8px;}
-.inp-row{display:flex;gap:8px;align-items:center;}
+.inp-row{display:flex;gap:8px;align-items:center;width:100%;}
 .inp-mic{height:44px;width:44px;border-radius:10px;border:1px solid #E2DED6;background:#F7F6F2;color:#6B6760;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .inp-mic:hover{background:#ECEAE4;color:#1A1916;}
 .inp-mic.rec{background:#c0392b;border-color:#e74c3c;color:#fff;animation:mpulse 1s ease-in-out infinite;}
 .inp-mic.proc{background:#F7F6F2;border-color:#E2DED6;cursor:default;}
 @keyframes mpulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);}50%{box-shadow:0 0 0 7px rgba(231,76,60,0);}}
-.inp-ta{flex:1;padding:0 14px;border:1px solid #E2DED6;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:13px;color:#1A1916;background:#F7F6F2;resize:none;height:44px;line-height:44px;overflow:hidden;}
+.inp-ta{flex:1;padding:10px 14px;border:1px solid #E2DED6;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:13px;color:#1A1916;background:#F7F6F2;resize:none;min-height:44px;max-height:100px;line-height:1.4;overflow-y:auto;}
 .inp-ta::placeholder{color:#A8A49E;font-size:13px;}
 .inp-ta:focus{outline:none;border-color:#A8A49E;background:rgba(255,255,255,.1);}
 .inp-send{height:44px;padding:0 14px;border-radius:10px;border:none;background:#1A1916;color:#fff;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;flex-shrink:0;display:flex;align-items:center;gap:7px;}
@@ -452,7 +452,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <button class="btn-no" id="conf-no">Cancelar</button>
       </div>
     </div>
-    <div class="metrics m3" id="home-metrics">
+    <div class="metrics m2" id="home-metrics">
       <div class="metric hlr" id="wt-metrics" style="padding:14px 16px 12px"><div class="ml">Gastos del mes</div><div class="mv red" style="font-size:44px;letter-spacing:-.04em;line-height:1" id="hm-eg">$0</div><div class="ms" id="hm-eg2">0 registros</div></div>
       <div class="metric hlg" id="hm-ing-card" style="display:none"><div class="ml">Ingresos del mes</div><div class="mv green" id="hm-ing">$0</div><div class="ms" id="hm-ing2">0 registros</div></div>
       <div class="metric" style="padding:14px 16px 12px"><div class="ml">Mayor categoria</div><div class="mv" id="hm-top" style="font-size:15px;letter-spacing:-.01em">-</div><div class="ms" id="hm-top2">este mes</div></div>
@@ -1059,7 +1059,7 @@ async function startRec() {
     isRec = true;
     var b = document.getElementById("mic-btn");
     b.classList.add("rec");
-    b.textContent = "\u23F9";
+    b.innerHTML = '<svg viewBox="0 0 120 120" width="22" height="22" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"><circle cx="60" cy="66" r="38" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/><circle cx="60" cy="66" r="25" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/><circle cx="60" cy="66" r="4" fill="#fff" style="animation:dot-beat 2.4s ease-in-out infinite"/></svg>';
     setVSt("rec", "\u25CF Grabando... toca para detener");
   } catch(e) {
     showToast(e.name === "NotAllowedError" ? "Permiso de microfono denegado" : "No se pudo acceder al microfono");
@@ -1135,11 +1135,12 @@ function showConf(p) {
     fields.innerHTML="";
     var ncDiv=document.createElement("div"); ncDiv.style.cssText="grid-column:1/-1;display:flex;flex-direction:column;gap:10px";
     var cb=document.createElement("div"); cb.style.cssText="background:#F0EEE8;border-radius:10px;padding:12px";
-    var cL=document.createElement("div"); cL.style.cssText="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px"; cL.textContent="Crear categoria nueva";
+    var cL=document.createElement("div"); cL.style.cssText="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:4px"; cL.textContent="Crear categoria nueva";
+    var cHint=document.createElement("div"); cHint.style.cssText="font-size:11px;color:#A8A49E;margin-bottom:8px"; cHint.textContent="Podes editar el nombre antes de crear";
     var cR=document.createElement("div"); cR.style.cssText="display:flex;gap:8px;align-items:center";
     var nI=document.createElement("input"); nI.type="text"; nI.value=p.cat_sugerida; nI.style.cssText="flex:1;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#fff;color:#1A1916";
     var nB=document.createElement("button"); nB.textContent="+ Crear"; nB.style.cssText="background:#1A1916;color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap";
-    cR.appendChild(nI); cR.appendChild(nB); cb.appendChild(cL); cb.appendChild(cR);
+    cR.appendChild(nI); cR.appendChild(nB); cb.appendChild(cL); cb.appendChild(cHint); cb.appendChild(cR);
     var eb=document.createElement("div"); eb.style.cssText="background:#F0EEE8;border-radius:10px;padding:12px";
     var eL=document.createElement("div"); eL.style.cssText="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#A8A49E;margin-bottom:8px"; eL.textContent="O elegir una que ya tengo";
     var eS=document.createElement("select"); eS.style.cssText="width:100%;padding:8px 12px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#fff;color:#1A1916";
@@ -1229,7 +1230,13 @@ function setRecentFilter(days) {
 
 function renderRecentList() {
   var rcList=document.getElementById("rc-list"); if(!rcList) return;
-  var movs=gMonthM().slice().reverse();
+  var movs=gMonthM().slice();
+  // Sort by fecha descending (newest first), then by id descending within same day
+  movs.sort(function(a,b){
+    var da=a.fecha||"0000-00-00", db=b.fecha||"0000-00-00";
+    if(da>db) return -1; if(da<db) return 1;
+    return b.id-a.id;
+  });
   var co=new Date();co.setDate(co.getDate()-recentFilter);var cs=co.toISOString().split("T")[0];
   var f=movs.filter(function(m){return !m.fecha||m.fecha>=cs;});
   if(!f.length){rcList.innerHTML='<div class="mv-empty">Sin registros en este periodo.</div>';return;}
