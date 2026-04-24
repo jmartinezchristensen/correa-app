@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v7.3</title>
+<title>Correa v9.3</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -149,16 +149,18 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .bd-mth{font-size:13px;font-weight:600;color:#1A1916;display:flex;align-items:center;gap:8px;}
 .mbtn{background:none;border:1px solid #E2DED6;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:12px;color:#6B6760;font-family:"DM Sans",sans-serif;}
 .mbtn:hover{border-color:#1A1916;color:#1A1916;}
-.bd-row{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;transition:background .15s;}
+.bd-row{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid #E2DED6;}
 .bd-row:hover{background:#F7F6F2;}
-.bd-em{font-size:22px;flex-shrink:0;width:32px;text-align:center;}
+.bd-em{font-size:22px;flex-shrink:0;width:32px;text-align:center;padding-top:1px;}
 .bd-info{flex:1;min-width:0;}
 .bd-name{font-size:13px;font-weight:500;color:#1A1916;}
-.bd-bar-wrap{height:7px;background:#F0EEE8;border-radius:4px;margin-top:6px;}
+.bd-bar-wrap{height:6px;background:#F0EEE8;border-radius:4px;margin-top:6px;width:100%;}
 .bd-bar{height:100%;border-radius:4px;transition:width .5s ease;}
-.bd-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0;}
+.bd-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0;align-self:flex-start;}
 .bd-amt{font-size:14px;font-weight:700;font-family:"DM Mono",monospace;color:#1A1916;}
 .bd-cnt{font-size:10px;color:#A8A49E;}
+.bud-link{font-size:11px;color:#A8A49E;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;cursor:pointer;margin-top:4px;display:inline-block;}
+.bud-link:hover{color:#1A1916;}
 .bd-empty{text-align:center;padding:32px;color:#A8A49E;font-size:13px;}
 
 /* Detail */
@@ -453,29 +455,64 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <button class="btn-no" id="conf-no">Cancelar</button>
       </div>
     </div>
-    <div class="metrics" style="grid-template-columns:1fr" id="home-metrics">
-      <div class="metric hlr" id="wt-metrics" style="padding:18px 20px 16px"><div class="ml">Gastos del mes</div><div class="mv red" style="font-size:clamp(22px,8vw,44px);letter-spacing:-.04em;line-height:1;word-break:break-all" id="hm-eg">$0</div><div class="ms" id="hm-eg2">0 registros</div></div>
-      <div class="metric hlg" id="hm-ing-card" style="display:none"><div class="ml">Ingresos del mes</div><div class="mv green" id="hm-ing">$0</div><div class="ms" id="hm-ing2">0 registros</div></div>
-      
-    </div>
-    <div class="bdown">
-      <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between">
-        <span class="bd-hl">Por categoria</span>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="display:flex;background:#F0EEE8;border-radius:16px;padding:2px;gap:2px">
-            <button id="cur-ars" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">ARS</button>
-            <button id="cur-usd" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
+    <!-- DASHBOARD CARD -->
+    <div class="bdown" id="home-metrics" style="margin-bottom:20px">
+      <div style="padding:16px">
+        <!-- Fila 1: label mes + flechas -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E">Gastos de <span id="dash-mes-lbl" style="color:#1A1916">Abril 2026</span></div>
+          <div style="display:flex;align-items:center;gap:3px">
+            <button id="btn-prev-month" style="background:none;border:none;color:#A8A49E;font-size:16px;cursor:pointer;padding:0;line-height:1">&#8249;</button>
+            <button id="btn-next-month" style="background:none;border:none;color:#A8A49E;font-size:16px;cursor:pointer;padding:0;line-height:1">&#8250;</button>
           </div>
-          <div style="display:flex;align-items:center;gap:2px">
-            <button class="mbtn" id="btn-prev-month" style="width:24px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0">&larr;</button>
-            <span id="bd-month-lbl" style="font-size:11px;font-weight:600;color:#1A1916;min-width:36px;text-align:center;line-height:1.2">Abril 2026</span>
-            <button class="mbtn" id="btn-next-month" style="width:24px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0">&rarr;</button>
+        </div>
+        <!-- Fila 2: monto + toggle ARS/USD -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="mv red" style="font-size:30px;letter-spacing:-.04em;line-height:1;font-family:DM Mono,monospace" id="hm-eg">$0</div>
+          <div style="display:flex;background:#F0EEE8;border-radius:16px;padding:2px;gap:2px;flex-shrink:0">
+            <button id="cur-ars" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">ARS</button>
+            <button id="cur-usd" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
+          </div>
+        </div>
+        <!-- Divider -->
+        <div style="height:1px;background:#E2DED6;margin-bottom:12px"></div>
+        <!-- Stats row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;margin-bottom:12px">
+          <div style="padding-right:12px;border-right:1px solid #E2DED6;text-align:center">
+            <div style="font-size:10px;color:#A8A49E;margin-bottom:3px">Prom. / dia</div>
+            <div style="font-size:12px;font-weight:600;font-family:DM Mono,monospace;color:#1A1916" id="dash-avg">-</div>
+          </div>
+          <div style="padding:0 12px;border-right:1px solid #E2DED6;text-align:center">
+            <div style="font-size:10px;color:#A8A49E;margin-bottom:3px">Mayor gasto</div>
+            <div style="font-size:12px;font-weight:600;color:#1A1916;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="dash-top">-</div>
+          </div>
+          <div style="padding-left:12px;text-align:center">
+            <div style="font-size:10px;color:#A8A49E;margin-bottom:3px">Presupuesto</div>
+            <div style="font-size:12px;font-weight:600;color:#1A1916" id="dash-bud">-</div>
+          </div>
+        </div>
+        <!-- Progress bar del mes -->
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:#A8A49E;margin-bottom:4px">
+            <span>Progreso del mes</span>
+            <span id="dash-prog-lbl"></span>
+          </div>
+          <div style="height:5px;background:#F0EEE8;border-radius:3px;overflow:hidden">
+            <div id="dash-prog-fill" style="height:100%;border-radius:3px;background:#9B2335;transition:width .4s ease;width:0%"></div>
           </div>
         </div>
       </div>
+      <!-- Ingresos (hidden when no income tracking) -->
+      <div class="metric hlg" id="hm-ing-card" style="display:none;margin:0 16px 16px;border-radius:10px"><div class="ml">Ingresos del mes</div><div class="mv green" id="hm-ing">$0</div><div class="ms" id="hm-ing2">0 registros</div></div>
+    </div>
+    <!-- Por categoria -->
+    <div class="bdown">
+      <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between">
+        <span class="bd-hl">Por categoria</span>
+      </div>
       <div id="bd-body" data-wt="breakdown"><div class="bd-empty">Registra tu primer gasto para verlo aqui.</div></div>
     </div>
-    <div class="detail" id="detail-panel">
+    <div class="detail" id="detail-panel" style="display:none!important">
       <div class="det-hdr">
         <div class="det-title" id="det-title"></div>
         <button class="det-close" id="det-close">&#215;</button>
@@ -620,6 +657,84 @@ function ls(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse
 function ss(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 function gKey(p) { return localStorage.getItem("cr_k_" + p) || ""; }
 function sKey(p, v) { localStorage.setItem("cr_k_" + p, v); }
+
+function gBudgets() { return ls("cr_budgets", {}); }
+function sBudgets(b) { ss("cr_budgets", b); }
+function getBudget(nom) { return gBudgets()[nom] || null; }
+function setBudget(nom, limite, repetir, inflacion) {
+  var b = gBudgets();
+  b[nom] = {limite: limite, repetir: repetir, inflacion: inflacion};
+  sBudgets(b);
+}
+function delBudget(nom) {
+  var b = gBudgets(); delete b[nom]; sBudgets(b);
+}
+
+
+// Fetch IPC mensual from datos.gob.ar (no token needed)
+// Returns the monthly % change for a given YYYY-MM
+var ipcCache = {};
+async function fetchIPC(yearMonth) {
+  if (ipcCache[yearMonth]) return ipcCache[yearMonth];
+  try {
+    var url = "https://apis.datos.gob.ar/series/api/series/?ids=103.1_I2N_2016_M_15:percent_change&start_date="+yearMonth+"&end_date="+yearMonth+"&format=json&limit=1";
+    var r = await fetch(url);
+    if (!r.ok) throw new Error("IPC fetch error");
+    var d = await r.json();
+    var val = d.data && d.data[0] && d.data[0][1];
+    if (val === null || val === undefined) throw new Error("No IPC data");
+    var pct = parseFloat((val * 100).toFixed(2));
+    ipcCache[yearMonth] = pct;
+    return pct;
+  } catch(e) {
+    console.error("IPC fetch failed:", e);
+    return null;
+  }
+}
+
+// Apply budgets to next month when navigating forward
+// Called from chMonth when advancing months
+async function applyBudgetRollover(fromY, fromM) {
+  var budgets = gBudgets();
+  var toY = fromY, toM = fromM + 1;
+  if (toM > 11) { toM = 0; toY++; }
+  var toKey = toY + "-" + String(toM+1).padStart(2,"0");
+  var fromKey = fromY + "-" + String(fromM+1).padStart(2,"0");
+
+  // Fetch IPC of month BEFORE fromMonth (the one published during fromMonth)
+  var ipcY = fromY, ipcM = fromM - 1;
+  if (ipcM < 0) { ipcM = 11; ipcY--; }
+  var ipcMonthStr = ipcY + "-" + String(ipcM+1).padStart(2,"0");
+  var ipcPct = null;
+
+  var needsInflacion = Object.values(budgets).some(function(b){ return b.inflacion; });
+  if (needsInflacion) {
+    ipcPct = await fetchIPC(ipcMonthStr);
+  }
+
+  var updated = false;
+  Object.keys(budgets).forEach(function(nom) {
+    var b = budgets[nom];
+    if (!b.repetir) return;
+    // Check if budget for toKey already exists
+    var budKey = "cr_bud_"+toKey+"_"+nom;
+    if (ls(budKey, null)) return; // already set for that month
+
+    var newLimite = b.limite;
+    if (b.inflacion && ipcPct !== null) {
+      newLimite = Math.round(b.limite * (1 + ipcPct/100));
+    }
+    // Save budget for next month
+    var allBuds = gBudgets();
+    allBuds[nom] = { limite: newLimite, repetir: b.repetir, inflacion: b.inflacion };
+    sBudgets(allBuds);
+    updated = true;
+    if (b.inflacion && ipcPct !== null) {
+      showToast("Presupuesto ajustado por inflacion de " + ipcMonthStr + ": +" + ipcPct + "%");
+    }
+  });
+}
+
 function gTC() { return ls("cr_tc", {usd:1455, inf:2.9}); }
 function sTC(u, i) { ss("cr_tc", {usd:u, inf:i}); }
 function gCats() { return ls("cr_cats", null); }
@@ -911,8 +1026,8 @@ function startApp() {
   var ak=gKey("ant"),ok=gKey("oai");
   if(ak)document.getElementById("cfg-ant").value=ak;
   if(ok)document.getElementById("cfg-oai").value=ok;
-  var mLabel = MONTHS[curMonth.m].slice(0,4) + "<br>" + curMonth.y;
-  document.getElementById("bd-month-lbl").innerHTML = mLabel;
+  var dashMes2=document.getElementById("dash-mes-lbl");
+  if(dashMes2) dashMes2.textContent=MONTHS[curMonth.m]+" "+curMonth.y;
   renderHome();
   renderCfgCats();
 }
@@ -943,8 +1058,8 @@ function chMonth(d) {
   curMonth.m += d;
   if (curMonth.m > 11) { curMonth.m = 0; curMonth.y++; }
   if (curMonth.m < 0)  { curMonth.m = 11; curMonth.y--; }
-  var mLabel = MONTHS[curMonth.m].slice(0,4) + "<br>" + curMonth.y;
-  document.getElementById("bd-month-lbl").innerHTML = mLabel;
+  var dashMes2=document.getElementById("dash-mes-lbl");
+  if(dashMes2) dashMes2.textContent=MONTHS[curMonth.m]+" "+curMonth.y;
   renderHome();
   renderCfgCats();
 }
@@ -1333,10 +1448,37 @@ function renderHome() {
   var totIusd=ing.reduce(function(s,m){return s+(m.usd||0);},0);
   var hasUSDgas=gas.some(function(m){return m.cur!=="ARS";});
   var hasUSDing=ing.some(function(m){return m.cur!=="ARS";});
-  setText("hm-eg",fA(totGars));
-  setHTML("hm-eg2",gas.length+" registro"+(gas.length!==1?"s":"")+(hasUSDgas?" &middot; US$ "+Math.round(totGusd).toLocaleString("es-AR"):""));
+  setText("hm-eg", showUSD ? ("US$ "+Math.round(totGusd).toLocaleString("es-AR")) : fA(totGars));
   setText("hm-ing",fA(totIars));
   setHTML("hm-ing2",ing.length+" registro"+(ing.length!==1?"s":"")+(hasUSDing?" &middot; US$ "+Math.round(totIusd).toLocaleString("es-AR"):""));
+  // Dashboard stats
+  var today2 = new Date(); var dayOfMonth = today2.getDate(); var daysInMonth = new Date(curMonth.y, curMonth.m+1, 0).getDate();
+  var isCurrentMonth = (today2.getFullYear()===curMonth.y && today2.getMonth()===curMonth.m);
+  var divisor = isCurrentMonth ? Math.max(dayOfMonth,1) : daysInMonth;
+  var avgDay = gas.length ? Math.round(totGars/divisor) : 0;
+  setText("dash-avg", gas.length ? fA(avgDay) : "-");
+  // Top category
+  var byCatARS2={};
+  gas.forEach(function(m){var a=m.cur==="ARS"?m.monto:(m.usd||0)*gTC().usd;byCatARS2[m.categoria]=(byCatARS2[m.categoria]||0)+a;});
+  var topCat=Object.keys(byCatARS2).sort(function(a,b){return byCatARS2[b]-byCatARS2[a];})[0]||"-";
+  setText("dash-top", topCat);
+  // Budget stat
+  var budgets=gBudgets(); var budKeys=Object.keys(budgets);
+  if(budKeys.length>0){
+    var totalLim=0,totalSpent=0;
+    budKeys.forEach(function(k){totalLim+=budgets[k].limite||0;totalSpent+=(byCatARS2[k]||0);});
+    var budPct=totalLim>0?Math.round(totalSpent/totalLim*100):0;
+    var budEl=document.getElementById("dash-bud");
+    if(budEl){budEl.textContent=budPct+"% usado";budEl.style.color=budPct>=100?"#9B2335":budPct>=80?"#BA7517":"#1A1916";}
+  } else { setText("dash-bud","-"); }
+  // Progress bar
+  var progPct = isCurrentMonth ? Math.round(dayOfMonth/daysInMonth*100) : 100;
+  var progFill=document.getElementById("dash-prog-fill");
+  if(progFill) progFill.style.width=progPct+"%";
+  setText("dash-prog-lbl", isCurrentMonth ? "Dia "+dayOfMonth+" de "+daysInMonth : MONTHS[curMonth.m]);
+  // Month label
+  var dashMes=document.getElementById("dash-mes-lbl");
+  if(dashMes) dashMes.textContent=MONTHS[curMonth.m]+" "+curMonth.y;
   var byCatARS={},byCatUSD={};
   gas.forEach(function(m){var a=m.cur==="ARS"?m.monto:(m.usd||0)*gTC().usd;byCatARS[m.categoria]=(byCatARS[m.categoria]||0)+a;byCatUSD[m.categoria]=(byCatUSD[m.categoria]||0)+(m.usd||0);});
   var byCat=byCatARS;
@@ -1359,40 +1501,162 @@ function renderHome() {
     sNoms.forEach(function(nom){
       var amt=curMap[nom];var c=getCatObj(nom);
       var cnt=gas.filter(function(m){return m.categoria===nom;}).length;
-      var pct=maxA>0?Math.round(amt/maxA*100):0;var col=getCatColor(nom);
+      var col=getCatColor(nom);
       var amtStr=showUSD?("US$ "+Math.round(amt).toLocaleString("es-AR")):fA(amt);
-      bdHtml+='<div class="bd-row" data-cat="'+encodeURIComponent(nom)+'">'+
-        '<div class="bd-em">'+c.em+'</div>'+
-        '<div class="bd-info"><div class="bd-name">'+nom+'</div>'+
-        '<div class="bd-bar-wrap"><div class="bd-bar" style="width:'+pct+'%;background:'+col+'"></div></div></div>'+
-        '<div class="bd-right"><div class="bd-amt">'+amtStr+'</div><div class="bd-cnt">'+cnt+' registro'+(cnt!==1?"s":"")+'</div></div></div>';
+      var bud=getBudget(nom);
+      var barPct,barCol,subTxt,limitTxt='';
+      if(bud&&bud.limite>0&&!showUSD){
+        var pct=Math.round(amt/bud.limite*100);
+        barPct=Math.min(pct,100);
+        barCol=pct>=100?"#E24B4A":pct>=80?"#EF9F27":col;
+        if(pct>=100){subTxt='<span style="color:#A32D2D;font-weight:500">Superaste por '+fA(amt-bud.limite)+'</span>';}
+        else{subTxt='<span>'+pct+'% usado &middot; quedan '+fA(bud.limite-amt)+'</span>';}
+        limitTxt='';
+      } else {
+        var maxA2=Math.max.apply(null,Object.values(curMap));
+        barPct=maxA2>0?Math.round(amt/maxA2*100):0;
+        barCol=col;
+        subTxt='<span>'+cnt+' registro'+(cnt!==1?"s":"")+'</span>';
+      }
+      var budLinkTxt=bud?'Modificar presupuesto':'Agregar presupuesto';
+      bdHtml+='<div class="bd-row" data-cat="'+encodeURIComponent(nom)+'" style="padding-bottom:4px;align-items:flex-start">'+
+        '<div class="bd-em" style="padding-top:1px">'+c.em+'</div>'+
+        '<div class="bd-info">'+
+          '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'+
+            '<div style="display:flex;align-items:center;gap:5px;flex:1;min-width:0">'+
+              '<span class="bd-chev" style="color:#A8A49E;font-size:16px;transition:transform .2s;flex-shrink:0">&#8250;</span>'+
+              '<div class="bd-name">'+nom+'</div>'+
+            '</div>'+
+            '<div class="bd-amt" style="flex-shrink:0">'+amtStr+'</div>'+
+          '</div>'+
+          '<div class="bd-bar-wrap"><div class="bd-bar" style="width:'+barPct+'%;background:'+barCol+'"></div></div>'+
+          '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:5px;gap:8px">'+
+            '<span class="bud-link" style="display:inline;flex-shrink:0" data-budcat="'+encodeURIComponent(nom)+'">'+budLinkTxt+'</span>'+
+            '<div style="font-size:10px;color:#A8A49E;text-align:right;flex-shrink:0">'+subTxt+'</div>'+
+          '</div>'+
+        '</div>'+
+        '</div>';
     });
     bd.innerHTML = bdHtml;
+
   }
   renderRecentList();
+}
+
+
+function toggleBudgetForm(nom, lnk) {
+  var existing = document.getElementById("bud-form-" + nom);
+  if (existing) { existing.remove(); return; }
+  var bud = getBudget(nom) || {};
+  var form = document.createElement("div");
+  form.id = "bud-form-" + nom;
+  form.style.cssText = "background:#F7F6F2;border-top:1px solid #E2DED6;padding:12px 14px;margin-top:6px;border-radius:0 0 8px 8px";
+  form.innerHTML =
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+      '<span style="font-size:12px;color:#6B6760;flex:1">Limite mensual</span>' +
+      '<input id="bud-inp-'+nom+'" type="number" placeholder="0" value="'+(bud.limite||"")+'" style="width:120px;padding:5px 9px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Mono,monospace;font-size:12px;background:#fff;color:#1A1916">' +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">' +
+      '<span style="font-size:12px;color:#6B6760;flex:1">Usar para meses siguientes</span>' +
+      '<label style="position:relative;display:inline-block;width:36px;height:20px">' +
+        '<input type="checkbox" id="bud-rep-'+nom+'" '+(bud.repetir?"checked":"")+' style="opacity:0;width:0;height:0">' +
+        '<span id="bud-rep-trk-'+nom+'" data-on="'+(bud.repetir?"1":"0")+'" style="position:absolute;inset:0;border-radius:10px;cursor:pointer;background:'+(bud.repetir?"#1A1916":"#CBC6BC")+';transition:background .2s">' +
+          '<span style="position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;transition:left .2s;left:'+(bud.repetir?"18px":"2px")+'"></span>' +
+        '</span>' +
+      '</label>' +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">' +
+      '<span style="font-size:12px;color:#6B6760;flex:1">Ajustar por inflacion automaticamente</span>' +
+      '<label style="position:relative;display:inline-block;width:36px;height:20px">' +
+        '<input type="checkbox" id="bud-inf-'+nom+'" '+(bud.inflacion?"checked":"")+' style="opacity:0;width:0;height:0">' +
+        '<span id="bud-inf-trk-'+nom+'" data-on="'+(bud.inflacion?"1":"0")+'" style="position:absolute;inset:0;border-radius:10px;cursor:pointer;background:'+(bud.inflacion?"#1A1916":"#CBC6BC")+';transition:background .2s">' +
+          '<span style="position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;transition:left .2s;left:'+(bud.inflacion?"18px":"2px")+'"></span>' +
+        '</span>' +
+      '</label>' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;justify-content:flex-end">' +
+      (bud.limite?'<button id="bud-del-'+nom+'" style="background:none;border:1px solid #E2DED6;border-radius:8px;padding:6px 12px;font-family:DM Sans,sans-serif;font-size:12px;color:#A8A49E;cursor:pointer">Eliminar</button>':'') +
+      '<button id="bud-save-'+nom+'" style="background:#1A1916;color:#fff;border:none;border-radius:8px;padding:6px 16px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;cursor:pointer">Guardar</button>' +
+    '</div>';
+  // Insert after the bd-row
+  var row = lnk.closest(".bd-row");
+  row.insertAdjacentElement("afterend", form);
+  // Toggle click handlers
+  function setupToggle(trkId, onChange) {
+    var trk = document.getElementById(trkId);
+    if (!trk) return;
+    trk.addEventListener("click", function() {
+      var on = trk.getAttribute("data-on") !== "1";
+      trk.setAttribute("data-on", on ? "1" : "0");
+      trk.style.background = on ? "#1A1916" : "#CBC6BC";
+      trk.querySelector("span").style.left = on ? "18px" : "2px";
+      onChange(on);
+    });
+  }
+  var repVal = !!(bud && bud.repetir);
+  var infVal = !!(bud && bud.inflacion);
+  setupToggle("bud-rep-trk-"+nom, function(v){ repVal = v; });
+  setupToggle("bud-inf-trk-"+nom, function(v){ infVal = v; });
+  // Save
+  document.getElementById("bud-save-"+nom).addEventListener("click", function() {
+    var limite = parseFloat(document.getElementById("bud-inp-"+nom).value) || 0;
+    if (!limite) { showToast("Ingresa un limite valido"); return; }
+    setBudget(nom, limite, repVal, infVal);
+    form.remove(); renderHome(); showToast("Presupuesto guardado");
+  });
+  // Delete
+  var delBtn = document.getElementById("bud-del-"+nom);
+  if (delBtn) delBtn.addEventListener("click", function() {
+    delBudget(nom); form.remove(); renderHome(); showToast("Presupuesto eliminado");
+  });
 }
 
 function showDetail(nom){
   var tc=gTC(),movs=gMonthM().filter(function(m){return m.tipo==="gasto"&&m.categoria===nom;});
   var c=getCatObj(nom);
   function mAsd(m){return m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd;}
-  var tot=movs.reduce(function(s,m){return s+mAsd(m);},0);
   var bySub={},bySM={};
   movs.forEach(function(m){var s=m.subcategoria||"General";bySub[s]=(bySub[s]||0)+mAsd(m);if(!bySM[s])bySM[s]=[];bySM[s].push(m);});
-  document.getElementById("det-title").innerHTML=c.em+" "+nom;
-  var h='<div style="padding:10px 16px;background:#F0EEE8;border-bottom:1px solid #E2DED6;display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700;color:#A8A49E">TOTAL</span><span style="font-family:DM Mono,monospace;font-weight:600;font-size:15px">'+fA(tot)+'</span></div>';
+
+  // Close any open inline detail
+  var prev=document.getElementById("bd-inline-detail");
+  if(prev){
+    var prevNom=prev.dataset.nom;
+    prev.remove();
+    var prevRow=document.querySelector('.bd-row[data-cat="'+encodeURIComponent(prevNom)+'"]');
+    if(prevRow){var prevCh=prevRow.querySelector(".bd-chev");if(prevCh)prevCh.style.transform="";}
+    if(prevNom===nom)return;
+  }
+
+  var panel=document.createElement("div");
+  panel.id="bd-inline-detail";
+  panel.dataset.nom=nom;
+  panel.style.cssText="background:#F7F6F2;border-bottom:1px solid #E2DED6;";
+
+  var h="";
   Object.keys(bySub).sort(function(a,b){return bySub[b]-bySub[a];}).forEach(function(sub,si){
-    var sid="sd"+si+"-"+Date.now(),sM=bySM[sub]||[];
-    h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid #E2DED6;cursor:pointer" onclick="window.toggleSubDetail(\''+sid+'\')">'+
-      '<div style="display:flex;align-items:center;gap:8px"><span id="chev-'+sid+'" style="color:#A8A49E;font-size:16px;transition:transform .2s">&#8250;</span><span style="font-size:13px;color:#1A1916">'+sub+'</span></div>'+
-      '<span style="font-family:DM Mono,monospace;font-size:13px;font-weight:500">'+fA(bySub[sub])+'</span></div>';
-    h+='<div id="'+sid+'" style="display:none;background:#F7F6F2;border-bottom:1px solid #E2DED6">';
-    sM.forEach(function(m){var d=m.fecha?m.fecha.split("-").reverse().slice(0,2).join("/"):"--";h+='<div style="display:flex;justify-content:space-between;padding:8px 16px 8px 36px;border-bottom:1px solid #E2DED6"><div><div style="font-size:12px;color:#6B6760">&ldquo;'+m.inputOriginal+'&rdquo;</div><div style="font-size:10px;color:#A8A49E">'+d+(m.mp?' &middot; '+m.mp:'')+'</div></div><div style="font-family:DM Mono,monospace;font-size:12px;font-weight:500;margin-left:12px;white-space:nowrap">'+fC(m.monto,m.cur)+'</div></div>';});
+    var sid="sd"+si+"_"+Date.now(),sM=bySM[sub]||[];
+    h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 10px 60px;border-bottom:1px solid #E2DED6;cursor:pointer" onclick="window.toggleSubDetail(\''+sid+'\')">';
+    h+='<div style="display:flex;align-items:center;gap:6px"><span id="chev-'+sid+'" style="color:#A8A49E;font-size:14px;transition:transform .2s">&#8250;</span><span style="font-size:13px;color:#1A1916">'+sub+'</span></div>';
+    h+='<span style="font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#1A1916">'+fA(bySub[sub])+'</span></div>';
+    h+='<div id="'+sid+'" style="display:none;background:#fff;border-bottom:1px solid #E2DED6;padding-left:0">';
+    sM.forEach(function(m){
+      var d=m.fecha?m.fecha.split("-").reverse().slice(0,2).join("/"):"--";
+      h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 16px 8px 60px;border-bottom:1px solid #E2DED6">';
+      h+='<div style="flex:1;min-width:0"><div style="font-size:12px;color:#6B6760;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">&ldquo;'+m.inputOriginal+'&rdquo;</div>';
+      h+='<div style="font-size:10px;color:#A8A49E;margin-top:1px">'+d+(m.mp?' &middot; '+m.mp:'')+'</div></div>';
+      h+='<div style="font-family:DM Mono,monospace;font-size:12px;font-weight:500;margin-left:12px;white-space:nowrap;flex-shrink:0">'+fC(m.monto,m.cur)+'</div></div>';
+    });
     h+='</div>';
   });
-  setHTML("det-body",h);
-  document.getElementById("detail-panel").classList.add("show");
-  document.getElementById("detail-panel").scrollIntoView({behavior:"smooth",block:"nearest"});
+
+  panel.innerHTML=h;
+
+  var row=document.querySelector('.bd-row[data-cat="'+encodeURIComponent(nom)+'"]');
+  if(row){
+    row.insertAdjacentElement("afterend",panel);
+    var ch=row.querySelector(".bd-chev");if(ch)ch.style.transform="rotate(90deg)";
+  }
 }
 window.toggleSubDetail=function(id){var p=document.getElementById(id),ch=document.getElementById("chev-"+id);if(!p)return;var o=p.style.display!=="none";p.style.display=o?"none":"block";if(ch)ch.style.transform=o?"":"rotate(90deg)";};
 function renderIngresos() {
@@ -1668,6 +1932,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Breakdown click delegation
   document.getElementById("bd-body").addEventListener("click", function(e) {
+    // Budget link takes priority
+    var budLnk = e.target.closest(".bud-link");
+    if (budLnk) {
+      e.stopPropagation();
+      toggleBudgetForm(decodeURIComponent(budLnk.dataset.budcat), budLnk);
+      return;
+    }
+    // Row click opens detail
     var row = e.target.closest(".bd-row");
     if (row && row.dataset.cat) showDetail(decodeURIComponent(row.dataset.cat));
   });
@@ -1708,7 +1980,7 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("btn-modal-delete").addEventListener("click",deleteMovFromModal);
   document.getElementById("edit-modal").addEventListener("click",function(e){if(e.target===this)closeEditModal();});
   // Currency toggle
-  function setCurT(usd){showUSD=usd;var a=document.getElementById("cur-ars"),b=document.getElementById("cur-usd");a.style.cssText=usd?"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif":"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif";b.style.cssText=usd?"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif":"font-size:11px;font-weight:700;padding:3px 9px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif";renderHome();}
+  function setCurT(usd){showUSD=usd;var a=document.getElementById("cur-ars"),b=document.getElementById("cur-usd");a.style.cssText=usd?"font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif":"font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif";b.style.cssText=usd?"font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif":"font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif";renderHome();}
   document.getElementById("cur-ars").addEventListener("click",function(){setCurT(false);});
   document.getElementById("cur-usd").addEventListener("click",function(){setCurT(true);});
   // Scroll to top on load
