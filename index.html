@@ -4,14 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v7.2</title>
+<title>Correa v7.3</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
-#onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:safe center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#onboarding::before,#onboarding::after{content:"";flex:1;min-height:24px;}
 .ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:auto;}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
