@@ -4,15 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v6.9</title>
+<title>Correa v7.0</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
-#onboarding{min-height:100vh;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:0 auto;}
+#onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:0 auto;flex-shrink:0;}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
 .prog{display:flex;align-items:center;margin-bottom:32px;}
@@ -658,18 +658,9 @@ function updateProg() {
   var ob = document.getElementById("onboarding");
   var card = document.querySelector(".ob-card");
   if (ob && card) {
-    setTimeout(function() {
-      var cardH = card.scrollHeight;
-      var screenH = window.innerHeight - 80;
-      if (cardH < screenH) {
-        var topPad = Math.max(24, Math.floor((window.innerHeight - cardH) / 2) - 24);
-        ob.style.paddingTop = topPad + "px";
-      } else {
-        ob.style.paddingTop = "24px";
-      }
-      ob.scrollTop = 0;
-      window.scrollTo(0, 0);
-    }, 100);
+    ob.style.paddingTop = "24px";
+    ob.scrollTop = 0;
+    window.scrollTo(0, 0);
   }
 }
 
