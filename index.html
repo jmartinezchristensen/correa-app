@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v7.0</title>
+<title>Correa v7.1</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1616,13 +1616,18 @@ function delIngCat(i) {
 
 // Prevent iOS scroll jump on input blur
 document.addEventListener("focusout", function(e) {
-  if (document.getElementById("pg-config") && 
-      document.getElementById("pg-config").classList.contains("active")) {
-    var scrollY = window.scrollY;
-    setTimeout(function() {
+  // Preserve scroll position on iOS when inputs blur
+  var scrollY = window.scrollY;
+  var obScroll = document.getElementById("onboarding") ? document.getElementById("onboarding").scrollTop : 0;
+  setTimeout(function() {
+    var ob = document.getElementById("onboarding");
+    var cfg = document.getElementById("pg-config");
+    if (ob && ob.style.display !== "none") {
+      ob.scrollTop = obScroll;
+    } else if (cfg && cfg.classList.contains("active")) {
       window.scrollTo(0, scrollY);
-    }, 50);
-  }
+    }
+  }, 50);
 });
 
 document.addEventListener("DOMContentLoaded", function() {
