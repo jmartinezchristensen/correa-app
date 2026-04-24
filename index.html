@@ -4,15 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v7.1</title>
+<title>Correa v7.2</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
-#onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:0 auto;flex-shrink:0;}
+#onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:safe center;padding:24px;padding-top:max(24px,env(safe-area-inset-top));overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:auto;}
 .ob-step{display:none;}
 .ob-step.active{display:block;}
 .prog{display:flex;align-items:center;margin-bottom:32px;}
@@ -654,14 +654,9 @@ function updateProg() {
     var st = document.getElementById("st" + j);
     if (st) st.classList.toggle("active", j === step);
   }
-  // Center card if content fits screen, top-align if it doesn't
+  // Scroll onboarding to top on step change
   var ob = document.getElementById("onboarding");
-  var card = document.querySelector(".ob-card");
-  if (ob && card) {
-    ob.style.paddingTop = "24px";
-    ob.scrollTop = 0;
-    window.scrollTo(0, 0);
-  }
+  if (ob) setTimeout(function(){ ob.scrollTop = 0; }, 50);
 }
 
 function chipToggle(el) {
@@ -1718,9 +1713,6 @@ document.addEventListener("DOMContentLoaded", function() {
   // Scroll to top on load
   window.scrollTo(0, 0);
   document.getElementById("onboarding").scrollTop = 0;
-  // Set initial centering for step 0
-  setTimeout(function() { updateProg(); }, 50);
-
   // Check if already set up
   if (ls("cr_done", false)) {
     activeCats = gCats() || [];
