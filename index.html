@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v12.6</title>
+<title>Correa v13.7</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1513,7 +1513,7 @@ async function confirmMov() {
   try {
     var usdVal = await toUSD(p.monto, p.cur, p.fecha);
     var tcUsado = p.cur!=="USD" ? Math.round(p.monto/usdVal) : null;
-    var mov = {id:Date.now(),tipo:p.tipo,fecha:p.fecha,categoria:p.categoria,subcategoria:p.subcategoria,cur:p.cur,monto:p.monto,usd:usdVal,tc_usado:tcUsado,mp:p.mp||null,inputOriginal:p.inputOriginal};
+    var mov = {id:Date.now(),tipo:p.tipo,fecha:p.fecha,categoria:p.categoria,subcategoria:p.subcategoria,cur:p.cur,monto:p.monto,usd:usdVal,tc_usado:tcUsado,mp:p.mp||null,inputOriginal:p.inputOriginal,referencia:p.inputOriginal};
     var arr=gMonthM(); arr.push(mov); sMonthM(arr);
     cancelConf(); document.getElementById("ai-inp").value="";
     renderHome(); showToast("Registrado \u2713");
@@ -1574,7 +1574,7 @@ function renderRecentList() {
           '<div class="mv-em">'+c.em+'</div>'+
           '<div>'+
             '<div class="mv-cat-lbl">'+m.categoria+(isI?'<span class="badge bi">ingreso</span>':'')+'</div>'+
-            '<div class="mv-note-lbl" style="color:#A8A49E;font-size:11px">'+m.subcategoria+' &middot; '+dateStr+'</div>'+
+            '<div class="mv-note-lbl" style="color:#A8A49E;font-size:11px">'+m.subcategoria+'</div>'+
           '</div>'+
         '</div>'+
         '<div class="mv-r">'+
@@ -1588,25 +1588,7 @@ function renderRecentList() {
   // On tap: show original text in a small expandable below
   rcList.querySelectorAll(".mv-row[data-mov-id]").forEach(function(row){
     row.addEventListener("click",function(){
-      var id=row.dataset.movId;
-      var existing=document.getElementById("mv-expand-"+id);
-      if(existing){existing.remove();return;}
-      var movs2=gMonthM();
-      var m=movs2.find(function(x){return String(x.id)===String(id);});
-      if(!m)return;
-      // Remove any other open expand
-      rcList.querySelectorAll(".mv-expand").forEach(function(el){el.remove();});
-      var expand=document.createElement("div");
-      expand.id="mv-expand-"+id;
-      expand.className="mv-expand";
-      expand.style.cssText="background:#F7F6F2;padding:10px 16px 10px 58px;border-bottom:1px solid #E2DED6;font-size:12px;color:#6B6760;display:flex;justify-content:space-between;align-items:flex-start;gap:8px";
-      expand.innerHTML='<div style="flex:1;font-style:italic">&ldquo;'+m.inputOriginal+'&rdquo;</div>'+
-        '<button data-edit-id="'+id+'" style="background:none;border:1px solid #E2DED6;border-radius:6px;padding:3px 8px;font-size:11px;color:#6B6760;cursor:pointer;white-space:nowrap;flex-shrink:0">Editar</button>';
-      row.insertAdjacentElement("afterend", expand);
-      expand.querySelector("[data-edit-id]").addEventListener("click",function(e){
-        e.stopPropagation();
-        openEditModal(id);
-      });
+      openEditModal(row.dataset.movId);
     });
   });
 }
@@ -1624,8 +1606,29 @@ function openEditModal(id){
   aC.forEach(function(c){var o=document.createElement("option");o.value=c.nom;o.textContent=decodeEm(c.em)+" "+c.nom;if(c.nom===m.categoria)o.selected=true;sC.appendChild(o);});aF("Categoria",sC);
   var sS=document.createElement("select");sS.id="em-sub";sS.style.cssText="width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;font-weight:500;color:#1A1916;padding:0";
   subs.forEach(function(s){var o=document.createElement("option");o.value=s;o.textContent=s;if(s===m.subcategoria)o.selected=true;sS.appendChild(o);});aF("Subcategoria",sS);
-  var iM=document.createElement("input");iM.id="em-monto";iM.type="number";iM.value=m.monto;iM.style.cssText="width:100%;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0";aF("Monto ("+m.cur+")",iM);
+  // Monto field with ARS/USD toggle
+  var montoWrap=document.createElement("div");
+  montoWrap.style.cssText="display:flex;align-items:center;gap:8px";
+  var iM=document.createElement("input");iM.id="em-monto";iM.type="number";iM.value=m.monto;iM.style.cssText="flex:1;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0;min-width:0";
+  var curToggle=document.createElement("div");
+  curToggle.style.cssText="display:flex;background:#F0EEE8;border-radius:10px;padding:2px;gap:2px;flex-shrink:0";
+  var curArs=document.createElement("button");curArs.id="em-cur-ars";curArs.textContent="ARS";curArs.style.cssText="font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:none;background:"+(m.cur==="ARS"?"#1A1916":"transparent")+";color:"+(m.cur==="ARS"?"#fff":"#A8A49E")+";cursor:pointer;font-family:DM Sans,sans-serif";
+  var curUsd=document.createElement("button");curUsd.id="em-cur-usd";curUsd.textContent="USD";curUsd.style.cssText="font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:none;background:"+(m.cur!=="ARS"?"#1A1916":"transparent")+";color:"+(m.cur!=="ARS"?"#fff":"#A8A49E")+";cursor:pointer;font-family:DM Sans,sans-serif";
+  var emCur=m.cur||"ARS";editingCur=emCur;
+  function setCurEm(cur){
+    emCur=cur;
+    curArs.style.background=cur==="ARS"?"#1A1916":"transparent";
+    curArs.style.color=cur==="ARS"?"#fff":"#A8A49E";
+    curUsd.style.background=cur!=="ARS"?"#1A1916":"transparent";
+    curUsd.style.color=cur!=="ARS"?"#fff":"#A8A49E";
+  }
+  curArs.addEventListener("click",function(){setCurEm("ARS");editingCur="ARS";});
+  curUsd.addEventListener("click",function(){setCurEm("USD");editingCur="USD";});
+  curToggle.appendChild(curArs);curToggle.appendChild(curUsd);
+  montoWrap.appendChild(iM);montoWrap.appendChild(curToggle);
+  aF("Monto",montoWrap);
   var iF=document.createElement("input");iF.id="em-fecha";iF.type="date";iF.value=m.fecha||"";iF.style.cssText="width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";aF("Fecha",iF);
+  var iR=document.createElement("textarea");iR.id="em-ref";iR.placeholder="Opcional";iR.value=m.referencia||m.inputOriginal||"";iR.style.cssText="width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0;resize:none;min-height:40px;line-height:1.4";iR.rows=2;aF("Referencia",iR);
   var em=document.getElementById("edit-modal");em.style.display="flex";em.style.pointerEvents="auto";
 }
 function closeEditModal(){var m=document.getElementById("edit-modal");m.style.display="none";m.style.pointerEvents="none";editingMovId=null;}
@@ -1635,7 +1638,9 @@ function saveEditModal(){
   movs[i].categoria=document.getElementById("em-cat").value;
   movs[i].subcategoria=document.getElementById("em-sub").value;
   movs[i].monto=parseFloat(document.getElementById("em-monto").value)||movs[i].monto;
+  movs[i].cur=editingCur;
   movs[i].fecha=document.getElementById("em-fecha").value;
+  movs[i].referencia=document.getElementById("em-ref").value;
   sMonthM(movs);closeEditModal();renderHome();showToast("Guardado \u2713");
 }
 function deleteMovFromModal(){
@@ -1923,7 +1928,6 @@ function showDetail(nom){
   var bySub={},bySM={};
   movs.forEach(function(m){var s=m.subcategoria||"General";bySub[s]=(bySub[s]||0)+mAsd(m);if(!bySM[s])bySM[s]=[];bySM[s].push(m);});
 
-  // Close any open inline detail
   var prev=document.getElementById("bd-inline-detail");
   if(prev){
     var prevNom=prev.dataset.nom;
@@ -1940,22 +1944,47 @@ function showDetail(nom){
 
   var h="";
   Object.keys(bySub).sort(function(a,b){return bySub[b]-bySub[a];}).forEach(function(sub,si){
-    var sid="sd"+si+"_"+Date.now(),sM=bySM[sub]||[];
-    h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 10px 60px;border-bottom:1px solid #E2DED6;cursor:pointer" onclick="window.toggleSubDetail(\''+sid+'\')">';
-    h+='<div style="display:flex;align-items:center;gap:6px"><span id="chev-'+sid+'" style="color:#A8A49E;font-size:14px;transition:transform .2s">&#8250;</span><span style="font-size:13px;color:#1A1916">'+sub+'</span></div>';
-    h+='<span style="font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#1A1916">'+fA(bySub[sub])+'</span></div>';
-    h+='<div id="'+sid+'" style="display:none;background:#fff;border-bottom:1px solid #E2DED6;padding-left:0">';
+    var sM=bySM[sub]||[];
+    var amtSub=(amountsHidden||hiddenBoxes.eg)?'••••':fA(bySub[sub]);
+    var subId="subg-"+si+"-"+Date.now();
+    // Subcategory header — clickable, starts collapsed
+    h+='<div class="bd-sub-hdr" data-subid="'+subId+'" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 10px 60px;border-bottom:1px solid #E2DED6;cursor:pointer">';
+    h+='<div style="display:flex;align-items:center;gap:5px"><span class="bd-sub-chev" style="color:#A8A49E;font-size:14px;transition:transform .2s">&#8250;</span><span style="font-size:13px;color:#1A1916">'+sub+'</span></div>';
+    h+='<span style="font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#1A1916">'+amtSub+'</span></div>';
+    // Records — hidden by default
+    h+='<div id="'+subId+'" style="display:none">';
     sM.forEach(function(m){
-      var d=m.fecha?m.fecha.split("-").reverse().slice(0,2).join("/"):"--";
-      h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:8px 16px 8px 60px;border-bottom:1px solid #E2DED6">';
-      h+='<div style="flex:1;min-width:0"><div style="font-size:12px;color:#6B6760;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">&ldquo;'+m.inputOriginal+'&rdquo;</div>';
-      h+='<div style="font-size:10px;color:#A8A49E;margin-top:1px">'+d+(m.mp?' &middot; '+m.mp:'')+'</div></div>';
-      h+='<div style="font-family:DM Mono,monospace;font-size:12px;font-weight:500;margin-left:12px;white-space:nowrap;flex-shrink:0">'+fC(m.monto,m.cur)+'</div></div>';
+      var d=m.fecha?m.fecha.split("-").reverse().join("/"):"--";
+      var amtM=(amountsHidden||hiddenBoxes.eg)?'••••':(showUSD?('US$ '+Math.round(m.usd||0).toLocaleString('es-AR')):fC(m.monto,m.cur));
+      h+='<div class="bd-sub-mov" data-mov-id="'+m.id+'" style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px 8px 60px;border-bottom:1px solid #E2DED6;cursor:pointer;background:#fff">';
+      h+='<div><span style="font-size:10px;color:#A8A49E">'+d+'</span></div>';
+      h+='<div style="font-family:DM Mono,monospace;font-size:12px;margin-left:12px;white-space:nowrap;flex-shrink:0">'+amtM+'</div>';
+      h+='</div>';
     });
     h+='</div>';
   });
 
   panel.innerHTML=h;
+
+  // Subcategory header toggle
+  panel.querySelectorAll(".bd-sub-hdr").forEach(function(hdr){
+    hdr.addEventListener("click",function(){
+      var subId=hdr.dataset.subid;
+      var recs=document.getElementById(subId);
+      var chev=hdr.querySelector(".bd-sub-chev");
+      if(!recs)return;
+      var open=recs.style.display!=="none";
+      recs.style.display=open?"none":"block";
+      if(chev)chev.style.transform=open?"":"rotate(90deg)";
+    });
+  });
+
+  // Tap record row → open edit modal
+  panel.querySelectorAll(".bd-sub-mov[data-mov-id]").forEach(function(row2){
+    row2.addEventListener("click",function(){
+      openEditModal(row2.dataset.movId);
+    });
+  });
 
   var row=document.querySelector('.bd-row[data-cat="'+encodeURIComponent(nom)+'"]');
   if(row){
@@ -1963,6 +1992,7 @@ function showDetail(nom){
     var ch=row.querySelector(".bd-chev");if(ch)ch.style.transform="rotate(90deg)";
   }
 }
+
 window.toggleSubDetail=function(id){var p=document.getElementById(id),ch=document.getElementById("chev-"+id);if(!p)return;var o=p.style.display!=="none";p.style.display=o?"none":"block";if(ch)ch.style.transform=o?"":"rotate(90deg)";};
 function renderIngresos() {
   var movs = gMonthM();
