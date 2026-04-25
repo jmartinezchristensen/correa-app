@@ -4,13 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v12.1</title>
+<title>Correa v12.6</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
+#app.show ~ #onboarding{display:none!important;}
 #onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 #onboarding::before,#onboarding::after{content:"";flex:1;min-height:24px;}
 .ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:auto;}
@@ -71,7 +73,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .tip strong{color:#1A1916;}
 
 /* APP */
-#app{display:none;grid-template-columns:200px 1fr;min-height:100vh;}
+#app{display:none;grid-template-columns:200px 1fr;height:100vh;}
 #app.show{display:grid;}
 .sb{background:#1A1916;padding:24px 0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;}
 .sb-logo{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.08);}
@@ -186,9 +188,9 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .mv-amt{font-size:14px;font-weight:700;font-family:"DM Mono",monospace;white-space:nowrap;}
 .mv-date{font-size:10px;color:#A8A49E;font-family:"DM Mono",monospace;}
 .mv-empty{text-align:center;padding:28px;color:#A8A49E;font-size:13px;}
-.rc-filter-btn{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;border:1px solid #E2DED6;background:#fff;color:#A8A49E;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .15s;}
-.rc-filter-btn:hover{border-color:#CBC6BC;color:#6B6760;}
-.rc-filter-btn.active{background:#1A1916;border-color:#1A1916;color:#fff;}
+.rc-filter-txt{font-size:11px;font-weight:400;border:none;background:none;box-shadow:none;color:#A8A49E;cursor:pointer;font-family:"DM Sans",sans-serif;padding:0;margin:0;line-height:1;-webkit-appearance:none;}
+.rc-filter-txt:hover{color:#6B6760;}
+.rc-filter-txt.active{font-weight:700;color:#1A1916;}
 .day-group-hdr{padding:8px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#A8A49E;background:#F7F6F2;border-bottom:1px solid #E2DED6;}
 
 /* Insight */
@@ -528,9 +530,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <span>Ultimos registros</span>
         <div style="display:flex;align-items:center;gap:6px">
           <button id="eye-rec" style="background:none;border:none;cursor:pointer;color:#CBC6BC;padding:0;display:flex;align-items:center;line-height:1;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-          <button class="rc-filter-btn active" data-days="5">5 dias</button>
-          <button class="rc-filter-btn" data-days="10">10 dias</button>
-          <button class="rc-filter-btn" data-days="30">Este mes</button>
+<button class="rc-filter-txt active" data-days="5">5 dias</button> <span style="color:#E2DED6">·</span> <button class="rc-filter-txt" data-days="10">10 dias</button> <span style="color:#E2DED6">·</span> <button class="rc-filter-txt" data-days="30">Mes</button>
         </div>
       </div>
       <div id="rc-list" data-wt="recent"><div class="mv-empty">Aun no hay registros.</div></div>
@@ -917,6 +917,7 @@ function setEyeBtn(el, hidden) {
 }
 
 function applyEyeState() {
+  if (document.getElementById("app").style.display === "none") return;
   var eyeBtn2 = document.getElementById("eye-btn");
   if (eyeBtn2) {
     eyeBtn2.innerHTML = amountsHidden ? EYE_CLOSED_HTML : EYE_OPEN_HTML;
@@ -1212,7 +1213,8 @@ function finishOb() {
 function startApp() {
   document.title = "Correa v4.6";
   setTimeout(initDragReorder, 300);
-  document.getElementById("onboarding").style.display = "none";
+  var ob = document.getElementById("onboarding");
+  if(ob && ob.parentNode){ob.parentNode.removeChild(ob);}
   document.getElementById("app").style.display = "grid";
   var cats = gCats() || activeCats;
   var ingCats = gIngCats() || activeIngCats;
@@ -1531,7 +1533,7 @@ var recentFilter = 30;
 
 function setRecentFilter(days) {
   recentFilter=days;
-  document.querySelectorAll(".rc-filter-btn").forEach(function(b){b.classList.toggle("active",parseInt(b.dataset.days)===days);});
+  document.querySelectorAll(".rc-filter-txt").forEach(function(b){b.classList.toggle("active",parseInt(b.dataset.days)===days);});
   renderRecentList();
 }
 
@@ -2269,7 +2271,7 @@ document.addEventListener("DOMContentLoaded", function() {
   if(bnC)bnC.addEventListener("click",function(){showPage("config");});
   if(bnI)bnI.addEventListener("click",function(){showPage("ingresos");});
   // Filter buttons
-  document.querySelectorAll(".rc-filter-btn").forEach(function(btn){
+  document.querySelectorAll(".rc-filter-txt").forEach(function(btn){
     btn.addEventListener("click",function(){setRecentFilter(parseInt(btn.dataset.days));});
   });
   // Edit modal
@@ -2299,6 +2301,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function applyBudgetMode(on) {
+    if (!ls("cr_done", false)) return;
     var budToggle2 = document.getElementById("cfg-bud-toggle");
     var budThumb2 = document.getElementById("cfg-bud-thumb");
     if (budToggle2) { budToggle2.style.background = on ? "#1A1916" : "#CBC6BC"; }
@@ -2477,233 +2480,30 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
 </div>
 
-<!-- APP -->
-<div id="app">
-<aside class="sb">
-  <div class="sb-logo" style="display:flex;align-items:center;gap:10px">
-    <div style="width:28px;height:28px;flex-shrink:0;position:relative">
-      <svg viewBox="0 0 120 120" width="28" height="28" style="position:absolute;top:0;left:0">
-        <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
-        <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/>
-        <circle cx="60" cy="66" r="4" fill="#E8622A"/>
-      </svg>
+<div class="toast" id="toast"></div>
+<div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center;pointer-events:none">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:500px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-size:15px;font-weight:600;color:#1A1916" id="edit-modal-title">Editar</div>
+      <button id="btn-modal-close" style="background:none;border:none;font-size:22px;color:#A8A49E;cursor:pointer;line-height:1">&times;</button>
     </div>
-    <div><h2>Correa</h2><p>correa.app</p></div>
-  </div>
-  <nav class="sb-nav">
-    <div class="sb-sec">Principal</div>
-    <div class="sb-item active" id="nav-home">&#10022; Inicio</div>
-    <div class="sb-sec">Proximamente</div>
-    <div class="sb-item" style="opacity:.25;cursor:default">&#128202; Estadisticas</div>
-    <div class="sb-sec">Sistema</div>
-    <div class="sb-item" id="nav-config">&#9881; Configuracion</div>
-  </nav>
-  <div class="sb-foot">v4.6 · 23-Apr-04:18</div>
-</aside>
-<main class="main">
-
-  <!-- HOME -->
-  <div id="pg-home" class="page active">
-
-    <div class="inp-card" id="wt-input">
-
-      <div class="inp-row">
-        <button class="inp-mic" id="mic-btn" title="Grabar mensaje de voz">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <rect x="9" y="2" width="6" height="11" rx="3"/>
-            <path d="M5 10a7 7 0 0014 0"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-            <line x1="8" y1="23" x2="16" y2="23"/>
-          </svg>
-        </button>
-        <textarea class="inp-ta" id="ai-inp" placeholder="Ej: pague nafta $15.000..."></textarea>
-        <button class="inp-send" id="send-btn" title="Enviar">
-          <svg viewBox="0 0 120 120" width="32" height="32" id="send-logo" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
-            <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/>
-            <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/>
-            <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/>
-            <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/>
-          </svg>
-        </button>
-      </div>
-      <div id="vst-lbl" style="display:none"></div>
-    </div>
-    <div class="conf-card" id="conf-card">
-      <div class="conf-lbl">Correa interpreto esto &mdash; es correcto?</div>
-      <div class="conf-msg" id="conf-msg"></div>
-      <div class="conf-fields" id="conf-fields"></div>
-      <div class="conf-acts">
-        <button class="btn-ok" id="conf-ok">&#10003; Confirmar</button>
-        <button class="btn-no" id="conf-no">Cancelar</button>
-      </div>
-    </div>
-    <!-- DASHBOARD CARD -->
-    <div class="bdown" id="home-metrics" style="margin-bottom:20px">
-      <div style="padding:16px">
-        <!-- Fila 1: label + flechas a la derecha del mes + toggle arriba derecha -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div style="display:flex;align-items:baseline;gap:4px">
-            <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;line-height:1">Gastos de <span id="dash-mes-lbl" style="color:#1A1916">Abril 2026</span></div>
-            <button id="btn-prev-month" style="background:none;border:none;color:#A8A49E;font-size:14px;cursor:pointer;padding:0;line-height:1;vertical-align:baseline">&#8249;</button>
-            <button id="btn-next-month" style="background:none;border:none;color:#A8A49E;font-size:14px;cursor:pointer;padding:0;line-height:1;vertical-align:baseline">&#8250;</button>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <button id="eye-btn" title="Mostrar/ocultar montos" style="background:none;border:none;cursor:pointer;color:#A8A49E;padding:0;display:flex;align-items:center">
-              <svg id="eye-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
-              </svg>
-            </button>
-            <div style="display:flex;background:#F0EEE8;border-radius:16px;padding:2px;gap:2px;flex-shrink:0">
-              <button id="cur-ars" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">ARS</button>
-              <button id="cur-usd" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
-            </div>
-          </div>
-        </div>
-        <!-- Fila 2: monto solo -->
-        <div class="mv red" style="font-size:30px;letter-spacing:-.04em;line-height:1;font-family:DM Mono,monospace;margin-bottom:14px" id="hm-eg">$0</div>
-        <!-- Divider -->
-        <div style="height:1px;background:#E2DED6;margin-bottom:12px"></div>
-        </div>
-      </div>
-      <div id="hm-ing-card" style="display:none"><div id="hm-ing2"></div></div>
-    </div>
-    <!-- Ingresos box -->
-    <div class="bdown home-section" id="ing-bdown-box" style="margin-bottom:20px" draggable="false" data-section="ingresos">
-      <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between">
-        <span class="bd-hl">Ingresos</span>
-        <div style="display:flex;align-items:center;gap:8px"><button id="eye-ing" style="background:none;border:none;cursor:pointer;color:#CBC6BC;padding:0;display:flex;align-items:center;line-height:1;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><span id="ing-total-lbl" style="font-size:15px;font-weight:600;font-family:DM Mono,monospace;color:#2D6A4F;letter-spacing:-.02em">$0</span></div>
-      </div>
-      <div id="ing-bd-body"><div class="bd-empty">Registra tu primer ingreso para verlo aqui.</div></div>
-    </div>
-    <!-- Por categoria -->
-    <div class="bdown home-section" id="eg-bdown-box" style="margin-bottom:20px" draggable="false" data-section="egresos">
-      <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between">
-        <span class="bd-hl">Egresos</span>
-        <div style="display:flex;align-items:center;gap:8px"><button id="eye-eg" style="background:none;border:none;cursor:pointer;color:#CBC6BC;padding:0;display:flex;align-items:center;line-height:1;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><span id="bd-total-lbl" style="font-size:15px;font-weight:600;font-family:DM Mono,monospace;color:#9B2335;letter-spacing:-.02em">$0</span></div>
-      </div>
-      <div id="bd-body" data-wt="breakdown"><div class="bd-empty">Registra tu primer gasto para verlo aqui.</div></div>
-    </div>
-    <div class="detail" id="detail-panel" style="display:none!important">
-      <div class="det-hdr">
-        <div class="det-title" id="det-title"></div>
-        <button class="det-close" id="det-close">&#215;</button>
-      </div>
-      <div id="det-body"></div>
-    </div>
-    <div class="recent home-section" id="recent-box" draggable="false" data-section="recientes">
-      <div class="rc-hdr" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-        <span>Ultimos registros</span>
-        <div style="display:flex;align-items:center;gap:6px">
-          <button id="eye-rec" style="background:none;border:none;cursor:pointer;color:#CBC6BC;padding:0;display:flex;align-items:center;line-height:1;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-          <button class="rc-filter-btn active" data-days="5">5 dias</button>
-          <button class="rc-filter-btn" data-days="10">10 dias</button>
-          <button class="rc-filter-btn" data-days="30">Este mes</button>
-        </div>
-      </div>
-      <div id="rc-list" data-wt="recent"><div class="mv-empty">Aun no hay registros.</div></div>
-    </div>
-    <div class="insight home-section" id="insight-box" draggable="false" data-section="analisis">
-      <div class="ins-lbl" style="display:flex;align-items:center;gap:6px"><svg viewBox="0 0 120 120" width="12" height="12"><circle cx="60" cy="66" r="38" fill="none" stroke="#A8A49E" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/><circle cx="60" cy="66" r="4" fill="#A8A49E"/></svg> Analisis del mes</div>
-      <div id="ins-txt" style="font-size:14px;color:#A8A49E;line-height:1.7">Registra algunos gastos y te cuento como venis este mes.</div>
-      <button class="btn-sm" id="ins-btn">Generar analisis</button>
+    <div id="edit-modal-fields" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px"></div>
+    <div style="display:flex;gap:8px">
+      <button id="btn-modal-save" style="flex:1;background:#1A1916;color:#fff;border:none;padding:13px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Guardar</button>
+      <button id="btn-modal-delete" style="background:#FCE4E8;color:#9B2335;border:1px solid #f5c1c8;padding:13px 18px;border-radius:10px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:600;cursor:pointer">Eliminar</button>
     </div>
   </div>
-
-  <!-- INGRESOS -->
-  <div id="pg-ingresos" class="page">
-    <div class="ph">
-      <div><div class="ph-title">Ingresos</div><div class="ph-sub">Tus entradas de dinero del mes</div></div>
-      <button class="btn-s" id="ing-back">&#8592; Volver</button>
-    </div>
-    <div class="metrics m3">
-      <div class="metric hlg"><div class="ml">Total ingresos</div><div class="mv green" id="ing-tot">$0</div><div class="ms" id="ing-tot2">0 registros</div></div>
-      <div class="metric hlr"><div class="ml">Total gastos</div><div class="mv red" id="ing-gas">$0</div><div class="ms">del mismo mes</div></div>
-      <div class="metric"><div class="ml">Resultado</div><div class="mv" id="ing-res">$0</div><div class="ms">Ingresos - Gastos</div></div>
-    </div>
-    <div class="bdown">
-      <div class="bd-hdr"><span class="bd-hl">Por tipo de ingreso</span></div>
-      <div id="ing-bd"><div class="bd-empty">Sin ingresos registrados.</div></div>
-    </div>
-    <div class="recent home-section" id="recent-box" draggable="false" data-section="recientes">
-      <div class="rc-hdr"><span>Registros de ingresos</span></div>
-      <div id="ing-rc"><div class="mv-empty">Registra un ingreso desde el inicio.</div></div>
-    </div>
-  </div>
-
-  <!-- CONFIG -->
-  <div id="pg-config" class="page">
-    <div class="ph">
-      <div><div class="ph-title">Configuracion</div><div class="ph-sub">API keys, tipo de cambio y categorias</div></div>
-      <button class="btn-s" id="cfg-back">&#8592; Volver</button>
-    </div>
-    <div class="cfg-card">
-      <h3>API keys</h3>
-      <p>Necesarias para que Correa procese tus registros.</p>
-      <div class="k-row"><span class="k-lbl">Anthropic (Claude)</span><input class="k-inp" type="password" id="cfg-ant" placeholder="sk-ant-..."></div>
-      <div class="k-row"><span class="k-lbl">OpenAI (Whisper)</span><input class="k-inp" type="password" id="cfg-oai" placeholder="sk-..."></div>
-      <div style="margin-top:12px"><button class="btn-sm" id="save-tc-btn">Guardar</button></div>
-    </div>
-    <div class="cfg-card">
-      <h3>Mis categorias</h3>
-      <p>Agrega o quitá categorias. Los gastos ya registrados se mantienen.</p>
-      <div class="cfg-list" id="cfg-cats-el"></div>
-      <div class="add-row"><input type="text" id="new-cat-inp" placeholder="Nueva categoria..."><button id="add-cat-btn">+ Agregar</button></div>
-    </div>
-    <div class="cfg-card" id="cfg-ing-card" style="display:none">
-      <h3>Categorias de ingresos</h3>
-      <p>Para clasificar tus entradas de dinero.</p>
-      <div class="cfg-list" id="cfg-ing-el"></div>
-      <div class="add-row"><input type="text" id="new-ing-inp" placeholder="Nueva categoria..."><button id="add-ing-btn">+ Agregar</button></div>
-    </div>
-    <div class="cfg-card">
-      <h3>Presupuestos</h3>
-      <p>Controla tus gastos por categoria con limites mensuales.</p>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-        <span style="font-size:13px;color:#1A1916">Usar presupuestos</span>
-        <div id="cfg-bud-toggle" style="width:40px;height:22px;border-radius:11px;cursor:pointer;position:relative;transition:background .2s;background:#CBC6BC">
-          <span id="cfg-bud-thumb" style="position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:left .2s"></span>
-        </div>
-      </div>
-      <!-- Global budget options — shown only when ON -->
-      <div id="cfg-bud-opts" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid #E2DED6">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <span style="font-size:13px;color:#1A1916">Arrastrar al mes siguiente</span>
-          <div id="cfg-rep-toggle" style="width:40px;height:22px;border-radius:11px;cursor:pointer;position:relative;transition:background .2s;background:#CBC6BC">
-            <span id="cfg-rep-thumb" style="position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:left .2s"></span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:13px;color:#1A1916">Ajustar por inflacion automaticamente</span>
-          <div id="cfg-inf-toggle" style="width:40px;height:22px;border-radius:11px;cursor:pointer;position:relative;transition:background .2s;background:#CBC6BC">
-            <span id="cfg-inf-thumb" style="position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:2px;transition:left .2s"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="cfg-card">
-      <h3>Tipo de cambio</h3>
-      <p>Usado para convertir gastos en dolares a pesos.</p>
-      <div class="k-row" style="margin-top:8px">
-        <span class="k-lbl">Tipo de dolar</span>
-        <select id="cfg-dolar-tipo" style="padding:7px 11px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;background:#F7F6F2;color:#1A1916">
-          <option value="blue">Dolar blue</option>
-          <option value="mep">Dolar MEP</option>
-          <option value="oficial">Dolar oficial</option>
-        </select>
-      </div>
-      <div style="margin-top:4px;font-size:11px;color:#A8A49E">Correa busca la cotizacion del dia automaticamente</div>
-      <button class="btn-sm" id="save-tc-btn" style="margin-top:12px">Guardar</button>
-    </div>
-    <div class="cfg-card">
-      <h3>Datos y privacidad</h3>
-      <p>Todos tus datos se guardan unicamente en este navegador.</p>
-      <button class="btn-s" id="clear-btn">Borrar todos mis datos y empezar de nuevo</button>
-    </div>
-  </div>
-
-</main>
 </div>
+
+
+<nav class="bottom-nav" id="bottom-nav">
+  <div class="bn-item active" id="bn-home"><span class="bn-icon">&#10022;</span><span>Inicio</span></div>
+  
+  <div class="bn-item" id="bn-config"><span class="bn-icon">&#9881;</span><span>Config</span></div>
+</nav>
+
+</body>
+</html>
 
 <div class="toast" id="toast"></div>
 <div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center;pointer-events:none">
