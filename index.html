@@ -4,16 +4,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v13.7</title>
+<title>Correa v13.8</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;}
+body.app-active{overflow:hidden;height:100%;}
+html.app-active{overflow:hidden;height:100%;}
 body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
 
 /* ONBOARDING */
-#app.show ~ #onboarding{display:none!important;}
-#onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#app.show ~ #onboarding{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 #onboarding::before,#onboarding::after{content:"";flex:1;min-height:24px;}
 .ob-card{background:#fff;border:1px solid #E2DED6;border-radius:20px;padding:28px 24px;width:100%;max-width:500px;box-shadow:0 1px 12px rgba(0,0,0,.04);margin:auto;}
 .ob-step{display:none;}
@@ -73,7 +73,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .tip strong{color:#1A1916;}
 
 /* APP */
-#app{display:none;grid-template-columns:200px 1fr;height:100vh;}
+#app{display:none;grid-template-columns:200px 1fr;height:100vh;overflow:hidden;}
 #app.show{display:grid;}
 .sb{background:#1A1916;padding:24px 0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;}
 .sb-logo{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.08);}
@@ -1216,6 +1216,8 @@ function startApp() {
   var ob = document.getElementById("onboarding");
   if(ob && ob.parentNode){ob.parentNode.removeChild(ob);}
   document.getElementById("app").style.display = "grid";
+  document.body.classList.add("app-active");
+  document.documentElement.classList.add("app-active");
   var cats = gCats() || activeCats;
   var ingCats = gIngCats() || activeIngCats;
   var hasIng = ingCats && ingCats.length > 0;
