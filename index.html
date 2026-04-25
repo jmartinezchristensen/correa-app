@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v13.9</title>
+<title>Correa v14.0</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -439,14 +439,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
           </svg>
         </button>
         <textarea class="inp-ta" id="ai-inp" placeholder="Ej: pague nafta $15.000..."></textarea>
-        <button class="inp-send" id="send-btn" title="Enviar">
-          <svg viewBox="0 0 120 120" width="32" height="32" id="send-logo" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">
-            <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite"/>
-            <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .15s"/>
-            <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" style="animation:arc-spin 2.4s ease-in-out infinite .3s"/>
-            <circle cx="60" cy="66" r="4" fill="#E8622A" style="animation:dot-beat 2.4s ease-in-out infinite"/>
-          </svg>
-        </button>
+        <div style="width:0.5px;height:16px;background:#E2DED6;flex-shrink:0"></div>
+        <button id="manual-btn" title="Entrada manual" style="background:none;border:none;cursor:pointer;color:#A8A49E;font-size:20px;font-weight:300;padding:0 2px;line-height:1;flex-shrink:0">+</button>
       </div>
       <div id="vst-lbl" style="display:none"></div>
     </div>
@@ -937,6 +931,97 @@ function maskAmount(str) {
   return HIDDEN_PLACEHOLDER;
 }
 
+
+function openManualModal() {
+  // Reuse openEditModal with a blank movement template
+  var blank = {
+    id: null,
+    tipo: "gasto",
+    categoria: "",
+    subcategoria: "",
+    monto: 0,
+    cur: "ARS",
+    fecha: new Date().toISOString().split("T")[0],
+    referencia: "",
+    inputOriginal: ""
+  };
+  editingMovId = "__new__";
+  editingCur = "ARS";
+  var modal = document.getElementById("edit-modal");
+  var form = document.getElementById("edit-form");
+  document.getElementById("edit-modal-title").textContent = "Nuevo registro";
+  form.innerHTML = "";
+  var m = blank;
+
+  function aF(lbl, el) {
+    var wrap = document.createElement("div");
+    wrap.style.cssText = "border-bottom:1px solid #E2DED6;padding:12px 0";
+    var lb = document.createElement("div");
+    lb.style.cssText = "font-size:10px;color:#A8A49E;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px";
+    lb.textContent = lbl;
+    wrap.appendChild(lb); wrap.appendChild(el);
+    form.appendChild(wrap);
+  }
+
+  // Tipo
+  var iTipo = document.createElement("select");
+  iTipo.id = "em-tipo";
+  iTipo.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
+  iTipo.innerHTML = "<option value='gasto'>Gasto</option><option value='ingreso'>Ingreso</option>";
+  aF("Tipo", iTipo);
+
+  // Categoria
+  var iCat = document.createElement("input");
+  iCat.id = "em-cat"; iCat.placeholder = "Categoria";
+  iCat.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
+  aF("Categoria", iCat);
+
+  // Subcategoria
+  var iSub = document.createElement("input");
+  iSub.id = "em-sub"; iSub.placeholder = "Subcategoria";
+  iSub.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
+  aF("Subcategoria", iSub);
+
+  // Monto + toggle
+  var montoWrap = document.createElement("div");
+  montoWrap.style.cssText = "display:flex;align-items:center;gap:8px";
+  var iM = document.createElement("input"); iM.id = "em-monto"; iM.type = "number"; iM.placeholder = "0"; iM.value = "";
+  iM.style.cssText = "flex:1;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0;min-width:0";
+  var curToggle = document.createElement("div");
+  curToggle.style.cssText = "display:flex;background:#F0EEE8;border-radius:10px;padding:2px;gap:2px;flex-shrink:0";
+  var curArs = document.createElement("button"); curArs.id = "em-cur-ars"; curArs.textContent = "ARS";
+  curArs.style.cssText = "font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif";
+  var curUsd = document.createElement("button"); curUsd.id = "em-cur-usd"; curUsd.textContent = "USD";
+  curUsd.style.cssText = "font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif";
+  function setCurEm(cur) {
+    editingCur = cur;
+    curArs.style.background = cur === "ARS" ? "#1A1916" : "transparent";
+    curArs.style.color = cur === "ARS" ? "#fff" : "#A8A49E";
+    curUsd.style.background = cur !== "ARS" ? "#1A1916" : "transparent";
+    curUsd.style.color = cur !== "ARS" ? "#fff" : "#A8A49E";
+  }
+  curArs.addEventListener("click", function(){ setCurEm("ARS"); });
+  curUsd.addEventListener("click", function(){ setCurEm("USD"); });
+  curToggle.appendChild(curArs); curToggle.appendChild(curUsd);
+  montoWrap.appendChild(iM); montoWrap.appendChild(curToggle);
+  aF("Monto", montoWrap);
+
+  // Fecha
+  var iF = document.createElement("input"); iF.id = "em-fecha"; iF.type = "date";
+  iF.value = blank.fecha;
+  iF.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
+  aF("Fecha", iF);
+
+  // Referencia
+  var iR = document.createElement("textarea"); iR.id = "em-ref"; iR.placeholder = "Opcional";
+  iR.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0;resize:none;min-height:40px;line-height:1.4";
+  iR.rows = 2;
+  aF("Referencia", iR);
+
+  modal.style.display = "flex";
+  modal.style.pointerEvents = "auto";
+}
+
 function gTC() { return ls("cr_tc", {usd:1455, inf:2.9}); }
 function sTC(u, i) { ss("cr_tc", {usd:u, inf:i}); }
 function gCats() { return ls("cr_cats", null); }
@@ -1221,7 +1306,7 @@ function startApp() {
   var cats = gCats() || activeCats;
   var ingCats = gIngCats() || activeIngCats;
   var hasIng = ingCats && ingCats.length > 0;
-  document.getElementById("cfg-ing-card").style.display = "";
+  var cfgIng=document.getElementById("cfg-ing-card");if(cfgIng)cfgIng.style.display="";
   var ak=gKey("ant"),ok=gKey("oai");
   if(ak)document.getElementById("cfg-ant").value=ak;
   if(ok)document.getElementById("cfg-oai").value=ok;
@@ -1635,15 +1720,23 @@ function openEditModal(id){
 }
 function closeEditModal(){var m=document.getElementById("edit-modal");m.style.display="none";m.style.pointerEvents="none";editingMovId=null;}
 function saveEditModal(){
-  if(!editingMovId)return;var movs=gMonthM();
+  if(!editingMovId)return;
+  if(editingMovId==="__new__"){
+    var tipoEl=document.getElementById("em-tipo");
+    var newMov={id:Date.now(),tipo:tipoEl?tipoEl.value:"gasto",categoria:document.getElementById("em-cat").value||"Sin categoria",subcategoria:document.getElementById("em-sub").value||"General",monto:parseFloat(document.getElementById("em-monto").value)||0,cur:editingCur,fecha:document.getElementById("em-fecha").value,referencia:(document.getElementById("em-ref")||{}).value||"",inputOriginal:(document.getElementById("em-ref")||{}).value||"",mp:null,usd:0,tc_usado:0};
+    if(editingCur!=="ARS"){newMov.usd=newMov.monto;newMov.monto=Math.round(newMov.monto*(gTC().usd||1));}
+    var arr=gMonthM();arr.push(newMov);sMonthM(arr);
+    closeEditModal();renderHome();showToast("Guardado ✓");return;
+  }
+  var movs=gMonthM();
   var i=movs.findIndex(function(x){return String(x.id)===String(editingMovId);});if(i<0)return;
   movs[i].categoria=document.getElementById("em-cat").value;
   movs[i].subcategoria=document.getElementById("em-sub").value;
   movs[i].monto=parseFloat(document.getElementById("em-monto").value)||movs[i].monto;
   movs[i].cur=editingCur;
   movs[i].fecha=document.getElementById("em-fecha").value;
-  movs[i].referencia=document.getElementById("em-ref").value;
-  sMonthM(movs);closeEditModal();renderHome();showToast("Guardado \u2713");
+  movs[i].referencia=(document.getElementById("em-ref")||{}).value||"";
+  sMonthM(movs);closeEditModal();renderHome();showToast("Guardado ✓");
 }
 function deleteMovFromModal(){
   if(!editingMovId)return;
