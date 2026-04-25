@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v14.4</title>
+<title>Correa v14.5</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -241,7 +241,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .em-btn:hover{background:#F0EEE8;}
 
 .home-section{transition:opacity .15s,transform .15s;}
-.home-section.dragging{opacity:.35;transform:scale(.98);animation:none;}
+.home-section.dragging{opacity:.35;transform:scale(.98);animation:none;}.home-section.wiggling{animation:wiggle .3s ease-in-out infinite;transform-origin:center;}
 .home-section.drag-over{outline:2px solid #1A1916;border-radius:16px;}
 .drag-handle{display:none;flex-direction:column;gap:3px;cursor:grab;padding:4px;flex-shrink:0;}
 .drag-handle span{display:block;width:14px;height:2px;background:#CBC6BC;border-radius:1px;}
@@ -249,7 +249,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .reorder-mode .home-section{cursor:grab;animation:wiggle .35s ease-in-out infinite;transform-origin:center;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 @keyframes arc-spin{0%{stroke-dashoffset:0;opacity:1}40%{stroke-dashoffset:-120;opacity:0.25}60%{stroke-dashoffset:-120;opacity:0.25}100%{stroke-dashoffset:0;opacity:1}}
-@keyframes wiggle{0%{transform:translateY(0)}25%{transform:translateY(-3px)}75%{transform:translateY(3px)}100%{transform:translateY(0)}}
+@keyframes wiggle{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}}25%{transform:translateY(-3px)}75%{transform:translateY(3px)}100%{transform:translateY(0)}}
 @keyframes dot-beat{0%,100%{r:4}50%{r:6}}
 ::-webkit-scrollbar-thumb{background:#CBC6BC;border-radius:2px;}
 /* Bottom nav (mobile) */
@@ -823,8 +823,9 @@ function enterReorderMode() {
   if (main) main.classList.add("reorder-mode");
   document.querySelectorAll(".home-section[data-section]").forEach(function(el) {
     el.draggable = true;
+    el.classList.add("wiggling");
   });
-  if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+  if (navigator.vibrate) navigator.vibrate([15, 30, 15]);
 }
 
 function exitReorderMode() {
@@ -833,7 +834,7 @@ function exitReorderMode() {
   if (main) main.classList.remove("reorder-mode");
   document.querySelectorAll(".home-section[data-section]").forEach(function(el) {
     el.draggable = false;
-    el.classList.remove("dragging","drag-over");
+    el.classList.remove("dragging","drag-over","wiggling");
   });
   saveSectionOrder();
 }
@@ -869,7 +870,7 @@ function initDragReorder() {
     el.addEventListener("dragstart", function(e) {
       if (!reorderMode) { e.preventDefault(); return; }
       draggedSection = el;
-      setTimeout(function(){ el.classList.add("dragging"); }, 0);
+      setTimeout(function(){ el.classList.add("dragging"); el.classList.remove("wiggling"); }, 0);
       e.dataTransfer.effectAllowed = "move";
     });
     el.addEventListener("dragend", function() {
@@ -947,25 +948,12 @@ function maskAmount(str) {
 
 
 function openManualModal() {
-  // Reuse openEditModal with a blank movement template
-  var blank = {
-    id: null,
-    tipo: "gasto",
-    categoria: "",
-    subcategoria: "",
-    monto: 0,
-    cur: "ARS",
-    fecha: new Date().toISOString().split("T")[0],
-    referencia: "",
-    inputOriginal: ""
-  };
   editingMovId = "__new__";
   editingCur = "ARS";
   var modal = document.getElementById("edit-modal");
   var form = document.getElementById("edit-modal-fields");
   document.getElementById("edit-modal-title").textContent = "Nuevo registro";
   form.innerHTML = "";
-  var m = blank;
 
   function aF(lbl, el) {
     var wrap = document.createElement("div");
@@ -981,38 +969,55 @@ function openManualModal() {
   var iTipo = document.createElement("select");
   iTipo.id = "em-tipo";
   iTipo.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
-  iTipo.innerHTML = "<option value='gasto'>Gasto</option><option value='ingreso'>Ingreso</option>";
+  iTipo.innerHTML = "<option value='ingreso'>Ingreso</option><option value='gasto'>Egreso</option>";
   aF("Tipo", iTipo);
 
-  // Categoria
-  var iCat = document.createElement("input");
-  iCat.id = "em-cat"; iCat.placeholder = "Categoria";
+  // Categoria dropdown
+  var iCat = document.createElement("select");
+  iCat.id = "em-cat";
   iCat.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
+  function buildCatOpts() {
+    var tipo = iTipo.value;
+    var cats = tipo === "ingreso" ? (gIngCats()||[]) : (gCats()||[]);
+    iCat.innerHTML = "<option value=''>-- Categoria --</option>";
+    cats.forEach(function(c){ var o=document.createElement("option");o.value=c.nom;o.textContent=c.em+" "+c.nom;iCat.appendChild(o); });
+    buildSubOpts();
+  }
+  function buildSubOpts() {
+    var tipo = iTipo.value;
+    var cats = tipo === "ingreso" ? (gIngCats()||[]) : (gCats()||[]);
+    var selCat = iCat.value;
+    var cat = cats.find(function(c){return c.nom===selCat;});
+    iSub.innerHTML = "<option value=''>-- Subcategoria --</option>";
+    if (cat && cat.subs) cat.subs.forEach(function(s){ var o=document.createElement("option");o.value=s;o.textContent=s;iSub.appendChild(o); });
+  }
+  iTipo.addEventListener("change", buildCatOpts);
+  iCat.addEventListener("change", buildSubOpts);
   aF("Categoria", iCat);
 
-  // Subcategoria
-  var iSub = document.createElement("input");
-  iSub.id = "em-sub"; iSub.placeholder = "Subcategoria";
+  // Subcategoria dropdown
+  var iSub = document.createElement("select");
+  iSub.id = "em-sub";
   iSub.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
   aF("Subcategoria", iSub);
 
-  // Monto + toggle
+  buildCatOpts();
+
+  // Monto + toggle ARS/USD
   var montoWrap = document.createElement("div");
   montoWrap.style.cssText = "display:flex;align-items:center;gap:8px";
-  var iM = document.createElement("input"); iM.id = "em-monto"; iM.type = "number"; iM.placeholder = "0"; iM.value = "";
+  var iM = document.createElement("input"); iM.id = "em-monto"; iM.type = "number"; iM.placeholder = "0";
   iM.style.cssText = "flex:1;border:none;background:transparent;font-family:DM Mono,monospace;font-size:14px;font-weight:600;color:#1A1916;padding:0;min-width:0";
   var curToggle = document.createElement("div");
   curToggle.style.cssText = "display:flex;background:#F0EEE8;border-radius:10px;padding:2px;gap:2px;flex-shrink:0";
-  var curArs = document.createElement("button"); curArs.id = "em-cur-ars"; curArs.textContent = "ARS";
+  var curArs = document.createElement("button"); curArs.textContent = "ARS";
   curArs.style.cssText = "font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif";
-  var curUsd = document.createElement("button"); curUsd.id = "em-cur-usd"; curUsd.textContent = "USD";
+  var curUsd = document.createElement("button"); curUsd.textContent = "USD";
   curUsd.style.cssText = "font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif";
   function setCurEm(cur) {
     editingCur = cur;
-    curArs.style.background = cur === "ARS" ? "#1A1916" : "transparent";
-    curArs.style.color = cur === "ARS" ? "#fff" : "#A8A49E";
-    curUsd.style.background = cur !== "ARS" ? "#1A1916" : "transparent";
-    curUsd.style.color = cur !== "ARS" ? "#fff" : "#A8A49E";
+    curArs.style.background = cur==="ARS"?"#1A1916":"transparent"; curArs.style.color = cur==="ARS"?"#fff":"#A8A49E";
+    curUsd.style.background = cur!=="ARS"?"#1A1916":"transparent"; curUsd.style.color = cur!=="ARS"?"#fff":"#A8A49E";
   }
   curArs.addEventListener("click", function(){ setCurEm("ARS"); });
   curUsd.addEventListener("click", function(){ setCurEm("USD"); });
@@ -1022,7 +1027,7 @@ function openManualModal() {
 
   // Fecha
   var iF = document.createElement("input"); iF.id = "em-fecha"; iF.type = "date";
-  iF.value = blank.fecha;
+  iF.value = new Date().toISOString().split("T")[0];
   iF.style.cssText = "width:100%;border:none;background:transparent;font-family:DM Sans,sans-serif;font-size:14px;color:#1A1916;padding:0";
   aF("Fecha", iF);
 
