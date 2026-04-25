@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v14.0</title>
+<title>Correa v14.4</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -241,14 +241,15 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .em-btn:hover{background:#F0EEE8;}
 
 .home-section{transition:opacity .15s,transform .15s;}
-.home-section.dragging{opacity:.35;transform:scale(.98);}
+.home-section.dragging{opacity:.35;transform:scale(.98);animation:none;}
 .home-section.drag-over{outline:2px solid #1A1916;border-radius:16px;}
 .drag-handle{display:none;flex-direction:column;gap:3px;cursor:grab;padding:4px;flex-shrink:0;}
 .drag-handle span{display:block;width:14px;height:2px;background:#CBC6BC;border-radius:1px;}
-.reorder-mode .drag-handle{display:flex;}
-.reorder-mode .home-section{cursor:grab;}
+.reorder-mode .drag-handle{display:none;}
+.reorder-mode .home-section{cursor:grab;animation:wiggle .35s ease-in-out infinite;transform-origin:center;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 @keyframes arc-spin{0%{stroke-dashoffset:0;opacity:1}40%{stroke-dashoffset:-120;opacity:0.25}60%{stroke-dashoffset:-120;opacity:0.25}100%{stroke-dashoffset:0;opacity:1}}
+@keyframes wiggle{0%{transform:translateY(0)}25%{transform:translateY(-3px)}75%{transform:translateY(3px)}100%{transform:translateY(0)}}
 @keyframes dot-beat{0%,100%{r:4}50%{r:6}}
 ::-webkit-scrollbar-thumb{background:#CBC6BC;border-radius:2px;}
 /* Bottom nav (mobile) */
@@ -425,7 +426,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 <main class="main">
 
   <!-- HOME -->
-  <div id="pg-home" class="page active">
+  <div id="pg-home" class="page">
 
     <div class="inp-card" id="wt-input">
 
@@ -631,6 +632,15 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 </main>
 </div>
 
+<nav id="bottom-nav" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1A1916;padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:100;justify-content:space-around;align-items:center;border-top:1px solid #333">
+  <div class="bn-item active" id="bn-home" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#fff;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 20px">
+    <span style="font-size:18px">&#10022;</span><span>Inicio</span>
+  </div>
+  <div class="bn-item" id="bn-config" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#A8A49E;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 20px">
+    <span style="font-size:18px">&#9881;</span><span>Config</span>
+  </div>
+</nav>
+
 <div class="toast" id="toast"></div>
 <div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;align-items:flex-end;justify-content:center;pointer-events:none">
   <div style="background:#fff;border-radius:20px 20px 0 0;padding:24px 20px 40px;width:100%;max-width:500px">
@@ -814,8 +824,7 @@ function enterReorderMode() {
   document.querySelectorAll(".home-section[data-section]").forEach(function(el) {
     el.draggable = true;
   });
-  // Haptic feedback if available
-  if (navigator.vibrate) navigator.vibrate(30);
+  if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
 }
 
 function exitReorderMode() {
@@ -887,9 +896,14 @@ function initDragReorder() {
     });
   });
 
-  // Click outside to exit reorder mode
+  // Wire manual-btn
+  var manualBtn=document.getElementById("manual-btn");
+  if(manualBtn)manualBtn.addEventListener("click",function(){openManualModal();});
+
+  // Single tap anywhere exits reorder mode
   document.addEventListener("click", function(e) {
-    if (reorderMode && !e.target.closest(".home-section")) exitReorderMode();
+    if (!reorderMode) return;
+    exitReorderMode();
   });
 
   // Apply saved order on init
@@ -948,7 +962,7 @@ function openManualModal() {
   editingMovId = "__new__";
   editingCur = "ARS";
   var modal = document.getElementById("edit-modal");
-  var form = document.getElementById("edit-form");
+  var form = document.getElementById("edit-modal-fields");
   document.getElementById("edit-modal-title").textContent = "Nuevo registro";
   form.innerHTML = "";
   var m = blank;
@@ -1303,6 +1317,7 @@ function startApp() {
   document.getElementById("app").style.display = "grid";
   document.body.classList.add("app-active");
   document.documentElement.classList.add("app-active");
+  var bn=document.getElementById("bottom-nav");if(bn)bn.style.display="flex";
   var cats = gCats() || activeCats;
   var ingCats = gIngCats() || activeIngCats;
   var hasIng = ingCats && ingCats.length > 0;
@@ -1312,6 +1327,7 @@ function startApp() {
   if(ok)document.getElementById("cfg-oai").value=ok;
   var dashMes2=document.getElementById("dash-mes-lbl");
   if(dashMes2) dashMes2.textContent=MONTHS[curMonth.m].toUpperCase()+" "+curMonth.y;
+  showPage("home");
   renderHome();
   renderCfgCats();
 }
@@ -1327,8 +1343,8 @@ function showPage(p) {
   navs.forEach(function(n) {
     var el = document.getElementById("nav-" + n);
     if (el) el.classList.toggle("active", n === p);
-    var bn = document.getElementById("bn-" + n);
-    if (bn) bn.classList.toggle("active", n === p);
+    var bnEl = document.getElementById("bn-" + n);
+    if (bnEl) { bnEl.classList.toggle("active", n === p); bnEl.style.color = (n===p)?"#fff":"#A8A49E"; }
   });
   // Reset scroll position when changing pages
   var main = document.querySelector(".main");
@@ -1344,6 +1360,7 @@ function chMonth(d) {
   if (curMonth.m < 0)  { curMonth.m = 11; curMonth.y--; }
   var dashMes2=document.getElementById("dash-mes-lbl");
   if(dashMes2) dashMes2.textContent=MONTHS[curMonth.m].toUpperCase()+" "+curMonth.y;
+  showPage("home");
   renderHome();
   renderCfgCats();
 }
@@ -1398,7 +1415,7 @@ async function sendAI() {
   var key = gKey("ant");
   if (!key) { showToast("Configura tu API key en Configuracion"); return; }
   var btn = document.getElementById("send-btn");
-  btn.disabled = true;
+  if(btn) btn.disabled = true;
   // Animate the logo in the button
   var sendLbl = document.getElementById("send-lbl");
   if (sendLbl) sendLbl.textContent = "Enviando...";
@@ -1432,7 +1449,7 @@ async function sendAI() {
     showToast("Error: " + (e.message || "intenta de nuevo"));
     console.error(e);
   }
-  btn.disabled = false;
+  if(btn) btn.disabled = false;
   var sendLbl2 = document.getElementById("send-lbl");
   if (sendLbl2) sendLbl2.textContent = "Enviar";
   inp.disabled = false;
@@ -2169,7 +2186,7 @@ async function genInsight() {
     el.textContent = "No se pudo generar el analisis.";
     console.error(e);
   }
-  btn.disabled = false;
+  if(btn) btn.disabled = false;
   btn.innerHTML = "Actualizar analisis";
 }
 
@@ -2336,7 +2353,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Home buttons
   document.getElementById("send-btn").addEventListener("click", function() { sendAI(); });
-  document.getElementById("ai-inp").addEventListener("keydown", function(e) {
+  var aiInp=document.getElementById("ai-inp");if(aiInp)aiInp.addEventListener("keydown", function(e) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendAI(); }
   });
   document.getElementById("mic-btn").addEventListener("click", function() {
