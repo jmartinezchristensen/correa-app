@@ -4,7 +4,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v15.9</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Correa">
+<meta name="theme-color" content="#1A1916">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<title>Correa</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -144,7 +151,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
 /* Breakdown */
 .bdown{background:#fff;border:1px solid #E2DED6;border-radius:16px;overflow:hidden;margin-bottom:20px;}
-.bd-hdr{padding:12px 16px;border-bottom:1px solid #E2DED6;display:flex;justify-content:space-between;align-items:center;}
+.bd-hdr{padding:12px 16px;border-bottom:1px solid #E2DED6;display:flex;justify-content:space-between;align-items:center;min-height:44px;}
 .bd-hl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
 .bd-mth{font-size:13px;font-weight:600;color:#1A1916;display:flex;align-items:center;gap:8px;}
 .mbtn{background:none;border:1px solid #E2DED6;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:12px;color:#6B6760;font-family:"DM Sans",sans-serif;}
@@ -173,7 +180,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
 /* Recent */
 .recent{background:#fff;border:1px solid #E2DED6;border-radius:16px;overflow:hidden;margin-bottom:16px;}
-.rc-hdr{padding:11px 16px;border-bottom:1px solid #E2DED6;}
+.rc-hdr{padding:12px 16px;border-bottom:1px solid #E2DED6;min-height:44px;display:flex;align-items:center;}
 .rc-hdr span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
 .mv-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #E2DED6;}
 .mv-row:last-child{border-bottom:none;}
@@ -257,7 +264,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 @media(max-width:768px){
   .sb{display:none !important;}
   #app{grid-template-columns:1fr !important;}
-  .main{padding:16px 16px calc(200px + env(safe-area-inset-bottom)) !important;}
+  .main{padding:16px 16px calc(200px + env(safe-area-inset-bottom)) !important;padding-top:calc(16px + env(safe-area-inset-top)) !important;}
   .bottom-nav{display:flex !important;}
   .inp-ta{font-size:16px;}
   .metrics{grid-template-columns:1fr 1fr !important;}
@@ -600,18 +607,6 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
   <!-- FIX 3: CONFIG DENTRO DEL MAIN — era el bug principal -->
   <div id="pg-config" class="page">
-    <div class="ph">
-      <div><div class="ph-title">Configuracion</div><div class="ph-sub">API keys, tipo de cambio y categorias</div></div>
-      <button class="btn-s" id="cfg-back">&#8592; Volver</button>
-    </div>
-
-    <div class="cfg-card">
-      <h3>API keys</h3>
-      <p>Necesarias para que Correa procese tus registros.</p>
-      <div class="k-row"><span class="k-lbl">Anthropic (Claude)</span><input class="k-inp" type="password" id="cfg-ant" placeholder="sk-ant-..."></div>
-      <div class="k-row"><span class="k-lbl">OpenAI (Whisper)</span><input class="k-inp" type="password" id="cfg-oai" placeholder="sk-..."></div>
-      <div style="margin-top:12px"><button class="btn-sm" id="save-keys-btn">Guardar</button></div>
-    </div>
 
     <div class="cfg-card">
       <h3>Mis categorias</h3>
@@ -629,12 +624,10 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <button id="cfg-tab-ing" style="flex:1;font-size:12px;font-weight:600;padding:6px;border-radius:8px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">Ingresos</button>
         <button id="cfg-tab-eg" style="flex:1;font-size:12px;font-weight:600;padding:6px;border-radius:8px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">Egresos</button>
       </div>
-      <!-- Egresos panel -->
       <div id="cfg-panel-ing">
         <div class="cfg-list" id="cfg-ing-el"></div>
         <div class="add-row"><input type="text" id="new-ing-inp" placeholder="Nueva categoria de ingreso..."><button id="add-ing-btn">+ Agregar</button></div>
       </div>
-      <!-- Egresos panel -->
       <div id="cfg-panel-eg" style="display:none">
         <div class="cfg-list" id="cfg-cats-el"></div>
         <div class="add-row"><input type="text" id="new-cat-inp" placeholder="Nueva categoria de egreso..."><button id="add-cat-btn">+ Agregar</button></div>
@@ -682,6 +675,14 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
     </div>
 
     <div class="cfg-card">
+      <h3>API keys</h3>
+      <p>Necesarias para que Correa procese tus registros.</p>
+      <div class="k-row"><span class="k-lbl">Anthropic (Claude)</span><input class="k-inp" type="password" id="cfg-ant" placeholder="sk-ant-..."></div>
+      <div class="k-row"><span class="k-lbl">OpenAI (Whisper)</span><input class="k-inp" type="password" id="cfg-oai" placeholder="sk-..."></div>
+      <div style="margin-top:12px"><button class="btn-sm" id="save-keys-btn">Guardar</button></div>
+    </div>
+
+    <div class="cfg-card">
       <h3>Datos y privacidad</h3>
       <p>Todos tus datos se guardan unicamente en este navegador.</p>
       <button class="btn-s" id="clear-btn">Borrar todos mis datos y empezar de nuevo</button>
@@ -693,10 +694,11 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
     <!-- Torta unificada con toggle -->
     <div class="bdown" style="margin-bottom:16px">
-      <div class="bd-hdr" style="padding:0">
-        <div style="display:flex;width:100%">
-          <button id="pie-tab-ing" style="flex:1;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;border-radius:14px 0 0 0;transition:all .15s">Distribución de Ingresos</button>
-          <button id="pie-tab-eg" style="flex:1;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border:none;background:#F7F6F2;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif;border-radius:0 14px 0 0;transition:all .15s">Distribución de Egresos</button>
+      <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span class="bd-hl">Distribución de</span>
+        <div style="display:flex;background:#F0EEE8;border-radius:10px;padding:2px;gap:2px;flex-shrink:0">
+          <button id="pie-tab-ing" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">Ingresos</button>
+          <button id="pie-tab-eg" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">Egresos</button>
         </div>
       </div>
       <!-- Filtros de período para la torta -->
@@ -704,7 +706,6 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <button class="pie-period-btn active" data-period="month" style="font-size:11px;font-weight:600;padding:4px 11px;border-radius:16px;border:1px solid #1A1916;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">Este mes</button>
         <button class="pie-period-btn" data-period="3m" style="font-size:11px;font-weight:600;padding:4px 11px;border-radius:16px;border:1px solid #E2DED6;background:#fff;color:#6B6760;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">3 meses</button>
         <button class="pie-period-btn" data-period="6m" style="font-size:11px;font-weight:600;padding:4px 11px;border-radius:16px;border:1px solid #E2DED6;background:#fff;color:#6B6760;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">6 meses</button>
-        <button class="pie-period-btn" data-period="12m" style="font-size:11px;font-weight:600;padding:4px 11px;border-radius:16px;border:1px solid #E2DED6;background:#fff;color:#6B6760;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">12 meses</button>
         <button class="pie-period-btn" data-period="year" style="font-size:11px;font-weight:600;padding:4px 11px;border-radius:16px;border:1px solid #E2DED6;background:#fff;color:#6B6760;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s" id="pie-btn-year">2026</button>
       </div>
       <div style="padding:20px 16px">
@@ -718,10 +719,11 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
     <!-- Evolución -->
     <div class="bdown" style="margin-bottom:16px">
-      <div class="bd-hdr" style="padding:0">
-        <div style="display:flex;width:100%">
-          <button id="evo-tab-ing" style="flex:1;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;border-radius:14px 0 0 0;transition:all .15s">Evolución de Ingresos</button>
-          <button id="evo-tab-eg" style="flex:1;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border:none;background:#F7F6F2;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif;border-radius:0 14px 0 0;transition:all .15s">Evolución de Egresos</button>
+      <div class="bd-hdr" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span class="bd-hl">Evolución trimestral de</span>
+        <div style="display:flex;background:#F0EEE8;border-radius:10px;padding:2px;gap:2px;flex-shrink:0">
+          <button id="evo-tab-ing" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">Ingresos</button>
+          <button id="evo-tab-eg" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif;transition:all .15s">Egresos</button>
         </div>
       </div>
       <div id="stats-cat-chips" style="display:flex;flex-wrap:wrap;gap:5px;padding:10px 16px;border-bottom:1px solid #E2DED6"></div>
@@ -1626,7 +1628,7 @@ function getCatColor(nom) {
 
 function renderHome() {
   var movs=gMonthM();
-  var gas=movs.filter(function(m){return m.tipo===(evoTab==="ing"?"ingreso":"gasto");});
+  var gas=movs.filter(function(m){return m.tipo==="gasto";});
   var ing=movs.filter(function(m){return m.tipo==="ingreso";});
   var tc=gTC();
   var totGars=gas.reduce(function(s,m){return s+(m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd);},0);
@@ -1757,7 +1759,7 @@ function toggleBudgetForm(nom, lnk) {
 }
 
 function showDetail(nom){
-  var tc=gTC(),movs=gMonthM().filter(function(m){return m.tipo===(evoTab==="ing"?"ingreso":"gasto")&&m.categoria===nom;});
+  var tc=gTC(),movs=gMonthM().filter(function(m){return m.tipo==="gasto"&&m.categoria===nom;});
   function mAsd(m){return m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd;}
   var bySub={},bySM={};
   movs.forEach(function(m){var s=m.subcategoria||"General";bySub[s]=(bySub[s]||0)+mAsd(m);if(!bySM[s])bySM[s]=[];bySM[s].push(m);});
@@ -1807,7 +1809,7 @@ function showDetail(nom){
 
 function renderIngresos() {
   var movs=gMonthM();
-  var gas=movs.filter(function(m){return m.tipo===(evoTab==="ing"?"ingreso":"gasto");});
+  var gas=movs.filter(function(m){return m.tipo==="gasto";});
   var ing=movs.filter(function(m){return m.tipo==="ingreso";});
   var totG=gas.reduce(function(s,m){return s+m.monto;},0);
   var totI=ing.reduce(function(s,m){return s+m.monto;},0);
@@ -1849,7 +1851,7 @@ async function genInsight() {
   var el=document.getElementById("ins-txt");el.style.color="#A8A49E";el.textContent="Analizando...";
   try {
     var iTC=gTC();
-    var gas=movs.filter(function(m){return m.tipo===(evoTab==="ing"?"ingreso":"gasto");});
+    var gas=movs.filter(function(m){return m.tipo==="gasto";});
     var ing=movs.filter(function(m){return m.tipo==="ingreso";});
     function mARS2(m){return m.cur==="ARS"?m.monto:(m.usd||0)*iTC.usd;}
     var totG=gas.reduce(function(s,m){return s+mARS2(m);},0);
@@ -2094,7 +2096,7 @@ function renderStatsComparativo() {
   function fmt(n){ return showUSD ? ("US$ "+Math.round(n).toLocaleString("es-AR")) : fA(n); }
 
   function calcTotals(movs) {
-    var gas = movs.filter(function(m){return m.tipo===(evoTab==="ing"?"ingreso":"gasto");}).reduce(function(s,m){return s+toVal(m);},0);
+    var gas = movs.filter(function(m){return m.tipo==="gasto";}).reduce(function(s,m){return s+toVal(m);},0);
     var ing = movs.filter(function(m){return m.tipo==="ingreso";}).reduce(function(s,m){return s+toVal(m);},0);
     return {gas:gas, ing:ing, res:ing-gas};
   }
@@ -2140,7 +2142,7 @@ function renderStatsComparativo() {
 
 function renderStatsKPIs(movs) {
   var tc = gTC();
-  var gas = movs.filter(function(m){ return m.tipo===(evoTab==="ing"?"ingreso":"gasto"); });
+  var gas = movs.filter(function(m){ return m.tipo==="gasto"; });
   var ing = movs.filter(function(m){ return m.tipo==="ingreso"; });
   function toVal(m){ return showUSD ? (m.usd||0) : (m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd); }
   function fmt(n){ return showUSD ? ("US$ "+Math.round(n).toLocaleString("es-AR")) : fA(n); }
@@ -2228,11 +2230,11 @@ function setPieTab(tab) {
   var egBtn = document.getElementById("pie-tab-eg");
   var ingBtn = document.getElementById("pie-tab-ing");
   if (egBtn) {
-    egBtn.style.background = tab==="eg" ? "#1A1916" : "#F7F6F2";
+    egBtn.style.background = tab==="eg" ? "#1A1916" : "transparent";
     egBtn.style.color = tab==="eg" ? "#fff" : "#A8A49E";
   }
   if (ingBtn) {
-    ingBtn.style.background = tab==="ing" ? "#1A1916" : "#F7F6F2";
+    ingBtn.style.background = tab==="ing" ? "#1A1916" : "transparent";
     ingBtn.style.color = tab==="ing" ? "#fff" : "#A8A49E";
   }
   var movs = getMovsForPiePeriod();
@@ -2291,7 +2293,7 @@ function renderStatsMonthly() {
   function fmt(n){ return showUSD ? ("US$ "+Math.round(n).toLocaleString("es-AR")) : fA(n); }
   var rows = keys.map(function(k){
     var ms=all[k]||[];
-    var gas=ms.filter(function(m){return m.tipo===(evoTab==="ing"?"ingreso":"gasto");}).reduce(function(s,m){return s+toVal(m);},0);
+    var gas=ms.filter(function(m){return m.tipo==="gasto";}).reduce(function(s,m){return s+toVal(m);},0);
     var ing=ms.filter(function(m){return m.tipo==="ingreso";}).reduce(function(s,m){return s+toVal(m);},0);
     var parts=k.split("-");
     return {lbl:MONTHS[+parts[1]-1].substring(0,3)+" '"+parts[0].slice(2), gas:gas, ing:ing, res:ing-gas};
@@ -2406,7 +2408,7 @@ async function renderStackedChart() {
 
   var all = ls("cr_m", {});
   var allKeys = getStatsMonths();
-  var keys = allKeys.slice(-4); // siempre máximo 4 barras
+  var keys = allKeys.slice(-3); // últimos 3 meses
   if (!keys.length) {
     container.innerHTML = '<div style="text-align:center;color:#A8A49E;font-size:13px;padding:24px 0">Sin datos en este período.</div>';
     legEl.innerHTML = ""; return;
@@ -2597,7 +2599,8 @@ document.addEventListener("DOMContentLoaded",function(){
   });
 
   // Config
-  document.getElementById("cfg-back").addEventListener("click",function(){showPage("home");});
+  var cfgBackEl = document.getElementById("cfg-back");
+  if(cfgBackEl) cfgBackEl.addEventListener("click",function(){showPage("home");});
   document.getElementById("cfg-ant").addEventListener("input",function(){sKey("ant",this.value);});
   document.getElementById("cfg-oai").addEventListener("input",function(){sKey("oai",this.value);});
   document.getElementById("save-keys-btn").addEventListener("click",function(){showToast("API keys guardadas");});
@@ -2654,8 +2657,8 @@ document.addEventListener("DOMContentLoaded",function(){
     statsCatFilter = null; // reset filtro al cambiar tipo
     var eIng = document.getElementById("evo-tab-ing");
     var eEg  = document.getElementById("evo-tab-eg");
-    if(eIng){eIng.style.background=tab==="ing"?"#1A1916":"#F7F6F2";eIng.style.color=tab==="ing"?"#fff":"#A8A49E";}
-    if(eEg) {eEg.style.background=tab==="eg"?"#1A1916":"#F7F6F2";eEg.style.color=tab==="eg"?"#fff":"#A8A49E";}
+    if(eIng){eIng.style.background=tab==="ing"?"#1A1916":"transparent";eIng.style.color=tab==="ing"?"#fff":"#A8A49E";}
+    if(eEg) {eEg.style.background=tab==="eg"?"#1A1916":"transparent";eEg.style.color=tab==="eg"?"#fff":"#A8A49E";}
     renderStackedChart();
   }
   var eTabIng = document.getElementById("evo-tab-ing");
@@ -2739,6 +2742,13 @@ document.addEventListener("DOMContentLoaded",function(){
 });
 
 })();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("/sw.js");
+  });
+}
 </script>
 </body>
 </html>
