@@ -257,7 +257,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 @media(max-width:768px){
   .sb{display:none !important;}
   #app{grid-template-columns:1fr !important;}
-  .main{padding:16px 16px 80px !important;}
+  .main{padding:16px 16px calc(90px + env(safe-area-inset-bottom)) !important;}
   .bottom-nav{display:flex !important;}
   .inp-ta{font-size:16px;}
   .metrics{grid-template-columns:1fr 1fr !important;}
