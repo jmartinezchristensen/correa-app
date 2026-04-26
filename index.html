@@ -237,7 +237,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .toast{position:fixed;bottom:22px;right:22px;background:#1A1916;color:#fff;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:500;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;}
 .toast.show{opacity:1;}
 
-.emoji-picker{display:none;position:absolute;z-index:200;background:#fff;border:1px solid #E2DED6;border-radius:14px;padding:10px;box-shadow:0 8px 32px rgba(0,0,0,.12);width:240px;flex-wrap:wrap;gap:4px;}
+.emoji-picker{display:none;position:fixed;z-index:1000;background:#fff;border:1px solid #E2DED6;border-radius:14px;padding:10px;box-shadow:0 8px 32px rgba(0,0,0,.18);width:240px;flex-wrap:wrap;gap:4px;max-height:200px;overflow-y:auto;}
 .emoji-picker.open{display:flex;}
 .ep-emoji{font-size:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;border:none;background:none;}
 .ep-emoji:hover{background:#F0EEE8;}
@@ -1143,6 +1143,41 @@ function openManualModal() {
   modal.style.pointerEvents = "auto";
 }
 
+// Emoji picker global
+var _activeEPicker = null;
+function openEmojiPicker(eBtn, ePicker) {
+  // Cerrar cualquier picker abierto
+  if (_activeEPicker && _activeEPicker !== ePicker) {
+    _activeEPicker.classList.remove("open");
+    if (_activeEPicker.parentNode === document.body) document.body.removeChild(_activeEPicker);
+  }
+  if (ePicker.classList.contains("open")) {
+    ePicker.classList.remove("open");
+    if (ePicker.parentNode === document.body) document.body.removeChild(ePicker);
+    _activeEPicker = null;
+    return;
+  }
+  // Mover al body y posicionar
+  document.body.appendChild(ePicker);
+  ePicker.classList.add("open");
+  _activeEPicker = ePicker;
+  var rect = eBtn.getBoundingClientRect();
+  var pw = 240, ph = 200;
+  var left = rect.left;
+  var top = rect.bottom + 6;
+  if (left + pw > window.innerWidth) left = window.innerWidth - pw - 8;
+  if (top + ph > window.innerHeight) top = rect.top - ph - 6;
+  ePicker.style.left = left + "px";
+  ePicker.style.top = top + "px";
+}
+document.addEventListener("click", function(e) {
+  if (_activeEPicker && !_activeEPicker.contains(e.target)) {
+    _activeEPicker.classList.remove("open");
+    if (_activeEPicker.parentNode === document.body) document.body.removeChild(_activeEPicker);
+    _activeEPicker = null;
+  }
+});
+
 function gTC() { return ls("cr_tc", {usd:1455, inf:2.9}); }
 function sTC(u, i) { ss("cr_tc", {usd:u, inf:i}); }
 function gCats() { return ls("cr_cats", null); }
@@ -1860,7 +1895,7 @@ function showDetail(nom){
   panel.id="bd-inline-detail";panel.dataset.nom=nom;
   panel.style.cssText="background:#F7F6F2;border-bottom:1px solid #E2DED6;";
   var h="";
-  Object.keys(bySub).sort(function(a,b){return bySub[b]-bySub[a];}).forEach(function(sub,si){
+  Object.keys(bySub).sort(function(a,b){ return sortCats==="az"?a.localeCompare(b,"es"):bySub[b]-bySub[a]; }).forEach(function(sub,si){
     var sM=bySM[sub]||[];
     var amtSub=(amountsHidden||hiddenBoxes.eg)?'••••':fmt(bySub[sub]);
     var subId="subg-"+si+"-"+Date.now();
@@ -1968,12 +2003,11 @@ function renderCfgCats() {
     var emojis=["🏠","🛒","🚗","🏍️","🚲","❤️","🍽️","🏋️","👶","🐾","✈️","👗","📺","🎁","💊","🎓","💼","🐕","🏖️","🎮","🍕","☕","🚌","💰","📱","🔧","🏥","🎵","🛍️","🌿","⚽","🎨","📚","🧴","🏦","💡","🎂","🍷","🥗","🚿"];
     emojis.forEach(function(em){
       var eb=document.createElement("button");eb.className="ep-emoji";eb.textContent=em;
-      eb.addEventListener("click",function(ev){ev.stopPropagation();var fc=gCats()||[];var ci=fc.findIndex(function(x){return x.id===c.id;});if(ci>=0){fc[ci].em=em;ss("cr_cats",fc);}eBtn.textContent=em;ePicker.classList.remove("open");});
+      eb.addEventListener("click",function(ev){ev.stopPropagation();var fc=gCats()||[];var ci=fc.findIndex(function(x){return x.id===c.id;});if(ci>=0){fc[ci].em=em;ss("cr_cats",fc);}eBtn.textContent=em;ePicker.classList.remove("open");if(ePicker.parentNode===document.body)document.body.removeChild(ePicker);_activeEPicker=null;});
       ePicker.appendChild(eb);
     });
     eBtn.appendChild(ePicker);
-    eBtn.addEventListener("click",function(ev){ev.stopPropagation();ePicker.classList.toggle("open");});
-    document.addEventListener("click",function(){ePicker.classList.remove("open");});
+    eBtn.addEventListener("click",function(ev){ev.stopPropagation();openEmojiPicker(eBtn,ePicker);});
     var nS=document.createElement("span");nS.className="cfg-nom";nS.textContent=c.nom;
     var sS=document.createElement("span");sS.style.cssText="flex:1;font-size:11px;color:#A8A49E;margin-left:4px";sS.textContent=c.subs.slice(0,2).join(", ")+(c.subs.length>2?"...":"");
     var ch=document.createElement("span");ch.innerHTML=" &#8250;";ch.style.cssText="color:#A8A49E;font-size:18px;transition:transform .2s";
@@ -2005,12 +2039,11 @@ function renderCfgCats() {
     var emojis=["🏠","🛒","🚗","🏍️","🚲","❤️","🍽️","🏋️","👶","🐾","✈️","👗","📺","🎁","💊","🎓","💼","🐕","🏖️","🎮","🍕","☕","🚌","💰","📱","🔧","🏥","🎵","🛍️","🌿","⚽","🎨","📚","🧴","🏦","💡","🎂","🍷","🥗","🚿","💵","📈","🏦","🤝","🎯"];
     emojis.forEach(function(em){
       var eb=document.createElement("button");eb.className="ep-emoji";eb.textContent=em;
-      eb.addEventListener("click",function(ev){ev.stopPropagation();var fc=gIngCats()||[];var ci=fc.findIndex(function(x){return x.id===c.id;});if(ci>=0){fc[ci].em=em;ss("cr_ingcats",fc);}eBtn.textContent=em;ePicker.classList.remove("open");});
+      eb.addEventListener("click",function(ev){ev.stopPropagation();var fc=gIngCats()||[];var ci=fc.findIndex(function(x){return x.id===c.id;});if(ci>=0){fc[ci].em=em;ss("cr_ingcats",fc);}eBtn.textContent=em;ePicker.classList.remove("open");if(ePicker.parentNode===document.body)document.body.removeChild(ePicker);_activeEPicker=null;});
       ePicker.appendChild(eb);
     });
     eBtn.appendChild(ePicker);
-    eBtn.addEventListener("click",function(ev){ev.stopPropagation();ePicker.classList.toggle("open");});
-    document.addEventListener("click",function(){ePicker.classList.remove("open");});
+    eBtn.addEventListener("click",function(ev){ev.stopPropagation();openEmojiPicker(eBtn,ePicker);});
     var nS=document.createElement("span");nS.className="cfg-nom";nS.textContent=c.nom;
     var sS=document.createElement("span");sS.style.cssText="flex:1;font-size:11px;color:#A8A49E;margin-left:4px";sS.textContent=c.subs.slice(0,2).join(", ")+(c.subs.length>2?"...":"");
     var ch=document.createElement("span");ch.innerHTML=" &#8250;";ch.style.cssText="color:#A8A49E;font-size:18px;transition:transform .2s";
