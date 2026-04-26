@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v14.5</title>
+<title>Correa v14.7</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -73,7 +73,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .tip strong{color:#1A1916;}
 
 /* APP */
-#app{display:none;grid-template-columns:200px 1fr;height:100vh;overflow:hidden;}
+#app{display:none;grid-template-columns:200px 1fr;height:100vh;}
 #app.show{display:grid;}
 .sb{background:#1A1916;padding:24px 0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;}
 .sb-logo{padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,.08);}
@@ -85,7 +85,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .sb-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);}
 .sb-item.active{background:rgba(255,255,255,.1);color:#fff;}
 .sb-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:10px;color:rgba(255,255,255,.16);font-family:"DM Mono",monospace;}
-.main{padding:28px 32px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.main{padding:28px 32px;overflow-y:auto;-webkit-overflow-scrolling:touch;height:100%;}
 .page{display:none;}.page.active{display:block;}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
 .ph-title{font-size:22px;font-weight:600;letter-spacing:-.03em;}
@@ -1335,10 +1335,16 @@ function startApp() {
   showPage("home");
   renderHome();
   renderCfgCats();
+  // Re-attach nav listeners after app starts
+  var bnCfg=document.getElementById("bn-config");
+  if(bnCfg){bnCfg.onclick=function(){showPage("config");}; }
+  var bnHm=document.getElementById("bn-home");
+  if(bnHm){bnHm.onclick=function(){showPage("home");}; }
 }
 
 //  NAV 
 function showPage(p) {
+  try {
   var pages = ["home", "ingresos", "config"];
   pages.forEach(function(pg) {
     var el = document.getElementById("pg-" + pg);
@@ -1357,6 +1363,7 @@ function showPage(p) {
   if (p === "config") renderCfgCats();
   if (p === "home") renderHome();
   if (p === "ingresos") renderIngresos();
+  } catch(e) { console.error("showPage error:", e); }
 }
 
 function chMonth(d) {
@@ -1368,6 +1375,11 @@ function chMonth(d) {
   showPage("home");
   renderHome();
   renderCfgCats();
+  // Re-attach nav listeners after app starts
+  var bnCfg=document.getElementById("bn-config");
+  if(bnCfg){bnCfg.onclick=function(){showPage("config");}; }
+  var bnHm=document.getElementById("bn-home");
+  if(bnHm){bnHm.onclick=function(){showPage("home");}; }
 }
 
 //  AI 
