@@ -264,7 +264,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 @media(max-width:768px){
   .sb{display:none !important;}
   #app{grid-template-columns:1fr !important;}
-  .main{padding:16px 16px calc(200px + env(safe-area-inset-bottom)) !important;padding-top:calc(16px + env(safe-area-inset-top)) !important;}
+  .main{padding:16px 16px calc(100px + env(safe-area-inset-bottom)) !important;padding-top:calc(16px + env(safe-area-inset-top)) !important;}
   .bottom-nav{display:flex !important;}
   .inp-ta{font-size:16px;}
   .metrics{grid-template-columns:1fr 1fr !important;}
@@ -456,12 +456,6 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <textarea class="inp-ta" id="ai-inp" placeholder="Ej: pague nafta $15.000..."></textarea>
         <div style="width:0.5px;height:16px;background:#E2DED6;flex-shrink:0"></div>
         <button id="manual-btn" title="Entrada manual" style="background:none;border:none;cursor:pointer;color:#A8A49E;font-size:20px;font-weight:300;padding:0 2px;line-height:1;flex-shrink:0">+</button>
-        <div style="width:0.5px;height:16px;background:#E2DED6;flex-shrink:0"></div>
-        <button id="send-btn" title="Enviar" style="background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#E8622A">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-          </svg>
-        </button>
       </div>
     </div><!-- FIN inp-card -->
 
@@ -1413,7 +1407,9 @@ async function procAudio(mime) {
     var wd = await wr.json();
     var txt = wd.text ? wd.text.trim() : "";
     if (!txt) { showToast("No se detecto audio"); return; }
-    document.getElementById("ai-inp").value = txt;
+    var aiInpEl = document.getElementById("ai-inp");
+    aiInpEl.disabled = false;
+    aiInpEl.value = txt;
     setVSt("proc","Analizando con Claude...");
     await sendAI();
   } catch(e) { showToast("Error: "+(e.message||"intenta de nuevo")); console.error(e); }
@@ -2578,9 +2574,10 @@ document.addEventListener("DOMContentLoaded",function(){
 
   // Input
   var aiInp=document.getElementById("ai-inp");
-  if(aiInp)aiInp.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendAI();}});
-  var sendBtn = document.getElementById("send-btn");
-  if(sendBtn) sendBtn.addEventListener("click", function(){ sendAI(); });
+  if(aiInp){
+    aiInp.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendAI();}});
+    aiInp.addEventListener("keyup",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();}});
+  }
   document.getElementById("mic-btn").addEventListener("click",function(){if(isRec)stopRec();else startRec();});
   document.getElementById("manual-btn").addEventListener("click",function(){openManualModal();});
 
