@@ -1,4 +1,4 @@
-const CACHE = "correa-v1";
+const CACHE = "correa-v2";
 const ASSETS = ["/", "/index.html"];
 
 self.addEventListener("install", function(e) {
@@ -20,18 +20,17 @@ self.addEventListener("activate", function(e) {
 });
 
 self.addEventListener("fetch", function(e) {
-  // Solo cachear GET, ignorar requests externos (APIs)
   if (e.request.method !== "GET") return;
   var url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
 
   e.respondWith(
-    caches.match(e.request).then(function(cached) {
-      var network = fetch(e.request).then(function(res) {
-        caches.open(CACHE).then(function(c) { c.put(e.request, res.clone()); });
-        return res;
-      });
-      return cached || network;
+    fetch(e.request).then(function(res) {
+      var clone = res.clone();
+      caches.open(CACHE).then(function(c) { c.put(e.request, clone); });
+      return res;
+    }).catch(function() {
+      return caches.match(e.request);
     })
   );
 });
