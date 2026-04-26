@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Correa v14.7</title>
+<title>Correa v14.8</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -2369,7 +2369,6 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("nav-config").addEventListener("click", function() { showPage("config"); });
 
   // Home buttons
-  document.getElementById("send-btn").addEventListener("click", function() { sendAI(); });
   var aiInp=document.getElementById("ai-inp");if(aiInp)aiInp.addEventListener("keydown", function(e) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendAI(); }
   });
