@@ -250,7 +250,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .drag-handle{display:none;flex-direction:column;gap:3px;cursor:grab;padding:4px;flex-shrink:0;}
 .drag-handle span{display:block;width:14px;height:2px;background:#CBC6BC;border-radius:1px;}
 .reorder-mode .drag-handle{display:none;}
-.reorder-mode .home-section{cursor:grab;animation:wiggle .35s ease-in-out infinite;transform-origin:center;}
+.reorder-mode .home-section{cursor:grab;animation:wiggle .35s ease-in-out infinite;transform-origin:center;user-select:none;-webkit-user-select:none;touch-action:none;}
+.reorder-mode *{user-select:none;-webkit-user-select:none;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 @keyframes arc-spin{0%{stroke-dashoffset:0;opacity:1}40%{stroke-dashoffset:-120;opacity:0.25}60%{stroke-dashoffset:-120;opacity:0.25}100%{stroke-dashoffset:0;opacity:1}}
 @keyframes wiggle{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}}
@@ -907,16 +908,90 @@ function exitReorderMode() {
 function initDragReorder() {
   var home = getHomeEl();
   if (!home) return;
+
   home.querySelectorAll(".home-section[data-section]").forEach(function(el) {
     var pressTimer = null;
-    function startPress() { pressTimer = setTimeout(function() { if (!reorderMode) enterReorderMode(); }, 600); }
+    var touchDragging = false;
+    var touchClone = null;
+    var touchOffX = 0, touchOffY = 0;
+
+    // Long press para entrar en modo reorder
+    function startPress(e) {
+      pressTimer = setTimeout(function() {
+        if (!reorderMode) enterReorderMode();
+      }, 600);
+    }
     function cancelPress() { clearTimeout(pressTimer); }
+
     el.addEventListener("mousedown", startPress);
     el.addEventListener("mouseup", cancelPress);
     el.addEventListener("mouseleave", cancelPress);
-    el.addEventListener("touchstart", startPress, {passive:true});
-    el.addEventListener("touchend", cancelPress);
-    el.addEventListener("touchcancel", cancelPress);
+
+    // Touch: long press + drag
+    el.addEventListener("touchstart", function(e) {
+      startPress(e);
+      var touch = e.touches[0];
+      var rect = el.getBoundingClientRect();
+      touchOffX = touch.clientX - rect.left;
+      touchOffY = touch.clientY - rect.top;
+    }, {passive:true});
+
+    el.addEventListener("touchmove", function(e) {
+      if (!reorderMode) { cancelPress(); return; }
+      e.preventDefault(); // evita scroll y selección de texto
+      if (!touchDragging) {
+        touchDragging = true;
+        draggedSection = el;
+        el.classList.add("dragging");
+        el.classList.remove("wiggling");
+        // Clonar para mostrar fantasma
+        touchClone = el.cloneNode(true);
+        touchClone.style.cssText = "position:fixed;opacity:.6;pointer-events:none;z-index:999;width:"+el.offsetWidth+"px;transform:scale(1.02);border-radius:16px;";
+        document.body.appendChild(touchClone);
+      }
+      var touch = e.touches[0];
+      if (touchClone) {
+        touchClone.style.left = (touch.clientX - touchOffX) + "px";
+        touchClone.style.top  = (touch.clientY - touchOffY) + "px";
+      }
+      // Encontrar el elemento debajo
+      var below = document.elementFromPoint(touch.clientX, touch.clientY);
+      var target = below ? below.closest(".home-section[data-section]") : null;
+      home.querySelectorAll(".home-section").forEach(function(s){ s.classList.remove("drag-over"); });
+      if (target && target !== el) target.classList.add("drag-over");
+    }, {passive:false});
+
+    el.addEventListener("touchend", function(e) {
+      cancelPress();
+      if (touchClone) { document.body.removeChild(touchClone); touchClone = null; }
+      if (!touchDragging) return;
+      touchDragging = false;
+      el.classList.remove("dragging");
+      var touch = e.changedTouches[0];
+      var below = document.elementFromPoint(touch.clientX, touch.clientY);
+      var target = below ? below.closest(".home-section[data-section]") : null;
+      home.querySelectorAll(".home-section").forEach(function(s){ s.classList.remove("drag-over"); });
+      if (target && target !== el) {
+        var els = Array.from(home.querySelectorAll(".home-section[data-section]"));
+        var fromIdx = els.indexOf(el);
+        var toIdx = els.indexOf(target);
+        if (fromIdx < toIdx) home.insertBefore(el, target.nextSibling);
+        else home.insertBefore(el, target);
+      }
+      draggedSection = null;
+      setTimeout(exitReorderMode, 200);
+    }, {passive:true});
+
+    el.addEventListener("touchcancel", function() {
+      cancelPress();
+      if (touchClone) { document.body.removeChild(touchClone); touchClone = null; }
+      touchDragging = false;
+      el.classList.remove("dragging");
+      draggedSection = null;
+      if (reorderMode) setTimeout(exitReorderMode, 200);
+    }, {passive:true});
+
+    // Mouse drag (desktop)
     el.addEventListener("dragstart", function(e) {
       if (!reorderMode) { e.preventDefault(); return; }
       draggedSection = el;
@@ -946,6 +1021,7 @@ function initDragReorder() {
       else home.insertBefore(draggedSection, el);
     });
   });
+
   document.addEventListener("click", function() { if (reorderMode) exitReorderMode(); });
   applySectionOrder();
 }
