@@ -105,9 +105,9 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .inp-row{display:flex;gap:10px;align-items:center;width:100%;}
 .inp-mic{height:28px;width:28px;border:none;background:none;color:#CBC6BC;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;padding:0;}
 .inp-mic:hover{color:#6B6760;}
-.inp-mic.rec{color:#fff;animation:mpulse 1s ease-in-out infinite;}.inp-mic.rec svg circle{stroke:#fff !important;}
-.inp-mic.proc{background:#F7F6F2;border-color:#E2DED6;cursor:default;}
-@keyframes mpulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);}50%{box-shadow:0 0 0 7px rgba(231,76,60,0);}}
+.inp-mic.rec{color:#E8622A;animation:mpulse 1s ease-in-out infinite;}
+.inp-mic.proc{color:#A8A49E;cursor:default;}
+@keyframes mpulse{0%,100%{filter:drop-shadow(0 0 0px #E8622A);}50%{filter:drop-shadow(0 0 6px #E8622A);}}
 .inp-ta{flex:1;padding:0;border:none;background:transparent;font-family:"DM Sans",sans-serif;font-size:14px;color:#1A1916;resize:none;height:28px;line-height:28px;overflow:hidden;outline:none;}
 .inp-ta::placeholder{color:#CBC6BC;font-size:14px;}
 .inp-send{height:36px;width:36px;padding:0;border:none;background:none;cursor:pointer;transition:all .15s;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
@@ -456,6 +456,12 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
         <textarea class="inp-ta" id="ai-inp" placeholder="Ej: pague nafta $15.000..."></textarea>
         <div style="width:0.5px;height:16px;background:#E2DED6;flex-shrink:0"></div>
         <button id="manual-btn" title="Entrada manual" style="background:none;border:none;cursor:pointer;color:#A8A49E;font-size:20px;font-weight:300;padding:0 2px;line-height:1;flex-shrink:0">+</button>
+        <div style="width:0.5px;height:16px;background:#E2DED6;flex-shrink:0"></div>
+        <button id="send-btn" title="Enviar" style="background:none;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#E8622A">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
       </div>
     </div><!-- FIN inp-card -->
 
@@ -2573,6 +2579,8 @@ document.addEventListener("DOMContentLoaded",function(){
   // Input
   var aiInp=document.getElementById("ai-inp");
   if(aiInp)aiInp.addEventListener("keydown",function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendAI();}});
+  var sendBtn = document.getElementById("send-btn");
+  if(sendBtn) sendBtn.addEventListener("click", function(){ sendAI(); });
   document.getElementById("mic-btn").addEventListener("click",function(){if(isRec)stopRec();else startRec();});
   document.getElementById("manual-btn").addEventListener("click",function(){openManualModal();});
 
