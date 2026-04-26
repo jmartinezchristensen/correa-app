@@ -1358,7 +1358,7 @@ async function sendAI() {
     var resp = await fetch("https://api.anthropic.com/v1/messages", {
       method:"POST",
       headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,system:buildPrompt(),messages:[{role:"user",content:text}]})
+      body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:300,system:buildPrompt(),messages:[{role:"user",content:text}]})
     });
     if (!resp.ok) { var err=await resp.json().catch(function(){return{};}); throw new Error(err.error?err.error.message:"Error "+resp.status); }
     var data = await resp.json();
@@ -1861,7 +1861,7 @@ async function genInsight() {
     var byCat={};gas.forEach(function(m){byCat[m.categoria]=(byCat[m.categoria]||0)+mARS2(m);});
     var top=Object.keys(byCat).sort(function(a,b){return byCat[b]-byCat[a];}).slice(0,3).map(function(k){return k+": "+fA(byCat[k]);}).join(", ");
     var ctx="Mes: "+MONTHS[curMonth.m]+" "+curMonth.y+". Gastos (ARS): "+fA(totG)+(totI>0?". Ingresos: "+fA(totI):"")+". Top: "+top+". TC: 1 USD="+iTC.usd+". Registros: "+movs.length+".";
-    var resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:200,system:"Sos el asistente financiero de un usuario argentino que usa Correa. Con los datos del mes, escribi 2-3 oraciones en espanol rioplatense, amigable y directo. Sin asteriscos ni markdown. Solo texto.",messages:[{role:"user",content:ctx}]})});
+    var resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:200,system:"Sos el asistente financiero de un usuario argentino que usa Correa. Con los datos del mes, escribi 2-3 oraciones en espanol rioplatense, amigable y directo. Sin asteriscos ni markdown. Solo texto.",messages:[{role:"user",content:ctx}]})});
     if(!resp.ok)throw new Error("Error al generar");
     var data=await resp.json();
     el.style.color="#1A1916";
