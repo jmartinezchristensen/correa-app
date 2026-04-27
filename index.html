@@ -2608,8 +2608,8 @@ async function renderStackedChart() {
   container.innerHTML = '<div style="text-align:center;color:#A8A49E;font-size:12px;padding:20px 0">Calculando...</div>';
 
   var all = ls("cr_m", {});
-  var allKeys = getStatsMonths();
-  var keys = allKeys.slice(-3); // últimos 3 meses
+  // Evolución siempre toma los últimos 3 meses del historial real
+  var keys = Object.keys(all).sort().slice(-3);
   if (!keys.length) {
     container.innerHTML = '<div style="text-align:center;color:#A8A49E;font-size:13px;padding:24px 0">Sin datos en este período.</div>';
     legEl.innerHTML = ""; return;
