@@ -94,6 +94,10 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .sb-foot{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08);font-size:10px;color:rgba(255,255,255,.16);font-family:"DM Mono",monospace;}
 .main{padding:28px 32px;overflow-y:auto;-webkit-overflow-scrolling:touch;height:100%;}
 .page{display:none;}.page.active{display:block;}
+.page.slide-in-left{animation:slideInLeft .25s ease;}
+.page.slide-in-right{animation:slideInRight .25s ease;}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(-30px);}to{opacity:1;transform:translateX(0);}}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
 .ph-title{font-size:22px;font-weight:600;letter-spacing:-.03em;}
 .ph-sub{font-size:13px;color:#6B6760;margin-top:2px;}
@@ -748,10 +752,10 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
   <div class="bn-item active" id="bn-home" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#E8622A;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
     <span style="font-size:18px">&#10022;</span><span>Inicio</span>
   </div>
-  <div class="bn-item" id="bn-stats" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#A8A49E;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
+  <div class="bn-item" id="bn-stats" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:rgba(255,255,255,.4);font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
     <span style="font-size:18px">&#128202;</span><span>Stats</span>
   </div>
-  <div class="bn-item" id="bn-config" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#A8A49E;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
+  <div class="bn-item" id="bn-config" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:rgba(255,255,255,.4);font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
     <span style="font-size:18px">&#9881;</span><span>Config</span>
   </div>
 </nav>
@@ -791,8 +795,8 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
     var cur = pages.find(function(p){ return document.getElementById("pg-"+p).classList.contains("active"); });
     if (!cur) return;
     var idx = pages.indexOf(cur);
-    if (dx < 0 && idx < pages.length-1) showPage(pages[idx+1]); // swipe izq → avanza
-    if (dx > 0 && idx > 0) showPage(pages[idx-1]); // swipe der → retrocede
+    if (dx < 0 && idx < pages.length-1) { showPage(pages[idx+1], "left"); }
+    if (dx > 0 && idx > 0) { showPage(pages[idx-1], "right"); }
   }, {passive:true});
 })();
 var MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
@@ -1454,11 +1458,18 @@ function startApp() {
 }
 
 // NAV
-function showPage(p) {
+function showPage(p, dir) {
   try {
     ["home","ingresos","config","stats"].forEach(function(pg) {
       var el = document.getElementById("pg-" + pg);
-      if (el) el.classList.toggle("active", pg === p);
+      if (el) {
+        el.classList.toggle("active", pg === p);
+        if (pg === p && dir) {
+          el.classList.remove("slide-in-left","slide-in-right");
+          void el.offsetWidth;
+          el.classList.add(dir==="left"?"slide-in-left":"slide-in-right");
+        }
+      }
     });
     ["home","ingresos","config","stats"].forEach(function(n) {
       var el = document.getElementById("nav-" + n);
@@ -2519,23 +2530,30 @@ function renderStatsMonthly() {
 var evoTab = "ing"; // "ing" | "eg"
 var statsCatFilter = null;
 
-function renderCatChips(allCats, catColors) {
+function renderCatChips(allCats, catColors, currentCatSet) {
   var el = document.getElementById("stats-cat-chips");
   if (!el) return;
-  // Inicializar filtro con todas activas si no existe o cambió el set de cats
-  if (!statsCatFilter) statsCatFilter = new Set(allCats);
+  var catsKey = currentCatSet || allCats.join(",");
+  if (!statsCatFilter || statsCatFilter._catsKey !== catsKey) {
+    statsCatFilter = new Set(allCats);
+    statsCatFilter._catsKey = catsKey;
+  }
 
   el.innerHTML = "";
 
-  // Botón "Todas" / "Ninguna"
-  var allActive = statsCatFilter.size === allCats.length;
+  var allActive = allCats.every(function(c){ return statsCatFilter.has(c); });
   var tog = document.createElement("button");
   tog.textContent = allActive ? "Deseleccionar todas" : "Seleccionar todas";
   tog.style.cssText = "font-size:10px;font-weight:600;padding:3px 9px;border-radius:12px;border:1px solid #E2DED6;background:#fff;color:#6B6760;cursor:pointer;font-family:DM Sans,sans-serif;white-space:nowrap";
   tog.addEventListener("click", async function(){
-    if (statsCatFilter.size === allCats.length) statsCatFilter = new Set();
-    else statsCatFilter = new Set(allCats);
-    renderCatChips(allCats, catColors);
+    var allActive = allCats.every(function(c){ return statsCatFilter.has(c); });
+    if (allActive) {
+      statsCatFilter = new Set();
+    } else {
+      statsCatFilter = new Set(allCats);
+    }
+    statsCatFilter._catsKey = currentCatSet;
+    renderCatChips(allCats, catColors, currentCatSet);
     await renderStackedChart();
   });
   el.appendChild(tog);
@@ -2551,7 +2569,7 @@ function renderCatChips(allCats, catColors) {
     chip.addEventListener("click", async function(){
       if (statsCatFilter.has(cat)) statsCatFilter.delete(cat);
       else statsCatFilter.add(cat);
-      renderCatChips(allCats, catColors);
+      renderCatChips(allCats, catColors, currentCatSet);
       await renderStackedChart();
     });
     el.appendChild(chip);
@@ -2655,7 +2673,7 @@ async function renderStackedChart() {
     statsCatFilter = new Set(allCats);
     statsCatFilter._catsKey = currentCatSet;
   }
-  renderCatChips(allCats, catColors);
+  renderCatChips(allCats, catColors, currentCatSet);
 
   // Aplicar filtro
   var visibleCats = allCats.filter(function(c){ return statsCatFilter.has(c); });
