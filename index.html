@@ -260,7 +260,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 /* Bottom nav (mobile) */
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#1A1916;padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:100;justify-content:space-around;align-items:center;border-top:1px solid rgba(255,255,255,.08);}
 .bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 16px;border-radius:8px;color:rgba(255,255,255,.4);transition:color .15s;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;user-select:none;}
-.bn-item.active{color:#fff;}
+.bn-item.active{color:#E8622A;}
 .bn-icon{font-size:18px;line-height:1;}
 @media(max-width:768px){
   .sb{display:none !important;}
@@ -745,7 +745,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 </div><!-- FIN #app -->
 
 <nav id="bottom-nav" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#1A1916;padding:10px 0 calc(10px + env(safe-area-inset-bottom));z-index:100;justify-content:space-around;align-items:center;border-top:1px solid #333">
-  <div class="bn-item active" id="bn-home" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#fff;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
+  <div class="bn-item active" id="bn-home" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#E8622A;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
     <span style="font-size:18px">&#10022;</span><span>Inicio</span>
   </div>
   <div class="bn-item" id="bn-stats" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#A8A49E;font-size:10px;font-weight:500;letter-spacing:.04em;padding:4px 16px">
@@ -775,7 +775,26 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 <script>
 (function() {
 
-// CONSTANTS
+// Swipe entre páginas
+(function(){
+  var pages = ["home","stats","config"];
+  var touchStartX = 0, touchStartY = 0;
+  var THRESHOLD = 60, MAX_Y = 80;
+  document.addEventListener("touchstart", function(e){
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener("touchend", function(e){
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (Math.abs(dx) < THRESHOLD || dy > MAX_Y) return;
+    var cur = pages.find(function(p){ return document.getElementById("pg-"+p).classList.contains("active"); });
+    if (!cur) return;
+    var idx = pages.indexOf(cur);
+    if (dx < 0 && idx < pages.length-1) showPage(pages[idx+1]); // swipe izq → avanza
+    if (dx > 0 && idx > 0) showPage(pages[idx-1]); // swipe der → retrocede
+  }, {passive:true});
+})();
 var MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 var CAT_COLORS = ["#378ADD","#7F77DD","#EF9F27","#2D6A4F","#D4537E","#D85A30","#1D9E75","#888780","#0E6655","#9B2335","#4A235A","#7D4E24","#185FA5","#3B6D11"];
 
@@ -1186,6 +1205,52 @@ function mk() { return curMonth.y + "-" + String(curMonth.m + 1).padStart(2, "0"
 function gAllM() { return ls("cr_m", {}); }
 function gMonthM() { return gAllM()[mk()] || []; }
 function sMonthM(a) { var all = gAllM(); all[mk()] = a; ss("cr_m", all); }
+function keyFromFecha(fecha) {
+  if (!fecha) return mk();
+  var p = fecha.split("-");
+  return p[0] + "-" + p[1];
+}
+function addMovToCorrectMonth(mov) {
+  var all = gAllM();
+  var key = keyFromFecha(mov.fecha);
+  if (!all[key]) all[key] = [];
+  all[key].push(mov);
+  ss("cr_m", all);
+}
+function removeMovFromMonth(id) {
+  var all = gAllM();
+  Object.keys(all).forEach(function(k){
+    all[k] = (all[k]||[]).filter(function(m){ return String(m.id) !== String(id); });
+  });
+  ss("cr_m", all);
+}
+function updateMovInMonth(id, updated) {
+  var all = gAllM();
+  // Buscar en todos los meses
+  var found = false;
+  Object.keys(all).forEach(function(k){
+    var idx = (all[k]||[]).findIndex(function(m){ return String(m.id) === String(id); });
+    if (idx >= 0) {
+      // Si cambió la fecha y por ende el mes, mover al mes correcto
+      var newKey = keyFromFecha(updated.fecha);
+      if (newKey !== k) {
+        all[k].splice(idx, 1);
+        if (!all[newKey]) all[newKey] = [];
+        all[newKey].push(updated);
+      } else {
+        all[k][idx] = updated;
+      }
+      found = true;
+    }
+  });
+  if (!found) {
+    // Si no lo encuentra, agregar en el mes correcto
+    var key = keyFromFecha(updated.fecha);
+    if (!all[key]) all[key] = [];
+    all[key].push(updated);
+  }
+  ss("cr_m", all);
+}
 
 // UTILS
 function fA(n) { return "$" + Math.round(n).toLocaleString("es-AR"); }
@@ -1399,7 +1464,7 @@ function showPage(p) {
       var el = document.getElementById("nav-" + n);
       if (el) el.classList.toggle("active", n === p);
       var bnEl = document.getElementById("bn-" + n);
-      if (bnEl) { bnEl.classList.toggle("active", n === p); bnEl.style.color = (n===p)?"#fff":"#A8A49E"; }
+      if (bnEl) { bnEl.classList.toggle("active", n === p); bnEl.style.color = (n===p)?"#E8622A":"rgba(255,255,255,.4)"; }
     });
     var main = document.querySelector(".main");
     if (main) main.scrollTop = 0;
@@ -1609,6 +1674,11 @@ async function confirmMov() {
     var tcUsado = p.cur!=="USD" ? Math.round(p.monto/usdVal) : null;
     var mov = {id:Date.now(),tipo:p.tipo,fecha:p.fecha,categoria:p.categoria,subcategoria:p.subcategoria,cur:p.cur,monto:p.monto,usd:usdVal,tc_usado:tcUsado,mp:p.mp||null,inputOriginal:p.inputOriginal,referencia:p.inputOriginal};
     var arr=gMonthM(); arr.push(mov); sMonthM(arr);
+    // Mover al mes correcto si la fecha no coincide con el mes activo
+    if (keyFromFecha(mov.fecha) !== mk()) {
+      sMonthM(gMonthM().filter(function(m){ return String(m.id) !== String(mov.id); }));
+      addMovToCorrectMonth(mov);
+    }
     cancelConf(); document.getElementById("ai-inp").value="";
     renderHome(); showToast("Registrado \u2713");
   } catch(e) { showToast("Error al guardar"); console.error(e); }
@@ -1675,7 +1745,9 @@ function renderRecentList() {
 }
 
 function openEditModal(id) {
-  var movs=gMonthM(),m=movs.find(function(x){return String(x.id)===String(id);});
+  var all=gAllM();
+  var m=null;
+  Object.keys(all).forEach(function(k){ var found=(all[k]||[]).find(function(x){return String(x.id)===String(id);}); if(found)m=found; });
   if(!m)return; editingMovId=id;
   var cats=gCats()||[],ingCats=gIngCats()||[];
   var aC=m.tipo==="ingreso"?ingCats:cats;
@@ -1710,22 +1782,31 @@ function saveEditModal(){
     var tipoEl=document.getElementById("em-tipo");
     var newMov={id:Date.now(),tipo:tipoEl?tipoEl.value:"gasto",categoria:document.getElementById("em-cat").value||"Sin categoria",subcategoria:document.getElementById("em-sub").value||"General",monto:parseFloat(document.getElementById("em-monto").value)||0,cur:editingCur,fecha:document.getElementById("em-fecha").value,referencia:(document.getElementById("em-ref")||{}).value||"",inputOriginal:(document.getElementById("em-ref")||{}).value||"",mp:null,usd:0,tc_usado:0};
     if(editingCur!=="ARS"){newMov.usd=newMov.monto;newMov.monto=Math.round(newMov.monto*(gTC().usd||1));}
-    var arr=gMonthM();arr.push(newMov);sMonthM(arr);
+    addMovToCorrectMonth(newMov);
     closeEditModal();renderHome();showToast("Guardado \u2713");return;
   }
-  var movs=gMonthM();
-  var i=movs.findIndex(function(x){return String(x.id)===String(editingMovId);});if(i<0)return;
-  movs[i].categoria=document.getElementById("em-cat").value;
-  movs[i].subcategoria=document.getElementById("em-sub").value;
-  movs[i].monto=parseFloat(document.getElementById("em-monto").value)||movs[i].monto;
-  movs[i].cur=editingCur;
-  movs[i].fecha=document.getElementById("em-fecha").value;
-  movs[i].referencia=(document.getElementById("em-ref")||{}).value||"";
-  sMonthM(movs);closeEditModal();renderHome();showToast("Guardado \u2713");
+  // Edición de existente — buscar en todos los meses
+  var all=gAllM();
+  var found=false;
+  Object.keys(all).forEach(function(k){
+    var idx=(all[k]||[]).findIndex(function(x){return String(x.id)===String(editingMovId);});
+    if(idx>=0){
+      var updated=Object.assign({},all[k][idx]);
+      updated.categoria=document.getElementById("em-cat").value;
+      updated.subcategoria=document.getElementById("em-sub").value;
+      updated.monto=parseFloat(document.getElementById("em-monto").value)||updated.monto;
+      updated.cur=editingCur;
+      updated.fecha=document.getElementById("em-fecha").value;
+      updated.referencia=(document.getElementById("em-ref")||{}).value||"";
+      updateMovInMonth(editingMovId, updated);
+      found=true;
+    }
+  });
+  closeEditModal();renderHome();showToast("Guardado \u2713");
 }
 function deleteMovFromModal(){
   if(!editingMovId)return;
-  sMonthM(gMonthM().filter(function(x){return String(x.id)!==String(editingMovId);}));
+  removeMovFromMonth(editingMovId);
   closeEditModal();renderHome();showToast("Eliminado");
 }
 
