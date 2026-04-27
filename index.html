@@ -98,8 +98,6 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .page.slide-in-right{animation:slideInRight .25s ease;}
 @keyframes slideInLeft{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:translateX(0);}}
 @keyframes slideInRight{from{opacity:0;transform:translateX(-30px);}to{opacity:1;transform:translateX(0);}}
-/* Swipe drag-to-reveal */
-.main{will-change:transform;position:relative;overflow:hidden;}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
 .ph-title{font-size:22px;font-weight:600;letter-spacing:-.03em;}
 .ph-sub{font-size:13px;color:#6B6760;margin-top:2px;}
@@ -783,123 +781,24 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 <script>
 (function() {
 
-// Swipe estilo stack de cartas — la página actual se desliza, la siguiente ya está debajo
+// Swipe entre páginas
 (function(){
   var pages = ["home","stats","config"];
   var touchStartX = 0, touchStartY = 0;
-  var dragging = false;
-  var direction = 0;
-  var nextPage = null;
-  var curEl = null;
-  var W = 0;
-  var lockAxis = false;
-
-  function getCur(){ return pages.find(function(p){ var el=document.getElementById("pg-"+p); return el&&el.classList.contains("active"); }); }
-
+  var THRESHOLD = 40, MAX_Y = 80;
   document.addEventListener("touchstart", function(e){
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
-    dragging = false; lockAxis = false; direction = 0; nextPage = null; curEl = null;
-    W = window.innerWidth;
   }, {passive:true});
-
-  document.addEventListener("touchmove", function(e){
-    var dx = e.touches[0].clientX - touchStartX;
-    var dy = e.touches[0].clientY - touchStartY;
-
-    if (!lockAxis) {
-      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
-      // Si el movimiento es más vertical, ignorar completamente
-      if (Math.abs(dy) > Math.abs(dx)) { lockAxis = true; direction = 0; return; }
-      lockAxis = true;
-    }
-    if (direction === 0 && lockAxis && Math.abs(dy) > Math.abs(dx)) return;
-
-    if (!dragging) {
-      var cur = getCur();
-      var curIdx = pages.indexOf(cur);
-      var d = dx < 0 ? -1 : 1;
-      var targetIdx = curIdx - d; // izq = avanza, der = retrocede
-      if (targetIdx < 0 || targetIdx >= pages.length) return;
-
-      dragging = true;
-      direction = d;
-      nextPage = pages[targetIdx];
-      curEl = document.getElementById("pg-"+cur);
-
-      // Mostrar la página destino debajo (sin moverla)
-      var nextEl = document.getElementById("pg-"+nextPage);
-      if (nextEl) {
-        nextEl.style.display = "block";
-        nextEl.style.position = "absolute";
-        nextEl.style.top = "0"; nextEl.style.left = "0";
-        nextEl.style.width = "100%"; nextEl.style.zIndex = "0";
-        nextEl.style.transform = "";
-      }
-      // La página actual encima
-      if (curEl) {
-        curEl.style.position = "relative";
-        curEl.style.zIndex = "2";
-        curEl.style.transition = "none";
-        curEl.style.boxShadow = "-4px 0 20px rgba(0,0,0,.15)";
-      }
-    }
-
-    if (!dragging || !curEl) return;
-
-    // Solo mover en la dirección válida
-    var clampedDx = direction === 1 ? Math.max(0, dx) : Math.min(0, dx);
-    curEl.style.transform = "translateX("+clampedDx+"px)";
-  }, {passive:true});
-
   document.addEventListener("touchend", function(e){
-    if (!dragging || !curEl) { dragging = false; return; }
     var dx = e.changedTouches[0].clientX - touchStartX;
-    var threshold = W * 0.3;
-    var shouldSwitch = Math.abs(dx) > threshold;
-
-    curEl.style.transition = "transform .28s cubic-bezier(.25,.46,.45,.94), box-shadow .28s";
-
-    var nextEl = nextPage ? document.getElementById("pg-"+nextPage) : null;
-
-    function cleanup(switched) {
-      setTimeout(function(){
-        if (curEl) {
-          curEl.style.transform = "";
-          curEl.style.transition = "";
-          curEl.style.position = "";
-          curEl.style.zIndex = "";
-          curEl.style.boxShadow = "";
-        }
-        if (nextEl) {
-          nextEl.style.display = "";
-          nextEl.style.position = "";
-          nextEl.style.top = ""; nextEl.style.left = "";
-          nextEl.style.width = ""; nextEl.style.zIndex = "";
-        }
-        if (switched) showPage(nextPage);
-        dragging = false; nextPage = null; curEl = null;
-      }, 280);
-    }
-
-    if (shouldSwitch) {
-      curEl.style.transform = "translateX("+(direction === 1 ? W : -W)+"px)";
-      curEl.style.boxShadow = "none";
-      cleanup(true);
-    } else {
-      curEl.style.transform = "translateX(0)";
-      cleanup(false);
-    }
-  }, {passive:true});
-
-  document.addEventListener("touchcancel", function(){
-    if (curEl) { curEl.style.transform="translateX(0)"; curEl.style.transition="transform .2s"; }
-    setTimeout(function(){
-      if(curEl){curEl.style.transform="";curEl.style.transition="";curEl.style.position="";curEl.style.zIndex="";curEl.style.boxShadow="";}
-      var nextEl=nextPage?document.getElementById("pg-"+nextPage):null;
-      if(nextEl){nextEl.style.display="";nextEl.style.position="";nextEl.style.top="";nextEl.style.left="";nextEl.style.width="";nextEl.style.zIndex="";}
-      dragging=false;nextPage=null;curEl=null;
-    },200);
+    var dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (Math.abs(dx) < THRESHOLD || dy > MAX_Y) return;
+    var cur = pages.find(function(p){ return document.getElementById("pg-"+p).classList.contains("active"); });
+    if (!cur) return;
+    var idx = pages.indexOf(cur);
+    if (dx < 0 && idx < pages.length-1) { showPage(pages[idx+1], "left"); }
+    if (dx > 0 && idx > 0) { showPage(pages[idx-1], "right"); }
   }, {passive:true});
 })();
 var MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
