@@ -12,12 +12,14 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="apple-touch-icon" href="/icon-192.png">
 <title>Correa</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body.app-active{overflow:hidden;height:100%;}
 html.app-active{overflow:hidden;height:100%;}
-body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
+body{font-family:"Inter",sans-serif;background:#F7F6F2;color:#1A1916;font-size:14px;line-height:1.5;min-height:100vh;}
+/* Stats y Config mantienen DM Sans */
+#pg-stats,#pg-config{font-family:"DM Sans",sans-serif;}
 
 
 /* ONBOARDING */
@@ -156,14 +158,16 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
 /* Breakdown */
 .bdown{background:#fff;border:none;border-radius:20px;box-shadow:0 1px 8px rgba(0,0,0,.06);overflow:hidden;margin-bottom:20px;}
-.bd-hdr{padding:12px 16px;border-bottom:1px solid #E2DED6;display:flex;justify-content:space-between;align-items:center;min-height:44px;}
-.bd-hl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
+.bd-hdr{padding:16px 20px 12px;border-bottom:none;display:flex;justify-content:space-between;align-items:center;min-height:44px;}
+.bd-hl{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#1A1916;font-family:Inter,sans-serif;}
 .bd-mth{font-size:13px;font-weight:600;color:#1A1916;display:flex;align-items:center;gap:8px;}
 .mbtn{background:none;border:1px solid #E2DED6;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:12px;color:#6B6760;font-family:"DM Sans",sans-serif;}
 .mbtn:hover{border-color:#1A1916;color:#1A1916;}
-.bd-row{display:flex;align-items:flex-start;gap:12px;padding:13px 16px;cursor:pointer;transition:background .15s;border-bottom:1px solid #E2DED6;}
+.bd-row{display:flex;align-items:flex-start;gap:12px;padding:16px 20px;cursor:pointer;transition:background .15s;}
+.bd-row .bd-info{border-bottom:0.5px solid #F0EEE8;padding-bottom:16px;margin-bottom:-16px;}
+.bd-row:last-child .bd-info{border-bottom:none;padding-bottom:0;margin-bottom:0;}
 .bd-row:hover{background:#F7F6F2;}
-.bd-em{font-size:22px;flex-shrink:0;width:32px;text-align:center;padding-top:1px;;align-self:center}
+.bd-em{font-size:22px;flex-shrink:0;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;align-self:center;}
 .bd-info{flex:1;min-width:0;}
 .bd-name{font-size:13px;font-weight:500;color:#1A1916;}
 .bd-bar-wrap{height:6px;background:#F0EEE8;border-radius:4px;margin-top:6px;width:100%;}
@@ -185,13 +189,15 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 
 /* Recent */
 .recent{background:#fff;border:none;border-radius:20px;box-shadow:0 1px 8px rgba(0,0,0,.06);overflow:hidden;margin-bottom:16px;}
-.rc-hdr{padding:12px 16px;border-bottom:1px solid #E2DED6;min-height:44px;display:flex;align-items:center;}
-.rc-hdr span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#A8A49E;}
-.mv-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #E2DED6;}
+.rc-hdr{padding:16px 20px 12px;border-bottom:none;min-height:44px;display:flex;align-items:center;}
+.rc-hdr span{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#1A1916;font-family:Inter,sans-serif;}
+.mv-row{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;}
 .mv-row:last-child{border-bottom:none;}
+.recent .mv-row{position:relative;}
+.recent .mv-row + .mv-row::before{content:'';position:absolute;top:0;left:calc(20px + 42px + 10px);right:0;height:0.5px;background:#F0EEE8;}
 .mv-row:hover{background:#F7F6F2;}
-.mv-l{display:flex;align-items:center;gap:10px;}
-.mv-em{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
+.mv-l{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.mv-em{font-size:22px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .mv-cat{font-size:13px;font-weight:500;color:#1A1916;}
 .mv-note{font-size:11px;color:#A8A49E;}
 .mv-r{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0;min-width:90px;text-align:right;}
@@ -201,7 +207,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
 .rc-filter-txt{font-size:11px;font-weight:400;border:none;background:none;box-shadow:none;color:#A8A49E;cursor:pointer;font-family:"DM Sans",sans-serif;padding:0;margin:0;line-height:1;-webkit-appearance:none;}
 .rc-filter-txt:hover{color:#6B6760;}
 .rc-filter-txt.active{font-weight:700;color:#1A1916;}
-.day-group-hdr{padding:8px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#A8A49E;background:#F7F6F2;border-bottom:1px solid #E2DED6;}
+.day-group-hdr{padding:8px 20px 6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#A8A49E;background:#F7F6F2;border-bottom:0.5px solid #F0EEE8;font-family:Inter,sans-serif;}
 
 /* Insight */
 .insight{background:#fff;border:none;border-radius:20px;box-shadow:0 1px 8px rgba(0,0,0,.06);padding:16px 20px;margin-bottom:16px;}
@@ -449,17 +455,15 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
   <div id="pg-home" class="page active">
 
     <!-- FIX 1: inp-card es solo el input, conf-card va AFUERA -->
-    <!-- Header Correa -->
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:4px 0">
-      <div style="width:32px;height:32px;flex-shrink:0;position:relative">
-        <svg viewBox="0 0 120 120" width="32" height="32">
-          <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
-          <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.6"/>
-          <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" opacity="0.35"/>
-          <circle cx="60" cy="66" r="4" fill="#E8622A"/>
-        </svg>
-      </div>
-      <span style="font-size:22px;font-weight:600;letter-spacing:-.04em;color:#1A1916">Correa</span>
+    <!-- Header Correa — sharp -->
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:20px;padding:6px 0 0">
+      <svg viewBox="0 0 120 120" width="28" height="28">
+        <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)"/>
+        <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0.55"/>
+        <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" opacity="0.3"/>
+        <circle cx="60" cy="66" r="4" fill="#E8622A"/>
+      </svg>
+      <span style="font-size:20px;font-weight:700;letter-spacing:-.05em;color:#1A1916;font-family:Inter,sans-serif">Correa</span>
     </div>
 
     <div class="inp-card" id="wt-input">
@@ -492,44 +496,43 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
     </div>
 
     <!-- FIX 2: DASHBOARD CARD — estructura limpia y bien cerrada -->
-    <div class="bdown" id="home-metrics" style="margin-bottom:20px">
-      <div style="padding:16px">
-        <!-- Fila 1: mes + flechas + toggles -->
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
-          <div style="display:flex;align-items:center;gap:3px">
-            <span style="font-size:20px;font-weight:700;letter-spacing:.01em;text-transform:uppercase;color:#1A1916" id="dash-mes-lbl">ABRIL 2026</span>
-            <button id="btn-prev-month" style="background:none;border:none;color:#1A1916;font-size:22px;cursor:pointer;padding:0 2px;line-height:1;display:flex;align-items:center;margin-bottom:3px">&#8249;</button>
-            <button id="btn-next-month" style="background:none;border:none;color:#1A1916;font-size:22px;cursor:pointer;padding:0 2px;line-height:1;display:flex;align-items:center;margin-bottom:3px">&#8250;</button>
+    <div class="bdown" id="home-metrics" style="margin-bottom:20px;border-radius:24px">
+      <div style="padding:20px">
+        <!-- Mes + controles -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <div style="display:flex;align-items:center;gap:2px">
+            <button id="btn-prev-month" style="background:none;border:none;color:#C4BFB8;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;display:flex;align-items:center">&#8249;</button>
+            <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;font-family:Inter,sans-serif" id="dash-mes-lbl">ABRIL 2026</span>
+            <button id="btn-next-month" style="background:none;border:none;color:#C4BFB8;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;display:flex;align-items:center">&#8250;</button>
           </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <button id="eye-btn" title="Mostrar/ocultar montos" style="background:none;border:none;cursor:pointer;color:#A8A49E;padding:0;display:flex;align-items:center">
-              <svg id="eye-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <div style="display:flex;align-items:center;gap:10px">
+            <button id="eye-btn" title="Mostrar/ocultar montos" style="background:none;border:none;cursor:pointer;color:#C4BFB8;padding:0;display:flex;align-items:center">
+              <svg id="eye-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
             </button>
             <div style="display:flex;background:#F0EEE8;border-radius:16px;padding:2px;gap:2px;flex-shrink:0">
-              <button id="cur-ars" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:DM Sans,sans-serif">ARS</button>
-              <button id="cur-usd" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:DM Sans,sans-serif">USD</button>
+              <button id="cur-ars" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:#1A1916;color:#fff;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.03em">ARS</button>
+              <button id="cur-usd" style="font-size:11px;font-weight:700;padding:4px 11px;border-radius:14px;border:none;background:transparent;color:#A8A49E;cursor:pointer;font-family:Inter,sans-serif;letter-spacing:.03em">USD</button>
             </div>
           </div>
         </div>
-        <!-- Ingresos -->
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:13px;color:#A8A49E">Ingresos</span>
-          <span style="font-size:20px;font-weight:500;font-family:DM Mono,monospace;letter-spacing:-.02em;color:#2D6A4F" id="hm-ing">$0</span>
+        <!-- Ingresos + Egresos en grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+          <div style="background:#F7F6F2;border-radius:16px;padding:14px">
+            <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#A8A49E;margin-bottom:6px;font-family:Inter,sans-serif">Ingresos</div>
+            <div style="font-size:22px;font-weight:600;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#2D6A4F;line-height:1" id="hm-ing">$0</div>
+          </div>
+          <div style="background:#F7F6F2;border-radius:16px;padding:14px">
+            <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#A8A49E;margin-bottom:6px;font-family:Inter,sans-serif">Egresos</div>
+            <div style="font-size:22px;font-weight:600;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#9B2335;line-height:1" id="hm-eg">$0</div>
+          </div>
         </div>
-        <!-- Egresos -->
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px">
-          <span style="font-size:13px;color:#A8A49E">Egresos</span>
-          <span style="font-size:20px;font-weight:500;font-family:DM Mono,monospace;letter-spacing:-.02em;color:#9B2335" id="hm-eg">$0</span>
-        </div>
-        <!-- Divider -->
-        <div style="height:1px;background:#E2DED6;margin-bottom:10px"></div>
-        <!-- Resultado -->
-        <div style="display:flex;align-items:baseline;justify-content:space-between">
-          <span style="font-size:13px;font-weight:600;color:#1A1916">Resultado</span>
-          <span style="font-size:20px;font-weight:500;font-family:DM Mono,monospace;letter-spacing:-.02em;color:#1A1916" id="dash-resultado">$0</span>
+        <!-- Resultado destacado en su propio box -->
+        <div style="background:#F7F6F2;border-radius:16px;padding:14px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;font-family:Inter,sans-serif">Resultado</span>
+          <span style="font-size:26px;font-weight:700;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#1A1916" id="dash-resultado">$0</span>
         </div>
       </div>
     </div><!-- FIN home-metrics -->
@@ -791,7 +794,7 @@ body{font-family:"DM Sans",sans-serif;background:#F7F6F2;color:#1A1916;font-size
       <button id="qm-close" style="background:none;border:none;font-size:22px;color:#A8A49E;cursor:pointer;line-height:1;flex-shrink:0;margin-left:8px">&times;</button>
     </div>
     <!-- Contenido del paso actual -->
-    <div id="qm-content" style="padding:16px 20px 32px;min-height:280px"></div>
+    <div id="qm-content" style="padding:16px 20px 20px;min-height:200px"></div>
   </div>
 </div>
 
@@ -1111,7 +1114,7 @@ function isHidden(box) { return amountsHidden || hiddenBoxes[box]; }
 var qm = { tipo:null, cat:null, sub:null, monto:"", cur:"ARS", ref:"", fecha: new Date().toISOString().split("T")[0] };
 
 function openManualModal() {
-  qm = { tipo:null, cat:null, sub:null, monto:"", cur:"ARS", ref:"" };
+  qm = { tipo:null, cat:null, sub:null, monto:"", cur:"ARS", ref:"", fecha: new Date().toISOString().split("T")[0] };
   var modal = document.getElementById("quick-modal");
   modal.style.display = "flex";
   modal.style.pointerEvents = "auto";
@@ -1131,7 +1134,7 @@ function qmBreadcrumb() {
   bc.innerHTML = items.map(function(it,i){
     return '<span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:8px;background:#F0EEE8;color:#6B6760;cursor:pointer" data-step="'+it.step+'">'+it.lbl+'</span>'
       + (i<items.length-1 ? '<span style="font-size:11px;color:#CBC6BC">›</span>' : '');
-  }).join("") || '<span style="font-size:12px;color:#A8A49E">Nuevo registro</span>';
+  }).join("") || '<span style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#1A1916">NUEVO REGISTRO</span>';
   bc.querySelectorAll("[data-step]").forEach(function(el){
     el.addEventListener("click", function(){
       var s = parseInt(el.dataset.step);
@@ -1151,16 +1154,14 @@ function qmRenderStep() {
   qmStep4(content);
 }
 function qmStep1(el) {
-  el.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">'
-    + '<button id="qm-btn-ing" style="background:#D8F3DC;border:none;border-radius:18px;padding:28px 16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px">'
-    +   '<span style="font-size:40px;line-height:1;color:#2D6A4F;font-weight:300">+</span>'
-    +   '<span style="font-size:15px;font-weight:700;color:#1A4A2E">Ingreso</span>'
-    +   '<span style="font-size:11px;color:#2D6A4F;opacity:.7">Entra plata</span>'
+  el.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;height:calc(100% - 8px)">'
+    + '<button id="qm-btn-ing" style="background:#2D6A4F;border:none;border-radius:20px;padding:28px 16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;flex:1;min-height:150px">'
+    +   '<span style="font-size:42px;color:#fff;font-weight:200;line-height:1">+</span>'
+    +   '<span style="font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff">INGRESO</span>'
     + '</button>'
-    + '<button id="qm-btn-eg" style="background:#FCE4E8;border:none;border-radius:18px;padding:28px 16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px">'
-    +   '<span style="font-size:40px;line-height:1;color:#9B2335;font-weight:300">−</span>'
-    +   '<span style="font-size:15px;font-weight:700;color:#6B1520">Egreso</span>'
-    +   '<span style="font-size:11px;color:#9B2335;opacity:.7">Sale plata</span>'
+    + '<button id="qm-btn-eg" style="background:#9B2335;border:none;border-radius:20px;padding:28px 16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;flex:1;min-height:150px">'
+    +   '<span style="font-size:42px;color:#fff;font-weight:200;line-height:1">−</span>'
+    +   '<span style="font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff">EGRESO</span>'
     + '</button>'
     + '</div>';
   el.querySelector("#qm-btn-ing").addEventListener("click", function(){ qm.tipo="ingreso"; qmRenderStep(); });
@@ -1171,8 +1172,9 @@ function qmStep2(el) {
   cats = cats.slice().sort(function(a,b){return a.nom.localeCompare(b.nom,"es");});
   var html = '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px">';
   cats.forEach(function(c){
-    html += '<button data-cat="'+encodeURIComponent(c.nom)+'" data-em="'+encodeURIComponent(c.em||"")+'" style="background:#fff;border:0.5px solid #E2DED6;border-radius:14px;padding:14px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px">'
-      + '<span style="font-size:26px;line-height:1">'+c.em+'</span>'
+    var bg = getCatBgColor(c.nom);
+    html += '<button data-cat="'+encodeURIComponent(c.nom)+'" data-em="'+encodeURIComponent(c.em||"")+'" style="background:#fff;border:0.5px solid #E2DED6;border-radius:14px;padding:14px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px">'
+      + '<div style="width:48px;height:48px;border-radius:50%;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:24px;line-height:1">'+c.em+'</div>'
       + '<span style="font-size:11px;font-weight:600;color:#1A1916;text-align:center;line-height:1.2">'+c.nom+'</span>'
       + '</button>';
   });
@@ -1215,7 +1217,7 @@ function qmStep4(el) {
     +   '</div>'
     + '</div>'
     + '</div>'
-    + '<input id="qm-fecha" type="date" value="'+qm.fecha+'" style="width:100%;border:0.5px solid #E2DED6;border-radius:10px;padding:10px 14px;font-size:13px;color:#1A1916;background:#fff;margin-bottom:8px;font-family:DM Sans,sans-serif;outline:none">'
+    + '<input id="qm-fecha" type="date" value="'+qm.fecha+'" style="width:100%;border:0.5px solid #E2DED6;border-radius:10px;padding:10px 14px;font-size:13px;color:#1A1916;background:#fff;margin-bottom:8px;font-family:DM Sans,sans-serif;outline:none;text-align:center">'
     + '<input id="qm-ref" type="text" placeholder="Referencia (opcional)" value="'+qm.ref+'" style="width:100%;border:0.5px solid #E2DED6;border-radius:10px;padding:10px 14px;font-size:13px;color:#1A1916;background:#fff;margin-bottom:12px;font-family:DM Sans,sans-serif;outline:none">'
     + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">'
     + ['1','2','3','4','5','6','7','8','9','⌫','0','✓'].map(function(k){
@@ -1767,7 +1769,7 @@ function showConf(p) {
     var preview = document.createElement("div");
     preview.style.cssText = "background:"+(isIng?"#D8F3DC":"#FCE4E8")+";border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;grid-column:1/-1";
     preview.innerHTML =
-      '<div style="font-size:40px;margin-bottom:8px">'+catEm+'</div>'+
+      '<div style="width:64px;height:64px;border-radius:50%;background:'+getCatBgColor(p.categoria)+';display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 8px">'+catEm+'</div>'+
       '<div style="font-size:22px;font-weight:700;font-family:DM Mono,monospace;color:'+(isIng?"#1A4A2E":"#6B1520")+'">'+
         (p.cur==="ARS"?fA(p.monto):"US$ "+p.monto.toLocaleString("es-AR"))+
       '</div>'+
@@ -1862,7 +1864,7 @@ function renderRecentList() {
       else{amt=isHidden('rec')?'••••':fC(m.monto,m.cur);if(m.cur!=="ARS"&&m.tc_usado){aeq='<div style="font-size:10px;color:#A8A49E;font-family:DM Mono,monospace;text-align:right">&asymp; '+fA(Math.round((m.usd||0)*gTC().usd))+'</div>';}}
       h+='<div class="mv-row" data-mov-id="'+m.id+'" style="cursor:pointer">'+
         '<div class="mv-l">'+
-          '<div class="mv-em">'+c.em+'</div>'+
+          '<div class="mv-em" style="background:'+getCatBgColor(m.categoria)+'">'+c.em+'</div>'+
           '<div>'+
             '<div style="font-size:13px;font-weight:500;color:#1A1916">'+m.categoria+(isI?'<span class="badge bi">ingreso</span>':'')+'</div>'+
             '<div style="color:#A8A49E;font-size:11px">'+m.subcategoria+'</div>'+
@@ -1957,10 +1959,36 @@ function getCatColor(nom) {
   return CAT_COLORS[idx>=0?idx%CAT_COLORS.length:0];
 }
 function getCatColorStable(nom) {
-  // Color estable basado en el nombre, independiente del orden del array
+  var allCats = (gCats()||[]).concat(gIngCats()||[]);
+  var idx = allCats.findIndex(function(c){ return c.nom === nom; });
+  if (idx >= 0) return CAT_COLORS[idx % CAT_COLORS.length];
   var hash = 0;
-  for (var i = 0; i < nom.length; i++) hash = ((hash << 5) - hash) + nom.charCodeAt(i);
-  return CAT_COLORS[Math.abs(hash) % CAT_COLORS.length];
+  for (var i = 0; i < nom.length; i++) hash = (hash * 31 + nom.charCodeAt(i)) >>> 0;
+  return CAT_COLORS[hash % CAT_COLORS.length];
+}
+var CAT_COLORS_BG = [
+  "#E6F1FB", // #378ADD → blue-50
+  "#EEEDFE", // #7F77DD → purple-50
+  "#FAEEDA", // #EF9F27 → amber-50
+  "#EAF3DE", // #2D6A4F → green-50
+  "#FBEAF0", // #D4537E → pink-50
+  "#FAECE7", // #D85A30 → coral-50
+  "#E1F5EE", // #1D9E75 → teal-50
+  "#F1EFE8", // #888780 → gray-50
+  "#E1F5EE", // #0E6655 → teal-50
+  "#FCEBEB", // #9B2335 → red-50
+  "#F3E8FB", // #4A235A → purple dark → light purple
+  "#FBF0E8", // #7D4E24 → amber dark → light amber
+  "#E6F1FB", // #185FA5 → blue-50
+  "#EAF3DE"  // #3B6D11 → green-50
+];
+function getCatBgColor(nom) {
+  var allCats = (gCats()||[]).concat(gIngCats()||[]);
+  var idx = allCats.findIndex(function(c){ return c.nom === nom; });
+  if (idx >= 0) return CAT_COLORS_BG[idx % CAT_COLORS.length];
+  var hash = 0;
+  for (var i = 0; i < nom.length; i++) hash = (hash * 31 + nom.charCodeAt(i)) >>> 0;
+  return CAT_COLORS_BG[hash % CAT_COLORS.length];
 }
 
 function renderHome() {
@@ -2005,30 +2033,49 @@ function renderHome() {
       var barPct,barCol,subTxt;
       if(usarPresupuesto()&&bud&&bud.limite>0&&!showUSD){
         var pct=Math.round(amt/bud.limite*100);
-        barPct=Math.min(pct,100);barCol=pct>=100?"#E24B4A":pct>=80?"#EF9F27":col;
+        barPct=Math.min(pct,100);barCol=pct>=100?"#E24B4A":col;
         subTxt=pct>=100?'<span style="color:#A32D2D;font-weight:500">Superaste por '+fA(amt-bud.limite)+'</span>':'<span>'+pct+'% usado &middot; quedan '+fA(bud.limite-amt)+'</span>';
       } else {
         barPct=maxA>0?Math.round(amt/maxA*100):0;barCol=col;
         subTxt='<span>'+cnt+' registro'+(cnt!==1?"s":"")+'</span>';
       }
+      var hasBud = usarPresupuesto()&&bud&&bud.limite>0&&!showUSD;
       var budLinkTxt=bud?'Modificar presupuesto':'Agregar presupuesto';
-      bdHtml+='<div class="bd-row" data-cat="'+encodeURIComponent(nom)+'" style="padding-bottom:4px;align-items:flex-start">'+
-        '<div class="bd-em" style="align-self:center">'+c.em+'</div>'+
-        '<div class="bd-info">'+
-          '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'+
-            '<div style="display:flex;align-items:center;gap:5px;flex:1;min-width:0">'+
+      if(!hasBud){
+        // Sin presupuesto asignado: layout simple centrado
+        bdHtml+='<div class="bd-row" data-cat="'+encodeURIComponent(nom)+'" style="align-items:center;position:relative">'+
+          '<div class="bd-em" style="background:'+getCatBgColor(nom)+'">'+c.em+'</div>'+
+          '<div class="bd-info" style="padding-right:90px">'+
+            '<div style="display:flex;align-items:center;gap:5px">'+
               '<span class="bd-chev" style="color:#A8A49E;font-size:16px;transition:transform .2s;flex-shrink:0">&#8250;</span>'+
               '<div class="bd-name">'+nom+'</div>'+
             '</div>'+
-            '<div class="bd-amt" style="flex-shrink:0">'+amtStr+'</div>'+
+            '<div style="font-size:10px;color:#A8A49E;margin-top:3px">'+
+              (usarPresupuesto()?'<span class="bud-link" data-budcat="'+encodeURIComponent(nom)+'" style="color:#A8A49E;cursor:pointer">Agregar presupuesto</span>':''+cnt+' registro'+(cnt!==1?"s":""))+
+            '</div>'+
           '</div>'+
-          (usarPresupuesto()?'<div class="bd-bar-wrap"><div class="bd-bar" style="width:'+barPct+'%;background:'+barCol+'"></div></div>':'')+
-          '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:5px;gap:8px">'+
-            '<span class="bud-link" style="display:'+(usarPresupuesto()?'inline':'none')+';flex-shrink:0" data-budcat="'+encodeURIComponent(nom)+'">'+budLinkTxt+'</span>'+
-            '<div style="font-size:10px;color:#A8A49E;text-align:right;flex-shrink:0">'+subTxt+'</div>'+
+          '<div class="bd-amt" style="position:absolute;right:20px;top:50%;transform:translateY(-50%)">'+amtStr+'</div>'+
+        '</div>';
+      } else {
+        // Con presupuesto: layout expandido
+        bdHtml+='<div class="bd-row" data-cat="'+encodeURIComponent(nom)+'" style="align-items:flex-start">'+
+          '<div class="bd-em" style="background:'+getCatBgColor(nom)+'">'+c.em+'</div>'+
+          '<div class="bd-info">'+
+            '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'+
+              '<div style="display:flex;align-items:center;gap:5px;flex:1;min-width:0">'+
+                '<span class="bd-chev" style="color:#A8A49E;font-size:16px;transition:transform .2s;flex-shrink:0">&#8250;</span>'+
+                '<div class="bd-name">'+nom+'</div>'+
+              '</div>'+
+              '<div class="bd-amt" style="flex-shrink:0">'+amtStr+'</div>'+
+            '</div>'+
+            '<div class="bd-bar-wrap"><div class="bd-bar" style="width:'+barPct+'%;background:'+barCol+'"></div></div>'+
+            '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:5px;gap:8px">'+
+              '<span class="bud-link" style="display:'+(usarPresupuesto()?'inline':'none')+';flex-shrink:0" data-budcat="'+encodeURIComponent(nom)+'">'+budLinkTxt+'</span>'+
+              '<div style="font-size:10px;color:#A8A49E;text-align:right;flex-shrink:0">'+subTxt+'</div>'+
+            '</div>'+
           '</div>'+
-        '</div>'+
-      '</div>';
+        '</div>';
+      }
     });
     bd.innerHTML=bdHtml;
   }
@@ -2051,15 +2098,15 @@ function renderHome() {
         var pct=maxI>0?Math.round(amt/maxI*100):0;
         var amtStr=isHidden('ing')?'••••':(showUSD?("US$ "+Math.round(amt).toLocaleString("es-AR")):fA(amt));
         var ingCol=getCatColorStable(nom);
-        ingHtml+='<div class="bd-row" style="padding-bottom:4px;align-items:flex-start">'+
-          '<div class="bd-em" style="padding-top:1px">'+c.em+'</div>'+
+        ingHtml+='<div class="bd-row" style="align-items:flex-start">'+
+          '<div class="bd-em" style="background:'+getCatBgColor(nom)+'">'+c.em+'</div>'+
           '<div class="bd-info">'+
             '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'+
               '<div class="bd-name" style="flex:1;min-width:0">'+nom+'</div>'+
               '<div class="bd-amt" style="flex-shrink:0;color:'+ingCol+'">'+amtStr+'</div>'+
             '</div>'+
             '<div class="bd-bar-wrap"><div class="bd-bar" style="width:'+pct+'%;background:'+ingCol+'"></div></div>'+
-            '<div style="font-size:10px;color:#A8A49E;margin-top:3px">'+cnt+' registro'+(cnt!==1?"s":"")+'</div>'+
+            '<div style="font-size:10px;color:#A8A49E;margin-top:4px;margin-bottom:0">'+cnt+' registro'+(cnt!==1?"s":"")+'</div>'+
           '</div>'+
         '</div>';
       });
@@ -2081,13 +2128,22 @@ function toggleBudgetForm(nom, lnk) {
   form.id="bud-form-"+nom;
   form.style.cssText="background:#F7F6F2;border-top:1px solid #E2DED6;padding:10px 14px;display:flex;align-items:center;gap:8px";
   form.innerHTML='<span style="font-size:12px;color:#6B6760;flex:1">Limite mensual</span>'+
-    '<input id="bud-inp-'+nom+'" type="number" placeholder="0" value="'+(bud.limite||"")+'" style="width:120px;padding:5px 9px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Mono,monospace;font-size:12px;background:#fff;color:#1A1916">'+
+    '<input id="bud-inp-'+nom+'" type="text" inputmode="numeric" placeholder="0" value="'+(bud.limite?Math.round(bud.limite).toLocaleString("es-AR"):"")+'" style="width:120px;padding:5px 9px;border:1px solid #E2DED6;border-radius:8px;font-family:DM Mono,monospace;font-size:12px;background:#fff;color:#1A1916">'+
     (bud.limite?'<button id="bud-del-'+nom+'" style="background:none;border:1px solid #E2DED6;border-radius:8px;padding:5px 10px;font-family:DM Sans,sans-serif;font-size:12px;color:#A8A49E;cursor:pointer">Quitar</button>':'')+
     '<button id="bud-save-'+nom+'" style="background:#1A1916;color:#fff;border:none;border-radius:8px;padding:5px 14px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;cursor:pointer">Guardar</button>';
   var row=lnk?lnk.closest(".bd-row"):null;
   if(row)row.insertAdjacentElement("afterend",form);
+  // Formatear mientras escribe
+  var inp = document.getElementById("bud-inp-"+nom);
+  inp.addEventListener("input", function(){
+    var raw = this.value.replace(/\./g,"").replace(/[^0-9]/g,"");
+    var num = parseInt(raw,10);
+    this.value = raw ? num.toLocaleString("es-AR") : "";
+    // Mantener cursor al final
+    this.setSelectionRange(this.value.length, this.value.length);
+  });
   document.getElementById("bud-save-"+nom).addEventListener("click",function(){
-    var limite=parseFloat(document.getElementById("bud-inp-"+nom).value)||0;
+    var limite=parseFloat((document.getElementById("bud-inp-"+nom).value||"").replace(/\./g,"").replace(/,/g,"."))||0;
     if(!limite){showToast("Ingresa un limite valido");return;}
     setBudget(nom,limite,budRepetir(),budInflacion());
     form.remove();renderHome();showToast("Presupuesto guardado");
