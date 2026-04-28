@@ -466,7 +466,7 @@ body{font-family:"Inter",sans-serif;background:#F7F6F2;color:#1A1916;font-size:1
       <span style="font-size:20px;font-weight:700;letter-spacing:-.05em;color:#1A1916;font-family:Inter,sans-serif">Correa</span>
     </div>
 
-    <div class="inp-card" id="wt-input">
+    <div class="inp-card" id="wt-input" style="display:none">
       <div class="inp-row">
         <button class="inp-mic" id="mic-btn" title="Grabar mensaje de voz">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
@@ -495,15 +495,21 @@ body{font-family:"Inter",sans-serif;background:#F7F6F2;color:#1A1916;font-size:1
       </div>
     </div>
 
-    <!-- FIX 2: DASHBOARD CARD — estructura limpia y bien cerrada -->
+    <!-- DASHBOARD con acciones integradas -->
     <div class="bdown" id="home-metrics" style="margin-bottom:20px;border-radius:24px">
       <div style="padding:20px">
         <!-- Mes + controles -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-          <div style="display:flex;align-items:center;gap:2px">
-            <button id="btn-prev-month" style="background:none;border:none;color:#C4BFB8;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;display:flex;align-items:center">&#8249;</button>
-            <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;font-family:Inter,sans-serif" id="dash-mes-lbl">ABRIL 2026</span>
-            <button id="btn-next-month" style="background:none;border:none;color:#C4BFB8;font-size:20px;cursor:pointer;padding:0 4px;line-height:1;display:flex;align-items:center">&#8250;</button>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#1A1916;font-family:Inter,sans-serif;line-height:1" id="dash-mes-lbl">ABRIL 2026</span>
+            <div style="display:flex;align-items:center;gap:0;margin-bottom:1px">
+              <button id="btn-prev-month" style="background:none;border:none;color:#A8A49E;cursor:pointer;padding:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <button id="btn-next-month" style="background:none;border:none;color:#A8A49E;cursor:pointer;padding:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
           </div>
           <div style="display:flex;align-items:center;gap:10px">
             <button id="eye-btn" title="Mostrar/ocultar montos" style="background:none;border:none;cursor:pointer;color:#C4BFB8;padding:0;display:flex;align-items:center">
@@ -518,21 +524,54 @@ body{font-family:"Inter",sans-serif;background:#F7F6F2;color:#1A1916;font-size:1
             </div>
           </div>
         </div>
-        <!-- Ingresos + Egresos en grid -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div style="background:#F7F6F2;border-radius:16px;padding:14px">
-            <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#A8A49E;margin-bottom:6px;font-family:Inter,sans-serif">Ingresos</div>
-            <div style="font-size:22px;font-weight:600;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#2D6A4F;line-height:1" id="hm-ing">$0</div>
+        <!-- RESULTADO — centrado -->
+        <div style="margin-bottom:20px;text-align:center;margin-top:24px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;font-family:Inter,sans-serif;margin-bottom:6px">Resultado</div>
+          <div style="font-size:36px;font-weight:700;font-family:DM Mono,monospace;letter-spacing:-.04em;color:#1A1916;line-height:1" id="dash-resultado">$0</div>
+        </div>
+        <!-- Ingresos + Egresos centrados -->
+        <div style="display:flex;justify-content:center;gap:36px;margin-bottom:20px">
+          <div style="text-align:center">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#A8A49E;font-family:Inter,sans-serif;margin-bottom:4px">Ingresos</div>
+            <div style="font-size:18px;font-weight:600;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#2D6A4F;line-height:1" id="hm-ing">$0</div>
           </div>
-          <div style="background:#F7F6F2;border-radius:16px;padding:14px">
-            <div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#A8A49E;margin-bottom:6px;font-family:Inter,sans-serif">Egresos</div>
-            <div style="font-size:22px;font-weight:600;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#9B2335;line-height:1" id="hm-eg">$0</div>
+          <div style="text-align:center">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#A8A49E;font-family:Inter,sans-serif;margin-bottom:4px">Egresos</div>
+            <div style="font-size:18px;font-weight:600;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#9B2335;line-height:1" id="hm-eg">$0</div>
           </div>
         </div>
-        <!-- Resultado destacado en su propio box -->
-        <div style="background:#F7F6F2;border-radius:16px;padding:14px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between">
-          <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#A8A49E;font-family:Inter,sans-serif">Resultado</span>
-          <span style="font-size:26px;font-weight:700;font-family:DM Mono,monospace;letter-spacing:-.03em;color:#1A1916" id="dash-resultado">$0</span>
+        <!-- Divisor -->
+        <div style="height:0.5px;background:#F0EEE8;margin-bottom:20px"></div>
+        <!-- 3 acciones — mismo tamaño -->
+        <div style="display:flex;justify-content:space-around;align-items:center">
+          <div id="dash-mic-btn" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+            <div style="width:52px;height:52px;border-radius:50%;background:#E8622A;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round">
+                <rect x="9" y="2" width="6" height="11" rx="3"/>
+                <path d="M5 10a7 7 0 0014 0"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </div>
+            
+          </div>
+          <div id="dash-ing-btn" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+            <div style="width:52px;height:52px;border-radius:50%;background:#D8F3DC;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D6A4F" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </div>
+            
+          </div>
+          <div id="dash-eg-btn" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer">
+            <div style="width:52px;height:52px;border-radius:50%;background:#FCE4E8;display:flex;align-items:center;justify-content:center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9B2335" stroke-width="2.5" stroke-linecap="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </div>
+            
+          </div>
         </div>
       </div>
     </div><!-- FIN home-metrics -->
@@ -578,18 +617,8 @@ body{font-family:"Inter",sans-serif;background:#F7F6F2;color:#1A1916;font-size:1
 
     <!-- Ultimos registros -->
     <div class="recent home-section" id="recent-box" draggable="false" data-section="recientes">
-      <div class="rc-hdr" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div class="rc-hdr">
         <span>Ultimos registros</span>
-        <div style="display:flex;align-items:center;gap:6px">
-          <button id="eye-rec" style="background:none;border:none;cursor:pointer;color:#CBC6BC;padding:0;display:flex;align-items:center;line-height:1;flex-shrink:0">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-          <button class="rc-filter-txt active" data-days="5">5 dias</button>
-          <span style="color:#E2DED6">·</span>
-          <button class="rc-filter-txt" data-days="10">10 dias</button>
-          <span style="color:#E2DED6">·</span>
-          <button class="rc-filter-txt" data-days="30">Mes</button>
-        </div>
       </div>
       <div id="rc-list" data-wt="recent"><div class="mv-empty">Aun no hay registros.</div></div>
     </div>
@@ -786,6 +815,30 @@ body{font-family:"Inter",sans-serif;background:#F7F6F2;color:#1A1916;font-size:1
 
 <div class="toast" id="toast"></div>
 
+<!-- Feedback de registro guardado -->
+<div id="reg-feedback" style="display:none;position:fixed;inset:0;z-index:600;pointer-events:none;align-items:center;justify-content:center">
+  <div id="reg-feedback-inner" style="background:#fff;border-radius:24px;padding:32px 40px;display:flex;flex-direction:column;align-items:center;gap:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);transform:scale(.85);opacity:0;transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .2s">
+    <svg viewBox="0 0 120 120" width="56" height="56" id="reg-logo-svg">
+      <circle cx="60" cy="66" r="38" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="119 239" transform="rotate(-200 60 66)" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="0.2s" begin="0.05s" fill="freeze"/>
+        <animateTransform attributeName="transform" type="rotate" from="-200 60 66" to="-160 60 66" dur="0.4s" begin="0.05s" fill="freeze"/>
+      </circle>
+      <circle cx="60" cy="66" r="25" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="78 157" transform="rotate(-200 60 66)" opacity="0">
+        <animate attributeName="opacity" from="0" to="0.6" dur="0.2s" begin="0.15s" fill="freeze"/>
+        <animateTransform attributeName="transform" type="rotate" from="-200 60 66" to="-160 60 66" dur="0.4s" begin="0.1s" fill="freeze"/>
+      </circle>
+      <circle cx="60" cy="66" r="13" fill="none" stroke="#E8622A" stroke-width="6" stroke-linecap="round" stroke-dasharray="41 82" transform="rotate(-200 60 66)" opacity="0">
+        <animate attributeName="opacity" from="0" to="0.35" dur="0.2s" begin="0.2s" fill="freeze"/>
+        <animateTransform attributeName="transform" type="rotate" from="-200 60 66" to="-160 60 66" dur="0.4s" begin="0.15s" fill="freeze"/>
+      </circle>
+      <circle cx="60" cy="66" r="4" fill="#E8622A" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="0.15s" begin="0.25s" fill="freeze"/>
+      </circle>
+    </svg>
+    <div id="reg-feedback-lbl" style="font-size:15px;font-weight:600;color:#1A1916;font-family:Inter,sans-serif;letter-spacing:-.02em">Registrado</div>
+  </div>
+</div>
+
 <div id="quick-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;justify-content:center;pointer-events:none">
   <div style="background:#F7F6F2;border-radius:24px 24px 0 0;padding:0;width:100%;max-width:500px;overflow:hidden">
     <!-- Header con breadcrumb -->
@@ -794,7 +847,7 @@ body{font-family:"Inter",sans-serif;background:#F7F6F2;color:#1A1916;font-size:1
       <button id="qm-close" style="background:none;border:none;font-size:22px;color:#A8A49E;cursor:pointer;line-height:1;flex-shrink:0;margin-left:8px">&times;</button>
     </div>
     <!-- Contenido del paso actual -->
-    <div id="qm-content" style="padding:16px 20px 20px;min-height:200px"></div>
+    <div id="qm-content" style="padding:16px 20px 20px"></div>
   </div>
 </div>
 
@@ -1266,14 +1319,7 @@ async function qmSave() {
   addMovToCorrectMonth(newMov);
   closeQuickModal();
   renderHome();
-  // Toast con emoji y animación
-  var t = document.getElementById("toast");
-  t.innerHTML = (qm.tipo==="ingreso" ? "💚" : "✓") + " Registrado";
-  t.style.background = qm.tipo==="ingreso" ? "#2D6A4F" : "#1A1916";
-  t.style.fontSize = "15px";
-  t.style.padding = "12px 22px";
-  t.classList.add("show");
-  setTimeout(function(){ t.classList.remove("show"); t.innerHTML=""; t.style.background=""; t.style.fontSize=""; t.style.padding=""; }, 2200);
+  showRegFeedback(qm.tipo === "ingreso" ? "Ingreso registrado" : "Egreso registrado");
 }
 
 // Emoji picker global
@@ -1375,6 +1421,30 @@ function showToast(m) {
   var t = document.getElementById("toast");
   t.textContent = m; t.classList.add("show");
   setTimeout(function() { t.classList.remove("show"); }, 2200);
+}
+function showRegFeedback(lbl) {
+  var wrap = document.getElementById("reg-feedback");
+  var inner = document.getElementById("reg-feedback-inner");
+  var lblEl = document.getElementById("reg-feedback-lbl");
+  if (!wrap) return;
+  lblEl.textContent = lbl || "Registrado";
+  wrap.style.display = "flex";
+  wrap.style.pointerEvents = "auto";
+  // Forzar reflow para que la animación arranque
+  void inner.offsetWidth;
+  inner.style.transform = "scale(1)";
+  inner.style.opacity = "1";
+  // Resetear SVG animations clonando el nodo
+  var svg = document.getElementById("reg-logo-svg");
+  if (svg) { var clone = svg.cloneNode(true); svg.parentNode.replaceChild(clone, svg); }
+  setTimeout(function() {
+    inner.style.transform = "scale(.85)";
+    inner.style.opacity = "0";
+    setTimeout(function() {
+      wrap.style.display = "none";
+      wrap.style.pointerEvents = "none";
+    }, 250);
+  }, 1400);
 }
 
 // ONBOARDING
@@ -1597,6 +1667,7 @@ function showPage(p, dir) {
 }
 
 function chMonth(d) {
+  recentVisibleCount = 10;
   curMonth.m += d;
   if (curMonth.m > 11) { curMonth.m = 0; curMonth.y++; }
   if (curMonth.m < 0) { curMonth.m = 11; curMonth.y--; }
@@ -1819,7 +1890,7 @@ async function confirmMov() {
       addMovToCorrectMonth(mov);
     }
     cancelConf(); document.getElementById("ai-inp").value="";
-    renderHome(); showToast("Registrado \u2713");
+    renderHome(); showRegFeedback("Registrado");
   } catch(e) { showToast("Error al guardar"); console.error(e); }
   btn.disabled=false; btn.innerHTML="\u2713 Confirmar";
 }
@@ -1832,23 +1903,20 @@ function cancelConf() {
 function decodeEm(em) { var d=document.createElement("div");d.innerHTML=em;return d.textContent||d.innerText||em; }
 var showUSD = false;
 var sortCats = ls("cr_sort_cats", "amt"); // "az" | "amt"
-var recentFilter = 30;
-
-function setRecentFilter(days) {
-  recentFilter = days;
-  document.querySelectorAll(".rc-filter-txt").forEach(function(b){ b.classList.toggle("active", parseInt(b.dataset.days)===days); });
-  renderRecentList();
-}
+var recentVisibleCount = 10;
 
 function renderRecentList() {
   var rcList = document.getElementById("rc-list"); if (!rcList) return;
-  var movs = gMonthM().slice();
+  // Todos los movimientos de todos los meses, ordenados por fecha desc
+  var all = gAllM();
+  var movs = [];
+  Object.keys(all).forEach(function(k){ movs = movs.concat(all[k]||[]); });
   movs.sort(function(a,b){ var da=a.fecha||"0000-00-00",db=b.fecha||"0000-00-00"; if(da>db)return -1;if(da<db)return 1;return b.id-a.id; });
-  var co=new Date();co.setDate(co.getDate()-recentFilter);var cs=co.toISOString().split("T")[0];
-  var f=movs.filter(function(m){return !m.fecha||m.fecha>=cs;});
-  if (!f.length) { rcList.innerHTML='<div class="mv-empty">Sin registros en este periodo.</div>'; return; }
+  if (!movs.length) { rcList.innerHTML='<div class="mv-empty">Aun no hay registros.</div>'; return; }
+  var visible = movs.slice(0, recentVisibleCount);
+  var hasMore = movs.length > recentVisibleCount;
   var byD={},dO=[];
-  f.forEach(function(m){ var d=m.fecha||"sin-fecha";if(!byD[d]){byD[d]=[];dO.push(d);}byD[d].push(m); });
+  visible.forEach(function(m){ var d=m.fecha||"sin-fecha";if(!byD[d]){byD[d]=[];dO.push(d);}byD[d].push(m); });
   var h="",today=new Date();today.setHours(0,0,0,0);
   var yest=new Date(today);yest.setDate(yest.getDate()-1);
   var mo=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
@@ -1877,9 +1945,19 @@ function renderRecentList() {
       '</div>';
     });
   });
+  if (hasMore) {
+    h += '<div id="rc-ver-mas" style="text-align:center;padding:14px 0;border-top:0.5px solid #F0EEE8;cursor:pointer">'+
+      '<span style="font-size:12px;font-weight:600;color:#A8A49E;letter-spacing:.04em">Ver más</span>'+
+    '</div>';
+  }
   rcList.innerHTML = h;
   rcList.querySelectorAll(".mv-row[data-mov-id]").forEach(function(row){
     row.addEventListener("click", function(){ openEditModal(row.dataset.movId); });
+  });
+  var verMas = document.getElementById("rc-ver-mas");
+  if (verMas) verMas.addEventListener("click", function(){
+    recentVisibleCount += 10;
+    renderRecentList();
   });
 }
 
@@ -2098,19 +2176,25 @@ function renderHome() {
         var pct=maxI>0?Math.round(amt/maxI*100):0;
         var amtStr=isHidden('ing')?'••••':(showUSD?("US$ "+Math.round(amt).toLocaleString("es-AR")):fA(amt));
         var ingCol=getCatColorStable(nom);
-        ingHtml+='<div class="bd-row" style="align-items:flex-start">'+
+        ingHtml+='<div class="bd-row bd-row-ing" data-cat="'+encodeURIComponent(nom)+'" style="align-items:center;position:relative">'+
           '<div class="bd-em" style="background:'+getCatBgColor(nom)+'">'+c.em+'</div>'+
-          '<div class="bd-info">'+
-            '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">'+
-              '<div class="bd-name" style="flex:1;min-width:0">'+nom+'</div>'+
-              '<div class="bd-amt" style="flex-shrink:0;color:'+ingCol+'">'+amtStr+'</div>'+
+          '<div class="bd-info" style="padding-right:90px">'+
+            '<div style="display:flex;align-items:center;gap:5px">'+
+              '<span class="bd-chev" style="color:#A8A49E;font-size:16px;transition:transform .2s;flex-shrink:0">&#8250;</span>'+
+              '<div class="bd-name">'+nom+'</div>'+
             '</div>'+
-            '<div class="bd-bar-wrap"><div class="bd-bar" style="width:'+pct+'%;background:'+ingCol+'"></div></div>'+
-            '<div style="font-size:10px;color:#A8A49E;margin-top:4px;margin-bottom:0">'+cnt+' registro'+(cnt!==1?"s":"")+'</div>'+
+            '<div style="font-size:10px;color:#A8A49E;margin-top:3px">'+cnt+' registro'+(cnt!==1?"s":"")+'</div>'+
           '</div>'+
+          '<div class="bd-amt" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);color:#1A1916">'+amtStr+'</div>'+
         '</div>';
       });
       ingBd.innerHTML=ingHtml;
+      ingBd.querySelectorAll(".bd-row-ing[data-cat]").forEach(function(row){
+        row.addEventListener("click",function(e){
+          if(e.target.closest(".bd-amt"))return;
+          showDetailIng(decodeURIComponent(row.dataset.cat));
+        });
+      });
     }
   }
   renderRecentList();
@@ -2152,6 +2236,63 @@ function toggleBudgetForm(nom, lnk) {
   if(delBtn)delBtn.addEventListener("click",function(){delBudget(nom);form.remove();renderHome();showToast("Presupuesto eliminado");});
 }
 
+function showDetailIng(nom){
+  var tc=gTC(),movs=gMonthM().filter(function(m){return m.tipo==="ingreso"&&m.categoria===nom;});
+  function mARS(m){return m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd;}
+  function mUSD(m){return m.usd||0;}
+  function fmt(n){return showUSD?("US$ "+Math.round(n).toLocaleString("es-AR")):fA(n);}
+  var bySubARS={},bySubUSD={},bySM={};
+  movs.forEach(function(m){
+    var s=m.subcategoria||"General";
+    bySubARS[s]=(bySubARS[s]||0)+mARS(m);
+    bySubUSD[s]=(bySubUSD[s]||0)+mUSD(m);
+    if(!bySM[s])bySM[s]=[];bySM[s].push(m);
+  });
+  var bySub=showUSD?bySubUSD:bySubARS;
+  var prev=document.getElementById("bd-inline-detail-ing");
+  if(prev){
+    var prevNom=prev.dataset.nom;prev.remove();
+    var prevRow=document.querySelector('.bd-row-ing[data-cat="'+encodeURIComponent(prevNom)+'"]');
+    if(prevRow){var prevCh=prevRow.querySelector(".bd-chev");if(prevCh)prevCh.style.transform="";}
+    if(prevNom===nom)return;
+  }
+  var panel=document.createElement("div");
+  panel.id="bd-inline-detail-ing";panel.dataset.nom=nom;
+  panel.style.cssText="background:#F7F6F2;border-bottom:1px solid #E2DED6;";
+  var h="";
+  Object.keys(bySub).sort(function(a,b){ return sortCats==="az"?a.localeCompare(b,"es"):bySub[b]-bySub[a]; }).forEach(function(sub,si){
+    var sM=bySM[sub]||[];
+    var amtSub=(amountsHidden||hiddenBoxes.ing)?'••••':fmt(bySub[sub]);
+    var subId="subging-"+si+"-"+Date.now();
+    h+='<div class="bd-sub-hdr" data-subid="'+subId+'" style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 10px 72px;border-bottom:1px solid #E2DED6;cursor:pointer">';
+    h+='<div style="display:flex;align-items:center;gap:5px"><span class="bd-sub-chev" style="color:#A8A49E;font-size:14px;transition:transform .2s">&#8250;</span><span style="font-size:13px;color:#1A1916">'+sub+'</span></div>';
+    h+='<span style="font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#1A1916">'+amtSub+'</span></div>';
+    h+='<div id="'+subId+'" style="display:none">';
+    sM.forEach(function(m){
+      var d=m.fecha?m.fecha.split("-").reverse().join("/"):"--";
+      var amtM=(amountsHidden||hiddenBoxes.ing)?'••••':(showUSD?('US$ '+Math.round(m.usd||0).toLocaleString('es-AR')):fC(m.monto,m.cur));
+      h+='<div class="bd-sub-mov" data-mov-id="'+m.id+'" style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 8px 72px;border-bottom:1px solid #E2DED6;cursor:pointer;background:#fff">';
+      h+='<div><span style="font-size:10px;color:#A8A49E">'+d+'</span></div>';
+      h+='<div style="font-family:DM Mono,monospace;font-size:12px;margin-left:12px;white-space:nowrap;flex-shrink:0">'+amtM+'</div>';
+      h+='</div>';
+    });
+    h+='</div>';
+  });
+  panel.innerHTML=h;
+  panel.querySelectorAll(".bd-sub-hdr").forEach(function(hdr){
+    hdr.addEventListener("click",function(){
+      var subId=hdr.dataset.subid;var recs=document.getElementById(subId);var chev=hdr.querySelector(".bd-sub-chev");
+      if(!recs)return;var open=recs.style.display!=="none";
+      recs.style.display=open?"none":"block";if(chev)chev.style.transform=open?"":"rotate(90deg)";
+    });
+  });
+  panel.querySelectorAll(".bd-sub-mov[data-mov-id]").forEach(function(row2){
+    row2.addEventListener("click",function(){openEditModal(row2.dataset.movId);});
+  });
+  var row=document.querySelector('.bd-row-ing[data-cat="'+encodeURIComponent(nom)+'"]');
+  if(row){row.insertAdjacentElement("afterend",panel);var ch=row.querySelector(".bd-chev");if(ch)ch.style.transform="rotate(90deg)";}
+}
+
 function showDetail(nom){
   var tc=gTC(),movs=gMonthM().filter(function(m){return m.tipo==="gasto"&&m.categoria===nom;});
   function mARS(m){return m.cur==="ARS"?m.monto:(m.usd||0)*tc.usd;}
@@ -2180,14 +2321,14 @@ function showDetail(nom){
     var sM=bySM[sub]||[];
     var amtSub=(amountsHidden||hiddenBoxes.eg)?'••••':fmt(bySub[sub]);
     var subId="subg-"+si+"-"+Date.now();
-    h+='<div class="bd-sub-hdr" data-subid="'+subId+'" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 10px 60px;border-bottom:1px solid #E2DED6;cursor:pointer">';
+    h+='<div class="bd-sub-hdr" data-subid="'+subId+'" style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 10px 72px;border-bottom:1px solid #E2DED6;cursor:pointer">';
     h+='<div style="display:flex;align-items:center;gap:5px"><span class="bd-sub-chev" style="color:#A8A49E;font-size:14px;transition:transform .2s">&#8250;</span><span style="font-size:13px;color:#1A1916">'+sub+'</span></div>';
     h+='<span style="font-family:DM Mono,monospace;font-size:13px;font-weight:600;color:#1A1916">'+amtSub+'</span></div>';
     h+='<div id="'+subId+'" style="display:none">';
     sM.forEach(function(m){
       var d=m.fecha?m.fecha.split("-").reverse().join("/"):"--";
       var amtM=(amountsHidden||hiddenBoxes.eg)?'••••':(showUSD?('US$ '+Math.round(m.usd||0).toLocaleString('es-AR')):fC(m.monto,m.cur));
-      h+='<div class="bd-sub-mov" data-mov-id="'+m.id+'" style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px 8px 60px;border-bottom:1px solid #E2DED6;cursor:pointer;background:#fff">';
+      h+='<div class="bd-sub-mov" data-mov-id="'+m.id+'" style="display:flex;align-items:center;justify-content:space-between;padding:8px 20px 8px 72px;border-bottom:1px solid #E2DED6;cursor:pointer;background:#fff">';
       h+='<div><span style="font-size:10px;color:#A8A49E">'+d+'</span></div>';
       h+='<div style="font-family:DM Mono,monospace;font-size:12px;margin-left:12px;white-space:nowrap;flex-shrink:0">'+amtM+'</div>';
       h+='</div>';
@@ -2986,6 +3127,13 @@ document.addEventListener("DOMContentLoaded",function(){
   }
   document.getElementById("mic-btn").addEventListener("click",function(){if(isRec)stopRec();else startRec();});
   document.getElementById("manual-btn").addEventListener("click",function(){openManualModal();});
+  // Botones del dashboard
+  var dMic = document.getElementById("dash-mic-btn");
+  var dIng = document.getElementById("dash-ing-btn");
+  var dEg  = document.getElementById("dash-eg-btn");
+  if(dMic) dMic.addEventListener("click", function(){ document.getElementById("mic-btn").click(); });
+  if(dIng) dIng.addEventListener("click", function(){ qm={tipo:"ingreso",cat:null,sub:null,monto:"",cur:"ARS",ref:"",fecha:new Date().toISOString().split("T")[0]}; var modal=document.getElementById("quick-modal"); modal.style.display="flex"; modal.style.pointerEvents="auto"; qmRenderStep(); });
+  if(dEg)  dEg.addEventListener("click",  function(){ qm={tipo:"gasto",cat:null,sub:null,monto:"",cur:"ARS",ref:"",fecha:new Date().toISOString().split("T")[0]}; var modal=document.getElementById("quick-modal"); modal.style.display="flex"; modal.style.pointerEvents="auto"; qmRenderStep(); });
   var qmCloseBtn = document.getElementById("qm-close");
   if(qmCloseBtn) qmCloseBtn.addEventListener("click", closeQuickModal);
   document.getElementById("quick-modal").addEventListener("click", function(e){ if(e.target===this) closeQuickModal(); });
@@ -3079,11 +3227,6 @@ document.addEventListener("DOMContentLoaded",function(){
   var eTabEg  = document.getElementById("evo-tab-eg");
   if(eTabIng) eTabIng.addEventListener("click", function(){ setEvoTab("ing"); });
   if(eTabEg)  eTabEg.addEventListener("click",  function(){ setEvoTab("eg"); });
-
-  // Filter buttons
-  document.querySelectorAll(".rc-filter-txt").forEach(function(btn){
-    btn.addEventListener("click",function(){setRecentFilter(parseInt(btn.dataset.days));});
-  });
 
   // Edit modal
   document.getElementById("btn-modal-close").addEventListener("click",closeEditModal);
